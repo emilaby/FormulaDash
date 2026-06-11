@@ -1,4 +1,4 @@
-import { DRIVERNUMBERS } from "@/data/driverNumbers"
+import { DRIVERNUMBERS, TEAMIMGS } from "@/public/data/f1Data"
 
 export async function GET(request: Request, { params }: { params: Promise<{ symbol: string }> }){
 
@@ -75,9 +75,11 @@ export async function GET(request: Request, { params }: { params: Promise<{ symb
         for(const num of DRIVERNUMBERS){
             let championshipObj = championshipData.find((championshipDataObj:championshipObj) =>  championshipDataObj.driver_number === num)
             let driverObj = uniqueDriverData.find((driverDataObj: driverObj) => driverDataObj.driver_number === num)
+            const teamImg = TEAMIMGS.get(driverObj.team_name.toLowerCase().replace(/ /g, ""))
             mergedData.push({
                 ...championshipObj,
-                ...driverObj
+                ...driverObj,
+                team_img: teamImg
             })
         }
 
