@@ -1,4 +1,5 @@
 import { DRIVERNUMBERS, TEAMIMGS } from "@/public/data/f1Data"
+import getLastRaceSessionKey from "@/lib/getLastRaceSessionKey"
 
 export async function GET(request: Request, { params }: { params: Promise<{ symbol: string }> }){
 
@@ -27,36 +28,14 @@ export async function GET(request: Request, { params }: { params: Promise<{ symb
         country_code: string
     }
 
-    const { searchParams } = new URL(request.url)
-    const driverNums = searchParams.getAll("driver_number")
     try{
-        if (driverNums.length <= 0){
-            return Response.json(
-                {error: "No driver number specified"},
-                {status: 400}
-            )
-        }
+        const lastRaceSessionKey = await getLastRaceSessionKey()
+
         const baseUrl = "https://api.openf1.org/v1/"
-        let championshipUrl = `${baseUrl}championship_drivers?session_key=latest`
-        let driverDataUrl = `${baseUrl}drivers?session_key=latest`
+        let championshipUrl = `${baseUrl}championship_drivers?session_key=${lastRaceSessionKey}`
+        let driverDataUrl = `${baseUrl}drivers?session_key=${lastRaceSessionKey}`
 
-        let driverQueryParams =[]
-        
-        for (const num of driverNums){
-            const driverNum = parseInt(num)
-            if(!DRIVERNUMBERS.includes(driverNum)){
-                return Response.json(
-                    {error: "Invalid driver number(s)"},
-                    {status: 400}
-                )
-            }
-            driverQueryParams.push(`&driver_number=${driverNum}`)
-        }
-
-        championshipUrl = `${championshipUrl}${driverQueryParams.join("")}`
-        driverDataUrl = `${driverDataUrl}${driverQueryParams.join("")}`
-
-        const [championshipRes, driverDataRes] = await Promise.all([fetch(championshipUrl), fetch(driverDataUrl)])
+        const [championshipRes, driverDataRes] = await Promise.all([fetch(championshipUrl, { next: {revalidate: 1000} }), fetch(driverDataUrl, { next: {revalidate: 1000} })])
 
         if (!championshipRes.ok || !driverDataRes.ok){
             return Response.json(
@@ -66,15 +45,10 @@ export async function GET(request: Request, { params }: { params: Promise<{ symb
         }
         const[championshipData, driverData] = await Promise.all([championshipRes.json(), driverDataRes.json()])
 
-        //remove duplicate objects in driverData
-        const uniqueDriverData = driverData.filter(
-            (driver:driverObj, index:number, arr:driverObj[]) => index === arr.findIndex(dr => dr.full_name === driver.full_name)
-        )
-
         let mergedData = []
         for(const num of DRIVERNUMBERS){
             let championshipObj = championshipData.find((championshipDataObj:championshipObj) =>  championshipDataObj.driver_number === num)
-            let driverObj = uniqueDriverData.find((driverDataObj: driverObj) => driverDataObj.driver_number === num)
+            let driverObj = driverData.find((driverDataObj: driverObj) => driverDataObj.driver_number === num)
             const teamImg = TEAMIMGS.get(driverObj.team_name.toLowerCase().replace(/ /g, ""))
             mergedData.push({
                 ...championshipObj,

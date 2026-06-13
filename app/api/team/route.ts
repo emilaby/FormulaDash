@@ -1,9 +1,8 @@
 import { TEAMNAMES, TEAMIMGS } from "@/public/data/f1Data"
+import getLastRaceSessionKey from "@/lib/getLastRaceSessionKey"
 //https://api.openf1.org/v1/championship_teams?session_key=latest&team_name=Audi&team_name=Mercedes
 
 export async function GET(request: Request, { params }: { params: Promise<{ symbol: string }> }){
-    const { searchParams } = new URL(request.url)
-    const teamNames = searchParams.getAll("team_name")
     type teamObj = {
         meeting_key: number,
         session_key: number,
@@ -15,28 +14,13 @@ export async function GET(request: Request, { params }: { params: Promise<{ symb
     }
 
     try{
-        if (teamNames.length <= 0){
-            return Response.json(
-                {error: "No team specified"},
-                {status: 400}
-            )
-        }
-
         let teamQueryParams =[]
+
+        const lastRaceSessionKey = await getLastRaceSessionKey()
         
-        for (const name of teamNames){
-            if(!TEAMNAMES.includes(name)){
-                return Response.json(
-                    {error: "Invalid team name(s)"},
-                    {status: 400}
-                )
-            }
-            teamQueryParams.push(`&team_name=${name}`)
-        }
+        const url = `https://api.openf1.org/v1/championship_teams?session_key=${lastRaceSessionKey}`
 
-        const url = `https://api.openf1.org/v1/championship_teams?session_key=latest${teamQueryParams.join("")}`
-
-        const teamDataRes = await fetch(url)
+        const teamDataRes = await fetch(url, { next: {revalidate: 1000} })
 
         if (!teamDataRes.ok){
             return Response.json(
@@ -57,7 +41,6 @@ export async function GET(request: Request, { params }: { params: Promise<{ symb
             })
 
         }
-        
 
         return Response.json(mergedData)
     }

@@ -19,9 +19,7 @@ export default function TeamStandings(){
 
     React.useEffect(() => {
         async function load(){
-            const url = "/api/team?" +
-            TEAMNAMES.map(name => `team_name=${name}`).join("&")
-
+            const url = "/api/team?"
             const res = await fetch(url)
             
             if (res.ok){

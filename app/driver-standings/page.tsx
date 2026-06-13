@@ -28,9 +28,7 @@ export default function DriverStandings(){
 
     React.useEffect(() => {
         async function load(){
-            const url = "/api/driver?" +
-            DRIVERNUMBERS.map(num => `driver_number=${num}`).join("&")
-
+            const url = "/api/driver?"
             const res = await fetch(url)
             
             if (res.ok){
