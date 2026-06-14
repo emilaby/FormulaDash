@@ -63,7 +63,7 @@ export async function GET() {
                 team_img: teamImg
             })
         }
-        console.log(mergedData)
+
         return Response.json(mergedData)
     }
 

@@ -10,8 +10,8 @@ export default async function Home() {
   const meetingData = await meetingDataRes.json()
 
   return(
-    <main className="bg-dark-blue">
-      <RaceWeekendCard meetingData={meetingData}/>
+    <main className="bg-dark-blue min-h-screen flex">
+      <RaceWeekendCard meetingData={meetingData} />
     </main>
   )
 }
