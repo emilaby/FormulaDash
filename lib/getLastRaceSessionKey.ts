@@ -41,7 +41,7 @@ export default async function getLastRaceSessionKey(){
     }
 
     catch(err){
-        console.error("Error fetching from FastF1:", err)
+        console.error("Error fetching from OpenF1:", err)
         return null
     }
 }

@@ -1,8 +1,7 @@
 import { TEAMNAMES, TEAMIMGS } from "@/public/data/f1Data"
 import getLastRaceSessionKey from "@/lib/getLastRaceSessionKey"
-//https://api.openf1.org/v1/championship_teams?session_key=latest&team_name=Audi&team_name=Mercedes
 
-export async function GET(request: Request, { params }: { params: Promise<{ symbol: string }> }){
+export async function GET(){
     type teamObj = {
         meeting_key: number,
         session_key: number,
@@ -14,9 +13,13 @@ export async function GET(request: Request, { params }: { params: Promise<{ symb
     }
 
     try{
-        let teamQueryParams =[]
-
         const lastRaceSessionKey = await getLastRaceSessionKey()
+        if (!lastRaceSessionKey){
+            return Response.json(
+                {error: "Error fetching last session key from OpenF1"},
+                {status: 502}
+            )
+        }
         
         const url = `https://api.openf1.org/v1/championship_teams?session_key=${lastRaceSessionKey}`
 
@@ -24,7 +27,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ symb
 
         if (!teamDataRes.ok){
             return Response.json(
-                {error: "FastF1 error"},
+                {error: "OpenF1 error"},
                 {status: 502}
             )
         }
@@ -46,7 +49,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ symb
     }
 
     catch(err){
-        console.error("Error fetching from FastF1:", err)
+        console.error("Error fetching from OpenF1:", err)
         return Response.json(
             {error: "Failed to load data"},
             {status: 500}

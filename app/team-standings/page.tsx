@@ -1,5 +1,4 @@
 "use client"
-import { TEAMNAMES } from "@/public/data/f1Data"
 import Image from "next/image"
 import React from "react"
 
@@ -25,6 +24,13 @@ export default function TeamStandings(){
             if (res.ok){
                 const newData = await res.json()
                 setData(newData)
+                localStorage.setItem("teamStandings", JSON.stringify(newData))
+            }
+            else {
+                const storedData = localStorage.getItem("teamStandings")
+                if (storedData){
+                    setData(JSON.parse(storedData))
+                }
             }
         }
         load()}, [])

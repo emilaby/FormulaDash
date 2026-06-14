@@ -1,8 +1,7 @@
 import { DRIVERNUMBERS, TEAMIMGS } from "@/public/data/f1Data"
 import getLastRaceSessionKey from "@/lib/getLastRaceSessionKey"
 
-export async function GET(request: Request, { params }: { params: Promise<{ symbol: string }> }){
-
+export async function GET() {
     type championshipObj = {
         meeting_key: number,
         session_key: number,
@@ -30,21 +29,29 @@ export async function GET(request: Request, { params }: { params: Promise<{ symb
 
     try{
         const lastRaceSessionKey = await getLastRaceSessionKey()
+        if (!lastRaceSessionKey){
+            return Response.json(
+                {error: "Error fetching last session key from OpenF1"},
+                {status: 502}
+            )
+        }
 
         const baseUrl = "https://api.openf1.org/v1/"
         let championshipUrl = `${baseUrl}championship_drivers?session_key=${lastRaceSessionKey}`
         let driverDataUrl = `${baseUrl}drivers?session_key=${lastRaceSessionKey}`
 
-        const [championshipRes, driverDataRes] = await Promise.all([fetch(championshipUrl, { next: {revalidate: 1000} }), fetch(driverDataUrl, { next: {revalidate: 1000} })])
+        const [championshipRes, driverDataRes] = await Promise.all([fetch(championshipUrl, { next: {revalidate: 1000} }), 
+                                                                        fetch(driverDataUrl, { next: {revalidate: 1000} })])
 
         if (!championshipRes.ok || !driverDataRes.ok){
             return Response.json(
-                {error: "FastF1 error"},
+                {error: "OpenF1 error"},
                 {status: 502}
             )
         }
         const[championshipData, driverData] = await Promise.all([championshipRes.json(), driverDataRes.json()])
 
+        // creates array of merged objects from championshipData and driverData and adds team_img
         let mergedData = []
         for(const num of DRIVERNUMBERS){
             let championshipObj = championshipData.find((championshipDataObj:championshipObj) =>  championshipDataObj.driver_number === num)
@@ -56,14 +63,12 @@ export async function GET(request: Request, { params }: { params: Promise<{ symb
                 team_img: teamImg
             })
         }
-
-        return Response.json(
-            mergedData
-        )
+        console.log(mergedData)
+        return Response.json(mergedData)
     }
 
     catch(err){
-        console.error("Error fetching from FastF1:", err)
+        console.error("Error fetching from OpenF1:", err)
         return Response.json(
             {error: "Failed to load data"},
             {status: 500}

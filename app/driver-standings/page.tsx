@@ -1,5 +1,4 @@
 "use client"
-import { DRIVERNUMBERS } from "@/public/data/f1Data"
 import Image from "next/image"
 import React from "react"
 
@@ -34,6 +33,13 @@ export default function DriverStandings(){
             if (res.ok){
                 const newData = await res.json()
                 setData(newData)
+                localStorage.setItem("driverStandings", JSON.stringify(newData))
+            }
+            else {
+                const storedData = localStorage.getItem("driverStandings")
+                if (storedData){
+                    setData(JSON.parse(storedData))
+                }
             }
         }
         load()}, [])
