@@ -1,3 +1,5 @@
+import getMeetings from "@/lib/getMeetings"
+
 export async function GET() {
     type meetingDataObj = {
         meeting_key: number,
@@ -23,17 +25,16 @@ export async function GET() {
     try{
         const currentDate = new Date()
         const startDate = new Date(currentDate.getFullYear(), 0, 1)
-        const seasonFinishedRacesUrl = `https://api.openf1.org/v1/meetings?date_start>=${startDate.toISOString()}&date_end<=${currentDate.toISOString()}`
 
-        const seasonFinishedRacesRes = await fetch(seasonFinishedRacesUrl, { next: {revalidate: 1000} })
-        if (!seasonFinishedRacesRes.ok){
-            console.log(seasonFinishedRacesUrl)
+        const seasonFinishedRacesData = await getMeetings(`date_start>=${startDate.toISOString()}&date_end<=${currentDate.toISOString()}`)
+
+        if (!seasonFinishedRacesData){
             return Response.json(
                 {error: "OpenF1 error"},
                 {status: 502}
             )
         }
-        const seasonFinishedRacesData = await seasonFinishedRacesRes.json()
+
         const seasonRacesMeetingKeys = seasonFinishedRacesData.map((meetingData:meetingDataObj) =>  meetingData.meeting_key)
 
         let standingsPerRace

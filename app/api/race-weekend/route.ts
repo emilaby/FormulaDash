@@ -1,4 +1,5 @@
 import getCurrentMeetingKey from "@/lib/getCurrentMeetingKey"
+import getMeetings from "@/lib/getMeetings"
 
 export async function GET(request: Request) {
     try{
@@ -14,31 +15,27 @@ export async function GET(request: Request) {
                 )
             }
 
-            const latestMeetingUrl = `https://api.openf1.org/v1/meetings?meeting_key=${meetingKey}`
-            const latestMeetingRes = await fetch(latestMeetingUrl, { next: {revalidate: 1000} })
+            const latestMeetingData = await getMeetings(`meeting_key=${meetingKey}`)
             
-            if (!latestMeetingRes.ok){
+            if (!latestMeetingData){
                 return Response.json(
                     {error: "Error fetching latest meeting data from OpenF1"},
                     {status: 502}
                 )
             }
             
-            const latestMeetingData = await latestMeetingRes.json()
             return Response.json(latestMeetingData[0])
         }
 
+        const meetingData = await getMeetings(`meeting_key=${meetingKeys.join("&meeting_key=")}`)
 
-        const meetingsUrl = `https://api.openf1.org/v1/meetings?meeting_key=${meetingKeys.join("&meeting_key=")}`
-        const meetingsRes = await fetch(meetingsUrl, { next: {revalidate: 1000} })
-
-        if (!meetingsRes.ok){
+        if (!meetingData){
             return Response.json(
                 {error: "Error fetching meeting data from OpenF1"},
                 {status: 502}
             )
         }
-        const meetingData = await meetingsRes.json()
+        
         return Response.json(meetingData)
 
     }
