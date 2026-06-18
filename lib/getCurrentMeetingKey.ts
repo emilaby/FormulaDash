@@ -24,7 +24,7 @@ export default async function getCurrentMeetingKey(){
         const year = new Date().getFullYear()
         const prevMeetingsUrl = `https://api.openf1.org/v1/meetings?year=${year}`
 
-        const prevMeetingsRes = await fetch(prevMeetingsUrl)
+        const prevMeetingsRes = await fetch(prevMeetingsUrl, { next: {revalidate: 1000}})
 
         if (!prevMeetingsRes.ok){
             return null

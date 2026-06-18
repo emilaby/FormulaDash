@@ -21,7 +21,7 @@ export default async function getLastRaceSessionKey(){
         const year = new Date().getFullYear()
         const prevRacesUrl = `https://api.openf1.org/v1/sessions?session_name=Race&year=${year}`
 
-        const prevRacesRes = await fetch(prevRacesUrl)
+        const prevRacesRes = await fetch(prevRacesUrl, { next: {revalidate: 1000}})
 
         if (!prevRacesRes.ok){
             return null
