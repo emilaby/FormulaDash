@@ -137,7 +137,7 @@ export default function LastSessionCard (){
 
     return (
         <>
-        {(!sessionInfo && !sessionData && !driverData) &&  
+        {(!sessionInfo || !sessionData || !driverData) &&  
         
         <div className="w-19/20 m-7 flex flex-col items-center p-4 border border-mid-blue rounded-3xl animate-pulse">
             <div className="h-4 w-24 bg-gray-700 rounded-full mb-2"/>

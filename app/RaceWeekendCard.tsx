@@ -46,6 +46,12 @@ export default function RaceWeekendCard(){
                 }
             }
             load()}, [])
+    
+    const [hourglassFlip, setHourGlassFlip] = React.useState(false)
+    React.useEffect(() => {
+        const interval = setInterval(() => setHourGlassFlip(prev => !prev), 1000)
+        return () => clearInterval(interval)
+    }, [])
 
     const liveNow = meetingData ? Date.parse(meetingData.date_start) <= Date.now() : false 
     const raceName = meetingData?.meeting_official_name.toLowerCase()
@@ -56,33 +62,32 @@ export default function RaceWeekendCard(){
 
     return (
         <>
-        {!meetingData &&  
+        {!meetingData &&
         
-        <div className="flex flex-col items-center border border-mid-blue p-6 basis-[55%] h-[400px] grow shrink ml-7 mt-7 mb-7 mr-5 rounded-3xl animate-pulse">
+        <div className="flex flex-col w-full items-center border border-mid-blue p-6  h-[250px]  ml-7 mt-7 mb-7 mr-5 rounded-3xl animate-pulse">
             <div className="h-4 w-24 bg-gray-700 rounded-full mb-2"/>
             <div className="h-6 w-64 bg-gray-700 rounded-full mb-4"/>
-            <div className="h-[300px] w-full bg-gray-800 rounded-lg"/>
+            <div className="h-[120px] w-full bg-gray-800 rounded-lg"/>
         </div>}
 
-        {meetingData && 
+        {meetingData &&
 
-        <div className="basis-[45%] grow shrink min-w-0 max-w-[45%] ml-8 mb-7 mt-7 flex flex-col items-center p-6 border border-mid-blue rounded-3xl hover:bg-white/3 transition">
+        <div className=" mt-5 flex flex-col items-center w-full p-6 border border-mid-blue rounded-3xl hover:bg-white/3 transition">
             {liveNow && <p className="text-xs text-gray-500 mb-2">CURRENT RACE WEEKEND</p>}
             {!liveNow && <p className="text-xs text-gray-500 mb-2">NEXT RACE WEEKEND</p>}
             <div className="flex gap-5 mb-5">
                 <h1 className="font-medium text-lg">{raceName}</h1>
                 <Image src={meetingData.country_flag} width={48} height={26} className="rounded-md object-contain" alt={`${meetingData.country_name} flag`}/>
             </div>
-            <div className="flex justify-center mt-2">
+            <div className="flex justify-center items-center">
                 <div className="flex-col items-center">
-                    {liveNow && <p className="text-center mb-3">Live 🟢</p>}
-                    {!liveNow && <p className="text-center mb-3">Upcoming... ⏳</p>}
-                    <p className="text-center">{`${new Date(meetingData.date_start).toString()} to ${new Date(meetingData.date_end).toString()}`}</p>
+                    {liveNow && <p className="text-center mb-3">Live <span className="animate-pulse">🟢</span></p>}
+                    {!liveNow && <p className="text-center mb-3">{`${hourglassFlip ? "⏳" : "⌛"} Upcoming`}</p>}
+                    <p className="text-center">{`${new Date(meetingData.date_start).toLocaleString("en-GB", {weekday: "long", month: "long", day: "numeric", hour: "2-digit", minute: "2-digit"}).replace(" at", ", ")} 
+                        - ${new Date(meetingData.date_end).toLocaleString("en-GB",  {weekday: "long", month: "long", day: "numeric", hour: "2-digit", minute: "2-digit"}).replace(" at", ", ")}`}</p>
                 </div>
-                <Image src={meetingData.circuit_image} width={138} height={100} className="mt-3" alt={`${meetingData.circuit_short_name} circuit`}/>
+                <Image src={meetingData.circuit_image} width={138} height={100} alt={`${meetingData.circuit_short_name} circuit`}/>
             </div>
-           
-
         </div>}
         </>
     )

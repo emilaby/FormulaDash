@@ -1,12 +1,17 @@
 import RaceWeekendCard from "./RaceWeekendCard"
 import LastSessionCard from "./LastSessionCard"
-import DriverStandingsGraph from "@/DriverStandingsGraph"
+import NextSessionCard from "./NextSessionCard"
+import DriverStandingsGraph from "./DriverStandingsGraph"
+
 
 export default async function Home() {
   return(
     <main className="bg-dark-blue min-h-screen flex flex-col items-center">
       <div className="flex w-full gap-12 h-[500px]">
-         <RaceWeekendCard />
+        <div className="basis-[45%] grow shrink min-w-0 max-w-[45%] ml-8 mb-7 mt-5 flex flex-col items-center ">
+          <NextSessionCard />
+          <RaceWeekendCard />
+        </div>
         <DriverStandingsGraph />
       </div>
      
