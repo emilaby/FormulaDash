@@ -1,6 +1,5 @@
 "use client"
 import React from "react"
-import Image from "next/image"
 
 type sessionDataElement = {
     position: number,
@@ -139,14 +138,14 @@ export default function LastSessionCard (){
         <>
         {(!sessionInfo || !sessionData || !driverData) &&  
         
-        <div className="w-19/20 m-7 flex flex-col items-center p-4 border border-mid-blue rounded-3xl animate-pulse">
+        <div className="w-19/20 ml-7 mr-7 mb-7 mt-9 flex flex-col items-center p-5 border border-mid-blue rounded-3xl animate-pulse">
             <div className="h-4 w-24 bg-gray-700 rounded-full mb-2"/>
             <div className="h-6 w-64 bg-gray-700 rounded-full mb-4"/>
             <div className="h-48 w-full bg-gray-800 rounded-lg"/>
         </div>}
         
         {sessionInfo?.session_type?.trim().toLowerCase() === SessionType.Race && 
-        <div className="w-19/20 m-7 flex flex-col items-center p-4 border border-mid-blue rounded-3xl hover:bg-white/3 transition">
+        <div className="w-19/20 ml-7 mr-7 mb-7 mt-9 flex flex-col items-center p-5 border border-mid-blue rounded-3xl hover:bg-white/3 transition">
             <p className="text-xs text-gray-500 mb-2">LAST SESSION</p>
             <h1 className="font-medium text-lg">{sessionInfo?.name}</h1>
 
@@ -168,11 +167,11 @@ export default function LastSessionCard (){
                             <td className="w-3/16 p-3 pl-10 text-gray-300">{sessionDriver.position || "-"}</td>
                             <td className="w-6/16 pl-3">
                                 <div className="flex gap-10 items-center">
-                                    {driver?.team_img && <Image src={driver.team_img} width={35} height={20} alt="team logo"/>}
+                                    {driver?.team_colour && <div className="w-7 h-7 rounded-full" style={{ backgroundColor: `#${driver.team_colour}`}}></div>}
                                     <p>{driver?.full_name}</p>
                                 </div>
                             </td>
-                            <td className="w-5/16 p-3 text-lg">{sessionDriver.position === 1 ? formatRaceTime(sessionDriver.duration) : (sessionDriver.gap_to_leader || (sessionDriver.dnf ? "DNF" : (sessionDriver.dns ? "DNS" : (sessionDriver.dsq ? "DSQ" : "NC"))))}</td>
+                            <td className="w-5/16 p-3 text-lg">{sessionDriver.position === 1 ? formatRaceTime(sessionDriver.duration) : (sessionDriver.gap_to_leader ? `+${String(sessionDriver.gap_to_leader).replace("+", "")}` : (sessionDriver.dnf ? "DNF" : (sessionDriver.dns ? "DNS" : (sessionDriver.dsq ? "DSQ" : "NC"))))}</td>
                             <td  className="w-2/16 pl-4">{sessionDriver.points}</td>
                         </tr>
                     )})}
@@ -203,7 +202,7 @@ export default function LastSessionCard (){
                             <td className="w-3/16 p-3 pl-10 text-gray-300">{sessionDriver.position || "-"}</td>
                             <td className="w-6/16">
                                 <div className="flex gap-10 items-center">
-                                    {driver?.team_img && <Image src={driver.team_img} width={35} height={20} alt="team logo"/>}
+                                    {driver?.team_colour && <div className="w-7 h-7 rounded-full" style={{ backgroundColor: `#${driver.team_colour}`}}></div>}
                                     <p>{driver?.full_name}</p>
                                 </div>
                             </td>

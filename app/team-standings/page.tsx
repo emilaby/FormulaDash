@@ -1,19 +1,32 @@
 "use client"
-import Image from "next/image"
 import React from "react"
 
-export default function TeamStandings(){
-      type teamStandingObj = {
-        meeting_key: number,
-        session_key: number,
-        team_name: string,
-        position_start: number,
-        position_current: number,
-        points_start: number,
-        points_current: number,
-        team_img: string
-    }
+type teamStandingObj = {
+    meeting_key: number,
+    session_key: number,
+    team_name: string,
+    position_start: number,
+    position_current: number,
+    points_start: number,
+    points_current: number,
+    team_img: string
+}
 
+type driverObj = {
+    meeting_key: number,
+    session_key: number,
+    driver_number: number,
+    broadcast_name: string,
+    full_name: string,
+    name_acronym: string,
+    team_name: string,
+    team_colour: string,
+    first_name: string,
+    last_name: string,
+    headshot_url: string,
+    country_code: string
+}
+export default function TeamStandings(){
     const [data, setData] = React.useState<teamStandingObj[] | null>(null)
 
     React.useEffect(() => {
@@ -35,7 +48,31 @@ export default function TeamStandings(){
         }
         load()}, [])
 
+    const [driverData, setDriverData] = React.useState<driverObj[] | null>(null)
+                
+        React.useEffect(() => {
+            async function load(){
+                const res = await fetch(`/api/driver`)
+                if (res.ok){
+                    const newData = await res.json()
+    
+                    if (newData){
+                        setDriverData(newData)
+                        localStorage.setItem("driverData", JSON.stringify(newData))
+                    }
+                    
+                }
+                else {
+                    const storedData = localStorage.getItem("driverData")
+                    if (storedData && storedData != undefined){
+                        setDriverData(JSON.parse(storedData))
+                    }
+                }
+            }
+            load()}, [])
+
     const sortedData = (data ? [...data].sort((a, b) => a.position_current - b.position_current) :[])
+    const teamColour = (teamName:string) => driverData?.find((driver:driverObj) => driver.team_name === teamName)?.team_colour || null
 
     return (
         <>
@@ -65,7 +102,7 @@ export default function TeamStandings(){
                             <td className="w-3/12 p-3 pl-10 text-gray-300">{standing.position_current}</td>
                             <td className="w-6/12 p-3">
                                 <div className="flex gap-7 items-center">
-                                    <Image src={standing.team_img} width={35} height={20} alt={standing.team_name}/> {standing.team_name}
+                                    {teamColour(standing?.team_name) && <div className="w-7 h-7 rounded-full" style={{ backgroundColor: `#${teamColour(standing?.team_name)}`}}></div>} {standing.team_name}
                                 </div>
                             </td>
                             <td  className="w-3/12 p-3">{standing.points_current}</td>

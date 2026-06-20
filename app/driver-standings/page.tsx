@@ -1,5 +1,4 @@
 "use client"
-import Image from "next/image"
 import React from "react"
 
 export default function DriverStandings(){
@@ -76,7 +75,7 @@ export default function DriverStandings(){
                             <td  className="w-4/16 p-3">{standing.points_current}</td>
                             <td className="w-4/16 p-3">
                                 <div className="flex gap-7 items-center">
-                                    <Image src={standing.team_img} width={35} height={20} alt={standing.team_name}/> {standing.team_name}
+                                    {standing?.team_colour && <div className="w-7 h-7 rounded-full" style={{ backgroundColor: `#${standing.team_colour}`}}></div>}{standing.team_name}
                                 </div>
                             </td>
                         </tr>

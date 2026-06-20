@@ -161,7 +161,7 @@ export default function DriverStandingsGraph(){
         
         {standingsPerRace && meetingData &&
         <div className="flex flex-col items-center basis-[55%] grow shrink mt-7 mb-7 mr-7 transform-gpu">
-            <p className="text-xs ml-10 mb-2 text-gray-500 mb-2">DRIVER STANDINGS</p>
+            <p className="text-xs pl-10 pb-2 text-gray-500">DRIVER STANDINGS</p>
             <ResponsiveContainer width="100%" height={450}>
             <LineChart data={standingsPerRaceGrouped}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#2d3738" vertical={false}/>
