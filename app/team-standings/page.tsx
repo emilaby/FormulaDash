@@ -31,7 +31,7 @@ export default function TeamStandings(){
 
     React.useEffect(() => {
         async function load(){
-            const url = "/api/team?"
+            const url = "/api/team"
             const res = await fetch(url)
             
             if (res.ok){

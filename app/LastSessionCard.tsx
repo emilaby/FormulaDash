@@ -53,7 +53,7 @@ export default function LastSessionCard (){
     
     React.useEffect(() => {
         async function load(){
-            const res = await fetch(`/api/session`)
+            const res = await fetch(`/api/session/latest`)
             
             if (res.ok){
                 const newData = await res.json()
