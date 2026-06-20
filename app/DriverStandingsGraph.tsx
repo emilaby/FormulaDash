@@ -1,6 +1,7 @@
 "use client"
 import React from "react"
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts"
+import { supabase } from "@/lib/supabase/client"
 
 
 type standingObj = {
@@ -57,51 +58,34 @@ export default function DriverStandingsGraph(){
             const res = await fetch(`/api/driver-standings-latest/history`)
             if (res.ok){
                 const newData = await res.json()
-
-                if (newData){
-                    setStandingsPerRace(newData)
-                    localStorage.setItem("standingsPerRace", JSON.stringify(newData))
-                }
-                
+                console.log(newData)
+                setStandingsPerRace(newData)
             }
-            else {
-                const storedData = localStorage.getItem("standingsPerRace")
-                if (storedData && storedData != undefined){
-                    setStandingsPerRace(JSON.parse(storedData))
-                }
-            }
+            return
         }
         load()}, [])
 
     const [driverData, setDriverData] = React.useState<driverObj[] | null>(null)
-            
+                    
     React.useEffect(() => {
         async function load(){
-            const res = await fetch(`/api/driver`)
-            if (res.ok){
-                const newData = await res.json()
-
-                if (newData){
-                    setDriverData(newData)
-                    localStorage.setItem("driverData", JSON.stringify(newData))
-                }
-                
+            const { data, error } = await supabase
+                .from("drivers")
+                .select("*")
+            if (error){
+                console.error(error)
+                return
             }
-            else {
-                const storedData = localStorage.getItem("driverData")
-                if (storedData && storedData != undefined){
-                    setDriverData(JSON.parse(storedData))
-                }
-            }
+            setDriverData(data)
         }
         load()}, [])
-    
-    const driverNumsSet = new Set(standingsPerRace?.map((standing:standingObj) => standing.driver_number))
+
+    const driverNumsSet = new Set((standingsPerRace??[]).map((standing:standingObj) => standing.driver_number))
     const driverNums = [...driverNumsSet]
 
 
     //use standingsPerRace, group by meeting_key so that arr has an object per race, each object has racekey and a property for each driver's pts
-    const meetingKeysSet = new Set(standingsPerRace?.map((standing:standingObj) => standing.meeting_key))
+    const meetingKeysSet = new Set((standingsPerRace??[]).map((standing:standingObj) => standing.meeting_key))
     const meetingKeys = [...meetingKeysSet]
 
 
@@ -109,8 +93,7 @@ export default function DriverStandingsGraph(){
             
     React.useEffect(() => {
         async function load(){
-            if (meetingKeys.length === 0) return
-            const res = await fetch(`/api/race-weekend?meeting_key=${meetingKeys.join("&meeting_key=")}`)
+            const res = await fetch(`/api/race-weekend/history`)
             if (res.ok){
                 const newData = await res.json()
 

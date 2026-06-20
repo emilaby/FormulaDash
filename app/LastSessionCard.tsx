@@ -118,7 +118,7 @@ export default function LastSessionCard (){
     const sortedNoPositionDriverData = (noPositionDriverData ? [...noPositionDriverData].sort((a, b) => b.number_of_laps - a.number_of_laps) :[])
 
     const mergedDriverData = [...sortedPositionDriverData, ...sortedNoPositionDriverData]
-
+    
     const findDriverData = (sessionDriver: sessionDataElement) => driverData?.find(driver => driver.driver_number === sessionDriver.driver_number)
 
     

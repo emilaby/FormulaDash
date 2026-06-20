@@ -2,22 +2,25 @@ import { supabaseAdmin } from "@/lib/supabase/server"
 
 export async function GET() {
     try{
-        const driverDataUrl = "https://api.openf1.org/v1/drivers?session_key=latest"
-        const driverDataRes = await fetch(driverDataUrl)
+        const currentDate = new Date()
+        const startDate = new Date(currentDate.getFullYear(), 0, 1)
 
-        if (!driverDataRes.ok){
+        const meetingsUrl = `https://api.openf1.org/v1/meetings?date_start>=${startDate.toISOString()}`
+        const meetingsRes = await fetch(meetingsUrl)
+
+        if (!meetingsRes.ok){
             return Response.json(
                 {success: false, error: "Error fetching driver data from OpenF1"},
                 {status: 502}
             )
         }
 
-        const driverData = await driverDataRes.json()
+        const meetingsData = await meetingsRes.json()
 
         const { error } = await supabaseAdmin
-            .from("drivers")
-            .upsert(driverData, {
-                onConflict: "driver_number"
+            .from("meetings")
+            .upsert(meetingsData, {
+                onConflict: "meeting_key"
         })
 
         if (error){

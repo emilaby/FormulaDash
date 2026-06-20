@@ -28,7 +28,7 @@ export default function RaceWeekendCard(){
         
         React.useEffect(() => {
             async function load(){
-                const res = await fetch(`/api/race-weekend`)
+                const res = await fetch(`/api/race-weekend/latest`)
                 if (res.ok){
                     const newData = await res.json()
 
@@ -53,7 +53,7 @@ export default function RaceWeekendCard(){
         return () => clearInterval(interval)
     }, [])
 
-    const liveNow = meetingData ? Date.parse(meetingData.date_start) <= Date.now() : false 
+    const liveNow = meetingData ? Date.parse(meetingData.date_start) <= Date.now() : false
     const raceName = meetingData?.meeting_official_name.toLowerCase()
                         .split(" ")
                         .map(word => word.charAt(0).toUpperCase() + word.slice(1))

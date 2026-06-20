@@ -1,5 +1,6 @@
 "use client"
 import React from "react"
+import { supabase } from "@/lib/supabase/client"
 
 type teamStandingObj = {
     meeting_key: number,
@@ -50,26 +51,18 @@ export default function TeamStandings(){
 
     const [driverData, setDriverData] = React.useState<driverObj[] | null>(null)
                 
-        React.useEffect(() => {
-            async function load(){
-                const res = await fetch(`/api/driver`)
-                if (res.ok){
-                    const newData = await res.json()
-    
-                    if (newData){
-                        setDriverData(newData)
-                        localStorage.setItem("driverData", JSON.stringify(newData))
-                    }
-                    
-                }
-                else {
-                    const storedData = localStorage.getItem("driverData")
-                    if (storedData && storedData != undefined){
-                        setDriverData(JSON.parse(storedData))
-                    }
-                }
+    React.useEffect(() => {
+        async function load(){
+            const { data, error } = await supabase
+                .from("drivers")
+                .select("*")
+            if (error){
+                console.error(error)
+                return
             }
-            load()}, [])
+            setDriverData(data)
+        }
+        load()}, [])
 
     const sortedData = (data ? [...data].sort((a, b) => a.position_current - b.position_current) :[])
     const teamColour = (teamName:string) => driverData?.find((driver:driverObj) => driver.team_name === teamName)?.team_colour || null
@@ -97,17 +90,19 @@ export default function TeamStandings(){
                     </thead>
                     
                     <tbody>
-                        {sortedData && sortedData.map((standing:teamStandingObj) => (
+                        {sortedData && sortedData.map((standing:teamStandingObj) => {
+                        const colour = teamColour(standing?.team_name)
+                        return (
                         <tr className="h-16 border-b border-gray-700 px-5 hover:bg-white/3 transition" key={standing.team_name}>
                             <td className="w-3/12 p-3 pl-10 text-gray-300">{standing.position_current}</td>
                             <td className="w-6/12 p-3">
                                 <div className="flex gap-7 items-center">
-                                    {teamColour(standing?.team_name) && <div className="w-7 h-7 rounded-full" style={{ backgroundColor: `#${teamColour(standing?.team_name)}`}}></div>} {standing.team_name}
+                                    {colour && <div className="w-7 h-7 rounded-full" style={{ backgroundColor: `#${colour}`}}></div>} {standing.team_name}
                                 </div>
                             </td>
                             <td  className="w-3/12 p-3">{standing.points_current}</td>
                         </tr>
-                        ))} 
+                        )})} 
                     </tbody>
                 </table>
             </div>
