@@ -93,7 +93,7 @@ export default function LastSessionCard (){
 
         React.useEffect(() => {
         async function load(){
-            const res = await fetch(`/api/driver-standings-latest`)
+            const res = await fetch(`/api/driver-standings-latest/latest`)
             
             if (res.ok){
                 const newData = await res.json()

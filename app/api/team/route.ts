@@ -1,58 +1,40 @@
-import { TEAMNAMES, TEAMIMGS } from "@/public/data/f1Data"
-import getLastRaceSessionKey from "@/lib/getLastRaceSessionKey"
+import { supabaseAdmin } from "@/lib/supabase/server"
 
-export async function GET(){
-    type teamObj = {
-        meeting_key: number,
-        session_key: number,
-        team_name: string,
-        position_start: number,
-        position_current: number,
-        points_start: number,
-        points_current: number,
-    }
-
+export async function GET() {
     try{
-        const lastRaceSessionKey = await getLastRaceSessionKey()
-        if (!lastRaceSessionKey){
+        const teamStandingsUrl = "https://api.openf1.org/v1/championship_teams"
+        const teamStandingsRes = await fetch(teamStandingsUrl)
+
+        if (!teamStandingsRes.ok){
             return Response.json(
-                {error: "Error fetching last session key from OpenF1"},
+                {success: false, error: "Error fetching driver data from OpenF1"},
                 {status: 502}
             )
         }
-        
-        const url = `https://api.openf1.org/v1/championship_teams?session_key=${lastRaceSessionKey}`
 
-        const teamDataRes = await fetch(url, { next: {revalidate: 1000} })
+        const teamStandings = await teamStandingsRes.json()
 
-        if (!teamDataRes.ok){
+        const { error } = await supabaseAdmin
+            .from("team_standings")
+            .upsert(teamStandings, {
+                onConflict: "team_name, session_key"
+        })
+
+        if (error){
+            console.error(error.message)
             return Response.json(
-                {error: "OpenF1 error"},
-                {status: 502}
-            )
-        }
-        
-        const teamData = await teamDataRes.json()
-        let mergedData = []
-
-        for (const name of TEAMNAMES){
-            const teamObj = teamData.find((teamDataObj:teamObj) => teamDataObj.team_name === name)
-            const teamImg = TEAMIMGS.get(teamObj.team_name.toLowerCase().replace(/ /g, ""))
-            mergedData.push({
-                ...teamObj,
-                team_img: teamImg
-            })
-
+                {success: false, error: error.message},
+                {status: 500})
         }
 
-        return Response.json(mergedData)
+        return Response.json({success: true})
     }
-
+    
     catch(err){
-        console.error("Error fetching from OpenF1:", err)
+        console.error(err)
         return Response.json(
-            {error: "Failed to load data"},
+            {success: false, error: "Failed to load data"},
             {status: 500}
-    )
+        )
     }
 }

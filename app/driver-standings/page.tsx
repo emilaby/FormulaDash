@@ -1,6 +1,8 @@
 "use client"
 import React from "react"
 
+// FULLY DB
+
 export default function DriverStandings(){
       type driverStandingObj = {
         meeting_key: number,
@@ -19,31 +21,24 @@ export default function DriverStandings(){
         last_name: string,
         headshot_url: string,
         country_code: string,
-        team_img: string
     }
 
-    const [data, setData] = React.useState<driverStandingObj[] | null>(null)
+    const [driverStandingsData, setDriverStandingsData] = React.useState<driverStandingObj[] | null>(null)
 
     React.useEffect(() => {
         async function load(){
-            const url = "/api/driver-standings-latest"
+            const url = "/api/driver-standings-latest/latest"
             const res = await fetch(url)
             
             if (res.ok){
                 const newData = await res.json()
-                setData(newData)
-                localStorage.setItem("driverStandings", JSON.stringify(newData))
+                setDriverStandingsData(newData)
             }
-            else {
-                const storedData = localStorage.getItem("driverStandings")
-                if (storedData){
-                    setData(JSON.parse(storedData))
-                }
-            }
+            return
         }
         load()}, [])
 
-    const sortedData = (data ? [...data].sort((a, b) => a.position_current - b.position_current) :[])
+    const sortedData = (driverStandingsData ? [...driverStandingsData].sort((a, b) => a.position_current - b.position_current) :[])
 
     return (
         <>

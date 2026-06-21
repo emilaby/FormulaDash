@@ -28,24 +28,18 @@ type driverObj = {
     country_code: string
 }
 export default function TeamStandings(){
-    const [data, setData] = React.useState<teamStandingObj[] | null>(null)
+    const [teamStandings, setTeamStandings] = React.useState<teamStandingObj[] | null>(null)
 
     React.useEffect(() => {
         async function load(){
-            const url = "/api/team"
+            const url = "/api/team/latest"
             const res = await fetch(url)
             
             if (res.ok){
                 const newData = await res.json()
-                setData(newData)
-                localStorage.setItem("teamStandings", JSON.stringify(newData))
+                setTeamStandings(newData)
             }
-            else {
-                const storedData = localStorage.getItem("teamStandings")
-                if (storedData){
-                    setData(JSON.parse(storedData))
-                }
-            }
+            return 
         }
         load()}, [])
 
@@ -64,7 +58,7 @@ export default function TeamStandings(){
         }
         load()}, [])
 
-    const sortedData = (data ? [...data].sort((a, b) => a.position_current - b.position_current) :[])
+    const sortedData = (teamStandings ? [...teamStandings].sort((a, b) => a.position_current - b.position_current) :[])
     const teamColour = (teamName:string) => driverData?.find((driver:driverObj) => driver.team_name === teamName)?.team_colour || null
 
     return (

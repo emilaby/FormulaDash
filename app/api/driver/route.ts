@@ -2,7 +2,7 @@ import { supabaseAdmin } from "@/lib/supabase/server"
 
 export async function GET() {
     try{
-        const driverDataUrl = "https://api.openf1.org/v1/drivers?session_key=latest"
+        const driverDataUrl = "https://api.openf1.org/v1/drivers"
         const driverDataRes = await fetch(driverDataUrl)
 
         if (!driverDataRes.ok){
@@ -17,7 +17,7 @@ export async function GET() {
         const { error } = await supabaseAdmin
             .from("drivers")
             .upsert(driverData, {
-                onConflict: "driver_number"
+                onConflict: "driver_number, session_key"
         })
 
         if (error){
