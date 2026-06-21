@@ -1,16 +1,6 @@
 import { supabaseAdmin } from "@/lib/supabase/server"
 
 export async function GET(){
-    type teamObj = {
-        meeting_key: number,
-        session_key: number,
-        team_name: string,
-        position_start: number,
-        position_current: number,
-        points_start: number,
-        points_current: number,
-    }
-
     try{
         const currentDate = new Date()
 
@@ -31,20 +21,20 @@ export async function GET(){
         }
         const lastRaceSessionKeyParsed = lastRaceSessionKey.map(lastRaceSK => lastRaceSK.session_key)[0]
 
-        const { data: teamStandingsLatest, error: teamStandingsLatestErr } = await supabaseAdmin
-            .from("team_standings")
+        const { data: driverLatest, error: driverLatestErr } = await supabaseAdmin
+            .from("drivers")
             .select("*")
             .eq("session_key", lastRaceSessionKeyParsed)
         
-        if (teamStandingsLatestErr){
-            console.error(teamStandingsLatestErr.message)
+        if (driverLatestErr){
+            console.error(driverLatestErr.message)
             return Response.json(
-                {success: false, error: teamStandingsLatestErr.message},
+                {success: false, error: driverLatestErr.message},
                 {status: 500}
             )
         }
 
-        return Response.json(teamStandingsLatest)
+        return Response.json(driverLatest)
 
     }
 

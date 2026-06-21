@@ -1,7 +1,6 @@
 "use client"
 import React from "react"
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts"
-import { supabase } from "@/lib/supabase/client"
 
 
 type standingObj = {
@@ -58,7 +57,6 @@ export default function DriverStandingsGraph(){
             const res = await fetch(`/api/driver-standings-latest/history`)
             if (res.ok){
                 const newData = await res.json()
-                console.log(newData)
                 setStandingsPerRace(newData)
             }
             return
@@ -69,14 +67,12 @@ export default function DriverStandingsGraph(){
                     
     React.useEffect(() => {
         async function load(){
-            const { data, error } = await supabase
-                .from("drivers")
-                .select("*")
-            if (error){
-                console.error(error)
-                return
+            const res = await fetch(`/api/driver/latest`)
+            if (res.ok){
+                const newData = await res.json()
+                setDriverData(newData)
             }
-            setDriverData(data)
+            return
         }
         load()}, [])
 
@@ -99,20 +95,20 @@ export default function DriverStandingsGraph(){
 
                 if (newData){
                     setMeetingData(newData)
-                    localStorage.setItem("meetingsData", JSON.stringify(newData))
                 }
                 
             }
-            else {
-                const storedData = localStorage.getItem("meetingsData")
-                if (storedData && storedData != undefined){
-                    setMeetingData(JSON.parse(storedData))
-                }
-            }
+            return
+
         }
         load()}, [meetingKeys.join(",")])
 
-
+    const meetingStartDate = (meetingKey: number): number => {
+        const meeting = meetingData?.find((m: meetingDataObj) => m.meeting_key === meetingKey)
+        return meeting ? new Date(meeting.date_start).getTime() : 0
+    }    
+    
+    meetingKeys.sort((a:number, b:number) => meetingStartDate(a) - meetingStartDate(b))
 
     const meetingLocation = (meetingKey:number) => meetingData?.find((meeting:meetingDataObj) => meeting.meeting_key === meetingKey)?.location
 
@@ -128,6 +124,7 @@ export default function DriverStandingsGraph(){
             }, {location: meetingLocation(key) || ""}
         )
     })
+
 
     const driverTeamColour = (driverNum:number) => driverData?.find((driver:driverObj) => driver.driver_number === driverNum)?.team_colour
     const nameFromNum = (driverNum:number) => driverData?.find((driver:driverObj) => driver.driver_number === driverNum)?.last_name
