@@ -67,19 +67,13 @@ export default function LastSessionCard (){
 
         React.useEffect(() => {
         async function load(){
-            const res = await fetch(`/api/session-results`)
+            const res = await fetch(`/api/session-results/latest`)
             
             if (res.ok){
                 const newData = await res.json()
                 setSessionData(newData)
-                localStorage.setItem("lastSessionData", JSON.stringify(newData))
             }
-            else {
-                const storedData = localStorage.getItem("lastSessionData")
-                if (storedData){
-                    setSessionData(JSON.parse(storedData))
-                }
-            }
+            return
         }
         load()}, [])
 
@@ -138,7 +132,7 @@ export default function LastSessionCard (){
             <div className="h-48 w-full bg-gray-800 rounded-lg"/>
         </div>}
         
-        {sessionInfo?.session_type?.trim().toLowerCase() === SessionType.Race && 
+        {sessionInfo && sessionData && driverData && sessionInfo?.session_type?.trim().toLowerCase() === SessionType.Race && 
         <div className="w-19/20 ml-7 mr-7 mb-7 mt-9 flex flex-col items-center p-5 border border-mid-blue rounded-3xl hover:bg-white/3 transition">
             <p className="text-xs text-gray-500 mb-2">LAST SESSION</p>
             <h1 className="font-medium text-lg">{sessionInfo?.name}</h1>
@@ -173,7 +167,7 @@ export default function LastSessionCard (){
             </table>
 
         </div>}
-        {(sessionInfo?.session_type?.trim().toLowerCase() === SessionType.Practice || sessionInfo?.session_type?.trim().toLowerCase() === SessionType.Qualifying) && 
+        {sessionInfo && sessionData && driverData && (sessionInfo?.session_type?.trim().toLowerCase() === SessionType.Practice || sessionInfo?.session_type?.trim().toLowerCase() === SessionType.Qualifying) && 
         <div className="w-19/20 m-7 flex flex-col items-center p-4 border border-mid-blue rounded-3xl hover:bg-white/3 transition">
             <p className="text-xs text-gray-500 mb-2">LAST SESSION</p>
             <h1 className="font-medium text-lg">{sessionInfo?.name}</h1>

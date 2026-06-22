@@ -1,3 +1,4 @@
+import { supabaseAdmin } from "@/lib/supabase/server"
 export async function GET() {
     type sessionDataObj = {
         session_key: number,
@@ -18,24 +19,23 @@ export async function GET() {
 
     }
     try{
-        const sessionsUrl = "https://api.openf1.org/v1/sessions"
-        const sessionsRes = await fetch(sessionsUrl, { next: {revalidate: 1000} })
+        const currentDate = new Date()
 
-        if (!sessionsRes.ok){
+        const { data, error } = await supabaseAdmin
+        .from("sessions")
+        .select("*")
+        .gt("date_start", currentDate.toISOString())
+        .order("date_end", { ascending: true })
+        .limit(1)
+        
+        if (error){
             return Response.json(
-                {error: "OpenF1 error"},
-                {status: 502}
+                {success: false, error: error.message},
+                {status: 500}
             )
         }
-
-        const sessionsData = await sessionsRes.json()
-        // start date is after now, sort by date end, pick closest ending one
-        const dateNow = new Date()
-        const futureSessionsData = sessionsData.filter((sessionData:sessionDataObj) => new Date(sessionData.date_start) > dateNow)
-        const sortedFutureSessionsData = futureSessionsData.sort((a:sessionDataObj, b:sessionDataObj) => a.date_end < b.date_end ? -1 : a.date_end > b.date_end ? 1 : 0)
-        const nextSessionData = sortedFutureSessionsData[0]
-
-        return Response.json(nextSessionData)
+        
+        return Response.json(data[0])
     }
 
     catch(err) {

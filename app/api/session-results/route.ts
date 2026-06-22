@@ -1,27 +1,69 @@
+import { supabaseAdmin } from "@/lib/supabase/server"
+type sessionDataElement = {
+    position: number,
+    driver_number: number,
+    number_of_laps: number,
+    points: number,
+    dnf: boolean,
+    dns: boolean,
+    dsq: boolean,
+    duration: number | number[],
+    gap_to_leader: string | sting[],
+    meeting_key: number,
+    session_key: number
+}
+
 export async function GET() {
     try{
-        const latestSessionUrl = "https://api.openf1.org/v1/session_result?session_key=latest"
-        const latestSessionRes = await fetch(latestSessionUrl, { next: {revalidate: 1000} })
+        const sessionsUrl = "https://api.openf1.org/v1/session_result"
+        const sessionsRes = await fetch(sessionsUrl)
 
-        if (!latestSessionRes.ok){
+        if (!sessionsRes.ok){
             return Response.json(
-                {error: "OpenF1 error"},
+                {success: false, error: "Error fetching driver data from OpenF1"},
                 {status: 502}
             )
         }
 
-        const latestSessionData = await latestSessionRes.json()
+        const sessionsData = await sessionsRes.json()
 
-        return Response.json(latestSessionData)
+        const parsedSessionsData = sessionsData.map((sessionData:sessionDataElement) => (
+            {
+                position: sessionData.position,
+                driver_number: sessionData.driver_number,
+                number_of_laps: sessionData.number_of_laps,
+                points: sessionData.points,
+                dnf: sessionData.dnf,
+                dns: sessionData.dns,
+                dsq: sessionData.dsq,
+                duration: Array.isArray(sessionData.duration) ? sessionData.duration[sessionData.duration.length - 1] : sessionData.duration,
+                gap_to_leader: Array.isArray(sessionData.gap_to_leader) ? sessionData.gap_to_leader[sessionData.gap_to_leader.length - 1] : sessionData.gap_to_leader,
+                meeting_key: sessionData.meeting_key,
+                session_key: sessionData.session_key
+            }
+        ))
 
+        const { error } = await supabaseAdmin
+            .from("session_results")
+            .upsert(parsedSessionsData, {
+                onConflict: "driver_number, session_key"
+        })
+
+        if (error){
+            console.error(error.message)
+            return Response.json(
+                {success: false, error: error.message},
+                {status: 500})
+        }
+
+        return Response.json({success: true})
     }
-
-    catch(err) {
+    
+    catch(err){
+        console.error(err)
         return Response.json(
-            {error: "Failed to load data"},
+            {success: false, error: "Failed to load data"},
             {status: 500}
         )
     }
 }
-
-

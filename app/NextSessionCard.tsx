@@ -30,16 +30,10 @@ export default function NextSessionCard() {
 
                 if (newData){
                     setnextSessionData(newData)
-                    localStorage.setItem("nextSession", JSON.stringify(newData))
                 }
                 
             }
-            else {
-                const storedData = localStorage.getItem("nextSession")
-                if (storedData && storedData != undefined){
-                    setnextSessionData(JSON.parse(storedData))
-                }
-            }
+            return
         }
         load()}, [])
     
