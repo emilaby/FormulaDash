@@ -1,5 +1,4 @@
 import getMeetingHistory from "@/lib/getMeetingHistory"
-import { supabase } from "@/lib/supabase/server"
 
 type standingObj = {
     meeting_key: number,

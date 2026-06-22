@@ -1,38 +1,34 @@
 "use client"
 import React from "react"
 
-type sessionDataElement = {
-    position: number,
+type sessionDataObj = {
     driver_number: number,
+    position: number,
     number_of_laps: number,
-    points: number,
     dnf: boolean,
     dns: boolean,
     dsq: boolean,
-    duration: number,
-    gap_to_leader: number,
     meeting_key: number,
-    session_key: number
+    session_key: number,
+    points: number,
+    gap_to_leader: string,
+    duration: number,
+    drivers: driverObj
 }
 
-type driverDataObj = {
-        meeting_key: number,
-        session_key: number,
-        driver_number: number,
-        position_start: number,
-        position_current: number,
-        points_start: number,
-        points_current: number,
-        broadcast_name: string,
-        full_name: string,
-        name_acronym: string,
-        team_name: string,
-        team_colour: string,
-        first_name: string,
-        last_name: string,
-        headshot_url: string,
-        country_code: string,
-        team_img: string
+type driverObj = {
+    meeting_key: number,
+    session_key: number,
+    driver_number: number,
+    broadcast_name: string,
+    full_name: string,
+    name_acronym: string,
+    team_name: string,
+    team_colour: string,
+    first_name: string,
+    last_name: string,
+    headshot_url: string,
+    country_code: string
 }
 
 type sessionInfo = {
@@ -48,60 +44,21 @@ enum SessionType {
 
 
 export default function LastSessionCard (){
-
     const [sessionInfo, setSessionInfo] = React.useState<sessionInfo | null>(null)
+    const [sessionData, setSessionData] = React.useState<sessionDataObj[] | null>(null)
     
     React.useEffect(() => {
-        async function load(){
-            const res = await fetch(`/api/session/latest`)
-            
-            if (res.ok){
-                const newData = await res.json()
-                setSessionInfo(newData)
-            }
-            return
-        }
-        load()}, [])
-
-        const [sessionData, setSessionData] = React.useState<sessionDataElement[] | null>(null)
-
-        React.useEffect(() => {
         async function load(){
             const res = await fetch(`/api/session-results/latest`)
             
             if (res.ok){
                 const newData = await res.json()
-                setSessionData(newData)
+                setSessionInfo(newData.sessionInfo)
+                setSessionData(newData.mergedSessionData)
             }
             return
         }
-        load()}, [])
-
-        const [driverData, setDriverData] = React.useState<driverDataObj[] | null>(null)
-
-        React.useEffect(() => {
-        async function load(){
-            const res = await fetch(`/api/driver-standings/latest`)
-            
-            if (res.ok){
-                const newData = await res.json()
-                setDriverData(newData)
-            }
-            return
-        }
-        load()}, [])
-    
-    
-
-
-    const positionDriverData = sessionData?.filter((sessionDriver) => sessionDriver.position)
-    const noPositionDriverData = sessionData?.filter((sessionDriver) => !sessionDriver.position)
-    const sortedPositionDriverData = (positionDriverData ? [...positionDriverData].sort((a, b) => a.position - b.position) :[])
-    const sortedNoPositionDriverData = (noPositionDriverData ? [...noPositionDriverData].sort((a, b) => b.number_of_laps - a.number_of_laps) :[])
-
-    const mergedDriverData = [...sortedPositionDriverData, ...sortedNoPositionDriverData]
-    
-    const findDriverData = (sessionDriver: sessionDataElement) => driverData?.find(driver => driver.driver_number === sessionDriver.driver_number)
+    load()}, [])
 
     
     const formatLaptime = (timeInSecs:number) => {
@@ -118,7 +75,7 @@ export default function LastSessionCard (){
 
     return (
         <>
-        {(!sessionInfo || !sessionData || !driverData) &&  
+        {(!sessionInfo || !sessionData) &&  
         
         <div className="w-19/20 ml-7 mr-7 mb-7 mt-9 flex flex-col items-center p-5 border border-mid-blue rounded-3xl animate-pulse">
             <div className="h-4 w-24 bg-gray-700 rounded-full mb-2"/>
@@ -126,7 +83,7 @@ export default function LastSessionCard (){
             <div className="h-48 w-full bg-gray-800 rounded-lg"/>
         </div>}
         
-        {sessionInfo && sessionData && driverData && sessionInfo?.session_type?.trim().toLowerCase() === SessionType.Race && 
+        {sessionInfo && sessionData  && sessionInfo?.session_type?.trim().toLowerCase() === SessionType.Race && 
         <div className="w-19/20 ml-7 mr-7 mb-7 mt-9 flex flex-col items-center p-5 border border-mid-blue rounded-3xl hover:bg-white/3 transition">
             <p className="text-xs text-gray-500 mb-2">LAST SESSION</p>
             <h1 className="font-medium text-lg">{sessionInfo?.name}</h1>
@@ -142,15 +99,14 @@ export default function LastSessionCard (){
                 </thead>
                 
                 <tbody>
-                    {mergedDriverData && mergedDriverData.map((sessionDriver:sessionDataElement) => {
-                    const driver = findDriverData(sessionDriver)
+                    {sessionData && sessionData.map((sessionDriver:sessionDataObj) => {
                     return (
                         <tr className="h-16 border-b border-gray-700 px-5 hover:bg-white/3 transition" key={sessionDriver.driver_number}>
                             <td className="w-3/16 p-3 pl-10 text-gray-300">{sessionDriver.position || "-"}</td>
                             <td className="w-6/16 pl-3">
                                 <div className="flex gap-10 items-center">
-                                    {driver?.team_colour && <div className="w-7 h-7 rounded-full" style={{ backgroundColor: `#${driver.team_colour}`}}></div>}
-                                    <p>{driver?.full_name}</p>
+                                    {sessionDriver.drivers.team_colour && <div className="w-7 h-7 rounded-full" style={{ backgroundColor: `#${sessionDriver.drivers.team_colour}`}}></div>}
+                                    <p>{sessionDriver.drivers.full_name}</p>
                                 </div>
                             </td>
                             <td className="w-5/16 p-3 text-lg">{sessionDriver.position === 1 ? formatRaceTime(sessionDriver.duration) : (sessionDriver.gap_to_leader ? `+${String(sessionDriver.gap_to_leader).replace("+", "")}` : (sessionDriver.dnf ? "DNF" : (sessionDriver.dns ? "DNS" : (sessionDriver.dsq ? "DSQ" : "NC"))))}</td>
@@ -161,7 +117,7 @@ export default function LastSessionCard (){
             </table>
 
         </div>}
-        {sessionInfo && sessionData && driverData && (sessionInfo?.session_type?.trim().toLowerCase() === SessionType.Practice || sessionInfo?.session_type?.trim().toLowerCase() === SessionType.Qualifying) && 
+        {sessionInfo && sessionData && (sessionInfo?.session_type?.trim().toLowerCase() === SessionType.Practice || sessionInfo?.session_type?.trim().toLowerCase() === SessionType.Qualifying) && 
         <div className="w-19/20 m-7 flex flex-col items-center p-4 border border-mid-blue rounded-3xl hover:bg-white/3 transition">
             <p className="text-xs text-gray-500 mb-2">LAST SESSION</p>
             <h1 className="font-medium text-lg">{sessionInfo?.name}</h1>
@@ -177,15 +133,14 @@ export default function LastSessionCard (){
                 </thead>
                 
                 <tbody>
-                    {mergedDriverData && mergedDriverData.map((sessionDriver:sessionDataElement) => {
-                    const driver = findDriverData(sessionDriver)
+                    {sessionData && sessionData.map((sessionDriver:sessionDataObj) => {
                     return (
                         <tr className="h-16 border-b border-gray-700 px-5 hover:bg-white/3 transition" key={sessionDriver.driver_number}>
                             <td className="w-3/16 p-3 pl-10 text-gray-300">{sessionDriver.position || "-"}</td>
                             <td className="w-6/16">
                                 <div className="flex gap-10 items-center">
-                                    {driver?.team_colour && <div className="w-7 h-7 rounded-full" style={{ backgroundColor: `#${driver.team_colour}`}}></div>}
-                                    <p>{driver?.full_name}</p>
+                                    {sessionDriver.drivers.team_colour && <div className="w-7 h-7 rounded-full" style={{ backgroundColor: `#${sessionDriver.drivers.team_colour}`}}></div>}
+                                    <p>{sessionDriver.drivers.full_name}</p>
                                 </div>
                             </td>
                             <td className="w-5/16 p-3 text-lg">{sessionDriver.position === 1 ? formatLaptime(sessionDriver.duration) : `+${sessionDriver.gap_to_leader}`}</td>

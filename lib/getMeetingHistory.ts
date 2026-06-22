@@ -1,5 +1,4 @@
 import { supabase } from "./supabase/client"
-
 export default async function getMeetingHistory(){
     try{
         const currentDate = new Date()
