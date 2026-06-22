@@ -1,8 +1,6 @@
 "use client"
 import React from "react"
 
-// FULLY DB
-
 export default function DriverStandings(){
       type driverStandingObj = {
         meeting_key: number,

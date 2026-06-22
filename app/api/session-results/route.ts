@@ -8,7 +8,7 @@ type sessionDataElement = {
     dns: boolean,
     dsq: boolean,
     duration: number | number[],
-    gap_to_leader: string | sting[],
+    gap_to_leader: string | string[],
     meeting_key: number,
     session_key: number
 }

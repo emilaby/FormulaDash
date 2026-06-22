@@ -1,6 +1,5 @@
 "use client"
 import React from "react"
-import { supabase } from "@/lib/supabase/client"
 
 type teamStandingObj = {
     meeting_key: number,

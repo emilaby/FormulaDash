@@ -49,8 +49,6 @@ export async function GET() {
                 {status: 500}
             )
         }
-
-        const driverStandingDateStart = (standing:standingObj) => meeting.find((m:meetingDataObj) => m.meeting_key === standing.meeting_key)?.date_start
         
         return Response.json(driverStandings)            
     }

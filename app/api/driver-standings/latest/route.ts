@@ -1,4 +1,4 @@
-import { DRIVERNUMBERS, TEAMIMGS } from "@/public/data/f1Data"
+import { DRIVERNUMBERS } from "@/public/data/f1Data"
 import { supabaseAdmin } from "@/lib/supabase/server"
 
 export async function GET() {

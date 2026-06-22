@@ -1,10 +1,9 @@
 import { supabaseAdmin } from "@/lib/supabase/server"
 
-export async function GET(request: Request) {
+export async function GET() {
     try{
 
         const currentDate = new Date()
-        const startDate = new Date(currentDate.getFullYear(), 0, 1)
 
         const { data: meetingData, error: meetingDataErr } = await supabaseAdmin
             .from("meetings")

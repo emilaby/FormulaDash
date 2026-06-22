@@ -86,14 +86,8 @@ export default function LastSessionCard (){
             if (res.ok){
                 const newData = await res.json()
                 setDriverData(newData)
-                localStorage.setItem("driverData", JSON.stringify(newData))
             }
-            else {
-                const storedData = localStorage.getItem("driverData")
-                if (storedData){
-                    setDriverData(JSON.parse(storedData))
-                }
-            }
+            return
         }
         load()}, [])
     

@@ -34,16 +34,10 @@ export default function RaceWeekendCard(){
 
                     if (newData){
                         setMeetingData(newData)
-                        localStorage.setItem("meetingData", JSON.stringify(newData))
                     }
                     
                 }
-                else {
-                    const storedData = localStorage.getItem("meetingData")
-                    if (storedData && storedData != undefined){
-                        setMeetingData(JSON.parse(storedData))
-                    }
-                }
+                return
             }
             load()}, [])
     
