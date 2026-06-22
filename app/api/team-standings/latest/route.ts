@@ -1,15 +1,23 @@
 import { supabaseAdmin } from "@/lib/supabase/server"
 
+type teamObj = {
+    meeting_key: number,
+    session_key: number,
+    team_name: string,
+    position_start: number,
+    position_current: number,
+    points_start: number,
+    points_current: number,
+}
+
+type teamNameColour = {
+    team_name: string,
+    team_colour: string
+}
+
+
 export async function GET(){
-    type teamObj = {
-        meeting_key: number,
-        session_key: number,
-        team_name: string,
-        position_start: number,
-        position_current: number,
-        points_start: number,
-        points_current: number,
-    }
+
 
     try{
         const currentDate = new Date()
@@ -44,7 +52,37 @@ export async function GET(){
             )
         }
 
-        return Response.json(teamStandingsLatest)
+        const { data: teamNameColours, error: teamNameColoursErr } = await supabaseAdmin
+            .from("drivers")
+            .select("team_name, team_colour")
+            .eq("session_key", lastRaceSessionKeyParsed)
+        
+        if (teamNameColoursErr){
+            console.error(teamNameColoursErr.message)
+            return Response.json(
+                {success: false, error: teamNameColoursErr.message},
+                {status: 500}
+            )
+        }
+
+        const teamStandingsLatestMerged = teamStandingsLatest.map((teamStanding:teamObj) => {
+            const teamColour = teamNameColours.find((teamNameColour:teamNameColour) => teamNameColour.team_name === teamStanding.team_name)?.team_colour
+        
+            return(
+                {
+                    meeting_key: teamStanding.meeting_key,
+                    session_key: teamStanding.session_key,
+                    team_name: teamStanding.team_name,
+                    position_start: teamStanding.position_start,
+                    position_current: teamStanding.position_current,
+                    points_start: teamStanding.points_start,
+                    points_current: teamStanding.points_current,
+                    team_colour: teamColour
+                }
+            )
+        })
+
+        return Response.json(teamStandingsLatestMerged)
 
     }
 
