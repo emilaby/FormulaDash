@@ -47,14 +47,14 @@ export default function TeamStandings(){
                 
     React.useEffect(() => {
         async function load(){
-            const { data, error } = await supabase
-                .from("drivers")
-                .select("*")
-            if (error){
-                console.error(error)
-                return
+            const url = "/api/driver/latest"
+            const res = await fetch(url)
+            
+            if (res.ok){
+                const newData = await res.json()
+                setDriverData(newData)
             }
-            setDriverData(data)
+            return 
         }
         load()}, [])
 
