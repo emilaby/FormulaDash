@@ -1,17 +1,37 @@
+import { supabaseAdmin } from "@/lib/supabase/server"
 export async function GET() {
     try{
-        const latestSessionUrl = "https://api.openf1.org/v1/sessions?session_key=latest"
-        const latestSessionRes = await fetch(latestSessionUrl, { next: {revalidate: 1000} })
-
-        if (!latestSessionRes.ok){
+        const currentDate = new Date()
+        
+        const { data: lastSessionKey, error: lastSessionKeyErr } = await supabaseAdmin
+            .from("sessions")
+            .select("session_key")
+            .lt("date_end", currentDate.toISOString())
+            .order("date_end", { ascending: false })
+            .limit(1)
+        
+        if (lastSessionKeyErr){
+            console.error(lastSessionKeyErr.message)
             return Response.json(
-                {error: "OpenF1 error"},
-                {status: 502}
+                {success: false, error: lastSessionKeyErr.message},
+                {status: 500}
+            )
+        }
+        const lastSessionKeyParsed = lastSessionKey.map(lastSK => lastSK.session_key)[0]
+        
+        const { data: lastSession, error: lastSessionErr } = await supabaseAdmin
+            .from("sessions")
+            .select("*")
+            .eq("session_key", lastSessionKeyParsed)
+        
+        if (lastSessionErr){
+            return Response.json(
+                {success: false, error: lastSessionErr.message},
+                {status: 500}
             )
         }
 
-        let latestSessionData = await latestSessionRes.json()
-        latestSessionData = latestSessionData[0] 
+        const latestSessionData = lastSession[0]
         const name = `${latestSessionData.location} ${latestSessionData.circuit_short_name} ${latestSessionData.session_name}`
 
         return Response.json(

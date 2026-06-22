@@ -32,7 +32,7 @@ export default function TeamStandings(){
 
     React.useEffect(() => {
         async function load(){
-            const url = "/api/team/latest"
+            const url = "/api/team-standings/latest"
             const res = await fetch(url)
             
             if (res.ok){
@@ -59,7 +59,7 @@ export default function TeamStandings(){
         load()}, [])
 
     const sortedData = (teamStandings ? [...teamStandings].sort((a, b) => a.position_current - b.position_current) :[])
-    const teamColour = (teamName:string) => driverData?.find((driver:driverObj) => driver.team_name === teamName)?.team_colour || null
+    const teamColour = (teamName:string) => driverData?.find((driver:driverObj) => driver.team_name === teamName)?.team_colour
 
     return (
         <>
@@ -86,6 +86,7 @@ export default function TeamStandings(){
                     <tbody>
                         {sortedData && sortedData.map((standing:teamStandingObj) => {
                         const colour = teamColour(standing?.team_name)
+                        console.log(colour)
                         return (
                         <tr className="h-16 border-b border-gray-700 px-5 hover:bg-white/3 transition" key={standing.team_name}>
                             <td className="w-3/12 p-3 pl-10 text-gray-300">{standing.position_current}</td>

@@ -54,7 +54,7 @@ export default function DriverStandingsGraph(){
             
     React.useEffect(() => {
         async function load(){
-            const res = await fetch(`/api/driver-standings-latest/history`)
+            const res = await fetch(`/api/driver-standings/history`)
             if (res.ok){
                 const newData = await res.json()
                 setStandingsPerRace(newData)

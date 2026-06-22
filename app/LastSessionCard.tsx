@@ -58,14 +58,8 @@ export default function LastSessionCard (){
             if (res.ok){
                 const newData = await res.json()
                 setSessionInfo(newData)
-                localStorage.setItem("lastSessionInfo", JSON.stringify(newData))
             }
-            else {
-                const storedData = localStorage.getItem("lastSessionInfo")
-                if (storedData){
-                    setSessionInfo(JSON.parse(storedData))
-                }
-            }
+            return
         }
         load()}, [])
 
@@ -93,7 +87,7 @@ export default function LastSessionCard (){
 
         React.useEffect(() => {
         async function load(){
-            const res = await fetch(`/api/driver-standings-latest/latest`)
+            const res = await fetch(`/api/driver-standings/latest`)
             
             if (res.ok){
                 const newData = await res.json()
