@@ -2,6 +2,9 @@ import { DRIVERNUMBERS } from "@/public/data/f1Data"
 import { supabaseAdmin } from "@/lib/supabase/server"
 import getLastRaceSessionKey from "@/lib/getLastRaceSessionKey"
 
+export const revalidate = 900
+
+
 export async function GET() {
     type standingsObj = {
         meeting_key: number,

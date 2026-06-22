@@ -1,5 +1,8 @@
 import { supabaseAdmin } from "@/lib/supabase/server"
 
+export const revalidate = 900
+
+
 export async function GET() {
     try{
 

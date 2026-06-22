@@ -1,6 +1,9 @@
 import { supabaseAdmin } from "@/lib/supabase/server"
 import getLastRaceSessionKey from "@/lib/getLastRaceSessionKey"
 
+export const revalidate = 900
+
+
 type teamObj = {
     meeting_key: number,
     session_key: number,

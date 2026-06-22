@@ -3,6 +3,8 @@ import getLastRaceSessionKey from "@/lib/getLastRaceSessionKey"
 import getDriverStandingsHistory from "@/lib/getDriverStandingsHistory"
 import getMeetingHistory from "@/lib/getMeetingHistory"
 
+export const revalidate = 900
+
 type standingObj = {
     meeting_key: number,
     session_key: number,
