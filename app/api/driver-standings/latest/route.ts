@@ -1,5 +1,6 @@
 import { DRIVERNUMBERS } from "@/public/data/f1Data"
 import { supabaseAdmin } from "@/lib/supabase/server"
+import getLastRaceSessionKey from "@/lib/getLastRaceSessionKey"
 
 export async function GET() {
     type standingsObj = {
@@ -31,30 +32,19 @@ export async function GET() {
         // find last race session key from sessions
         // access all driver standings + drivers with that session key
 
-        const currentDate = new Date()
+        const lastRaceSessionKey = await getLastRaceSessionKey()
 
-        const { data: lastRaceSessionKey, error: lastRaceSessionKeyErr } = await supabaseAdmin
-            .from("sessions")
-            .select("session_key")
-            .lt("date_end", currentDate.toISOString())
-            .eq("session_type", "Race")
-            .order("date_end", { ascending: false })
-            .limit(1)
-        
-        if (lastRaceSessionKeyErr){
-            console.error(lastRaceSessionKeyErr.message)
+        if (!lastRaceSessionKey){
             return Response.json(
-                {success: false, error: lastRaceSessionKeyErr.message},
+                {success: false, error: "Error fetching last race session key from database"},
                 {status: 500}
             )
         }
-        const lastRaceSessionKeyParsed = lastRaceSessionKey.map(lastRaceSK => lastRaceSK.session_key)[0]
-
 
         const { data: driverStandings, error: driverStandingsErr } = await supabaseAdmin
             .from("driver_standings")
             .select("*")
-            .eq("session_key", lastRaceSessionKeyParsed)
+            .eq("session_key", lastRaceSessionKey)
 
         
         if (driverStandingsErr){
@@ -68,7 +58,7 @@ export async function GET() {
         const { data: driverData, error: driverDataErr } = await supabaseAdmin
             .from("drivers")
             .select("*")
-            .eq("session_key", lastRaceSessionKeyParsed)
+            .eq("session_key", lastRaceSessionKey)
 
         
         if (driverDataErr){

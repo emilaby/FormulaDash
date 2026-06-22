@@ -1,4 +1,5 @@
-import { supabaseAdmin } from "@/lib/supabase/server"
+import getMeetingHistory from "@/lib/getMeetingHistory"
+import { supabase } from "@/lib/supabase/server"
 
 type standingObj = {
     meeting_key: number,
@@ -19,38 +20,16 @@ type meetingDataObj = {
 export async function GET() {
 
     try{
-        const currentDate = new Date()
-        const startDate = new Date(currentDate.getFullYear(), 0, 1)
+        const meetingHistory = await getMeetingHistory()
 
-        const { data: meeting, error: meetingErr } = await supabaseAdmin
-            .from("meetings")
-            .select("meeting_key, date_start")
-            .gt("date_start", startDate.toISOString())
-            .lt("date_end", currentDate.toISOString())
-        
-        if (meetingErr){
+        if (!meetingHistory){
             return Response.json(
-                {success: false, error: meetingErr.message},
-                {status: 500}
-            )
-        }
-
-        const meetingKeysParsed = meeting?.map((m) => m.meeting_key)
-        
-        const { data: driverStandings, error: driverStandingsErr} = await supabaseAdmin
-            .from("driver_standings")
-            .select("*")
-            .in("meeting_key", meetingKeysParsed)
-
-        
-        if (driverStandingsErr){
-            return Response.json(
-                {success: false, error: driverStandingsErr.message},
+                {error: "Failed to get meeting history"},
                 {status: 500}
             )
         }
         
-        return Response.json(driverStandings)            
+        return Response.json(meetingHistory)            
     }
         
 

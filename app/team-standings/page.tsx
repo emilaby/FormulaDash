@@ -16,6 +16,7 @@ type teamStandingObj = {
 export default function TeamStandings(){
     const [teamStandings, setTeamStandings] = React.useState<teamStandingObj[] | null>(null)
 
+    // unified data fetch so when caching route handler data there aren't inconsistencies (e.g. team standings upto date but driver data not)
     React.useEffect(() => {
         async function load(){
             const url = "/api/team-standings/latest"

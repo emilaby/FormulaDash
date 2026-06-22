@@ -50,88 +50,34 @@ type meetingDataObj = {
 }
     
 export default function DriverStandingsGraph(){
-    const [standingsPerRace, setStandingsPerRace] = React.useState<standingObj[] | null>(null)
-            
+    const [driverNums, setDriverNums] = React.useState<number[] | null>(null)
+    const [drivers, setDrivers] = React.useState<driverObj[] | null>(null)
+    const [standingsPerRace, setStandingsPerRace] = React.useState<Record<string, number | string>[] | null>(null)
+
+    
     React.useEffect(() => {
         async function load(){
-            const res = await fetch(`/api/driver-standings/history`)
+            const url = "/api/driver-standings/graph-data"
+            const res = await fetch(url)
+            
             if (res.ok){
                 const newData = await res.json()
-                setStandingsPerRace(newData)
+                setDriverNums(newData.driverNums)
+                setDrivers(newData.drivers)
+                setStandingsPerRace(newData.standingsPerRace)
             }
-            return
+            return 
         }
         load()}, [])
 
-    const [driverData, setDriverData] = React.useState<driverObj[] | null>(null)
-                    
-    React.useEffect(() => {
-        async function load(){
-            const res = await fetch(`/api/driver/latest`)
-            if (res.ok){
-                const newData = await res.json()
-                setDriverData(newData)
-            }
-            return
-        }
-        load()}, [])
-
-    const driverNumsSet = new Set((standingsPerRace??[]).map((standing:standingObj) => standing.driver_number))
-    const driverNums = [...driverNumsSet]
 
 
-    //use standingsPerRace, group by meeting_key so that arr has an object per race, each object has racekey and a property for each driver's pts
-    const meetingKeysSet = new Set((standingsPerRace??[]).map((standing:standingObj) => standing.meeting_key))
-    const meetingKeys = [...meetingKeysSet]
-
-
-    const [meetingData, setMeetingData] = React.useState<meetingDataObj[] | null>(null)
-            
-    React.useEffect(() => {
-        async function load(){
-            const res = await fetch(`/api/race-weekend/history`)
-            if (res.ok){
-                const newData = await res.json()
-
-                if (newData){
-                    setMeetingData(newData)
-                }
-                
-            }
-            return
-
-        }
-        load()}, [meetingKeys.join(",")])
-
-    const meetingStartDate = (meetingKey: number): number => {
-        const meeting = meetingData?.find((m: meetingDataObj) => m.meeting_key === meetingKey)
-        return meeting ? new Date(meeting.date_start).getTime() : 0
-    }    
-    
-    meetingKeys.sort((a:number, b:number) => meetingStartDate(a) - meetingStartDate(b))
-
-    const meetingLocation = (meetingKey:number) => meetingData?.find((meeting:meetingDataObj) => meeting.meeting_key === meetingKey)?.location
-
-    
-
-
-    const standingsPerRaceGrouped = meetingKeys.map((key:number) => {
-        const driversInRace = standingsPerRace?.filter((standing:standingObj) => standing.meeting_key === key) 
-        return driversInRace?.reduce(
-            (row: Record<string, number | string>, driver:standingObj) => {
-                row[driver.driver_number] = driver.points_current
-                return row
-            }, {location: meetingLocation(key) || ""}
-        )
-    })
-
-
-    const driverTeamColour = (driverNum:number) => driverData?.find((driver:driverObj) => driver.driver_number === driverNum)?.team_colour
-    const nameFromNum = (driverNum:number) => driverData?.find((driver:driverObj) => driver.driver_number === driverNum)?.last_name
+    const driverTeamColour = (driverNum:number) => drivers?.find((driver:driverObj) => driver.driver_number === driverNum)?.team_colour
+    const nameFromNum = (driverNum:number) => drivers?.find((driver:driverObj) => driver.driver_number === driverNum)?.last_name
 
     return (
         <>
-        {(!standingsPerRace && !meetingData && !driverData) &&  
+        {(!standingsPerRace || !driverNums || !drivers) &&  
         
         <div className="flex flex-col items-center basis-[55%] max-w-[55%] h-[400px] grow shrink mt-7 mb-7 mr-7 ml-5 rounded-3xl animate-pulse">
             <div className="h-4 w-24 bg-gray-700 rounded-full mb-2"/>
@@ -139,11 +85,11 @@ export default function DriverStandingsGraph(){
             <div className="h-[300px] w-full bg-gray-800 rounded-lg"/>
         </div>}
         
-        {standingsPerRace && meetingData &&
+        {standingsPerRace && drivers && driverNums &&
         <div className="flex flex-col items-center basis-[55%] grow shrink mt-7 mb-7 mr-7 transform-gpu">
             <p className="text-xs pl-10 pb-2 text-gray-500">DRIVER STANDINGS</p>
             <ResponsiveContainer width="100%" height={450}>
-            <LineChart data={standingsPerRaceGrouped}>
+            <LineChart data={standingsPerRace}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#2d3738" vertical={false}/>
                 <XAxis dataKey="location" stroke="#9ca3af" interval={0} angle={-90} height={120} tick={{dy:5, dx:-10, fontSize:14}} tickLine={false} textAnchor="end"/>
                 <YAxis tickLine={false} axisLine={false}/>

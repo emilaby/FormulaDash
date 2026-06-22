@@ -1,48 +1,29 @@
+import { supabase } from "./supabase/client"
 export default async function getLastRaceSessionKey(){
-    type raceSessionObj = {
-        session_key: number,
-        session_type: string,
-        session_name: string,
-        date_start: string,
-        date_end: string,
-        meeting_key: number,
-        circuit_key: number,
-        circuit_short_name: string,
-        country_key: number,
-        country_code: string,
-        country_name: string,
-        location: string,
-        gmt_offset: string,
-        year: number,
-        is_cancelled: boolean
-    }
-
     try{
-        const year = new Date().getFullYear()
-        const prevRacesUrl = `https://api.openf1.org/v1/sessions?session_name=Race&year=${year}`
+        const currentDate = new Date()
 
-        const prevRacesRes = await fetch(prevRacesUrl, { next: {revalidate: 1000}})
-
-        if (!prevRacesRes.ok){
+        const { data: lastRaceSessionKey, error: lastRaceSessionKeyErr } = await supabase
+            .from("sessions")
+            .select("session_key")
+            .lt("date_end", currentDate.toISOString())
+            .eq("session_type", "Race")
+            .order("date_end", { ascending: false })
+            .limit(1)
+        
+        if (lastRaceSessionKeyErr){
             return null
         }
-        
-        const prevRacesData = await prevRacesRes.json()
+        const lastRaceSessionKeyParsed = lastRaceSessionKey.map(lastRaceSK => lastRaceSK.session_key)[0]
 
-        const prevRaceData = prevRacesData
-            .filter((session:raceSessionObj) => Date.parse(session.date_end) < Date.now())
-            .sort(
-                (a:raceSessionObj, b:raceSessionObj) =>
-                Date.parse(b.date_end) - Date.parse(a.date_end)
-            )[0]
-
-        return prevRaceData?.session_key
+        return lastRaceSessionKeyParsed
 
     }
 
     catch(err){
-        console.error("Error fetching from OpenF1:", err)
+        console.error(err)
         return null
+    
     }
 }
 

@@ -1,28 +1,21 @@
 import { supabaseAdmin } from "@/lib/supabase/server"
+import getLastSessionKey from "@/lib/getLastSessionKey"
+
 export async function GET() {
     try{
-        const currentDate = new Date()
-        
-        const { data: lastSessionKey, error: lastSessionKeyErr } = await supabaseAdmin
-            .from("sessions")
-            .select("session_key")
-            .lt("date_end", currentDate.toISOString())
-            .order("date_end", { ascending: false })
-            .limit(1)
-        
-        if (lastSessionKeyErr){
-            console.error(lastSessionKeyErr.message)
+        const lastSessionKey = await getLastSessionKey()
+
+        if (!lastSessionKey){
             return Response.json(
-                {success: false, error: lastSessionKeyErr.message},
+                {success: false, error: "Error fetching last session key from database"},
                 {status: 500}
             )
         }
-        const lastSessionKeyParsed = lastSessionKey.map(lastSK => lastSK.session_key)[0]
         
         const { data: lastSession, error: lastSessionErr } = await supabaseAdmin
             .from("sessions")
             .select("*")
-            .eq("session_key", lastSessionKeyParsed)
+            .eq("session_key", lastSessionKey)
         
         if (lastSessionErr){
             return Response.json(

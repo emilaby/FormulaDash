@@ -1,4 +1,5 @@
 import { supabaseAdmin } from "@/lib/supabase/server"
+import getLastRaceSessionKey from "@/lib/getLastRaceSessionKey"
 
 type teamObj = {
     meeting_key: number,
@@ -20,29 +21,19 @@ export async function GET(){
 
 
     try{
-        const currentDate = new Date()
+        const lastRaceSessionKey = await getLastRaceSessionKey()
 
-        const { data: lastRaceSessionKey, error: lastRaceSessionKeyErr } = await supabaseAdmin
-            .from("sessions")
-            .select("session_key")
-            .lt("date_end", currentDate.toISOString())
-            .eq("session_type", "Race")
-            .order("date_end", { ascending: false })
-            .limit(1)
-        
-        if (lastRaceSessionKeyErr){
-            console.error(lastRaceSessionKeyErr.message)
+        if (!lastRaceSessionKey){
             return Response.json(
-                {success: false, error: lastRaceSessionKeyErr.message},
+                {success: false, error: "Error fetching last race session key from database"},
                 {status: 500}
             )
         }
-        const lastRaceSessionKeyParsed = lastRaceSessionKey.map(lastRaceSK => lastRaceSK.session_key)[0]
 
         const { data: teamStandingsLatest, error: teamStandingsLatestErr } = await supabaseAdmin
             .from("team_standings")
             .select("*")
-            .eq("session_key", lastRaceSessionKeyParsed)
+            .eq("session_key", lastRaceSessionKey)
         
         if (teamStandingsLatestErr){
             console.error(teamStandingsLatestErr.message)
@@ -55,7 +46,7 @@ export async function GET(){
         const { data: teamNameColours, error: teamNameColoursErr } = await supabaseAdmin
             .from("drivers")
             .select("team_name, team_colour")
-            .eq("session_key", lastRaceSessionKeyParsed)
+            .eq("session_key", lastRaceSessionKey)
         
         if (teamNameColoursErr){
             console.error(teamNameColoursErr.message)
