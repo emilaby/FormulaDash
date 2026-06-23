@@ -1,9 +1,20 @@
 import { supabaseAdmin } from "@/lib/supabase/server"
 import { Meeting } from "@/types"
+import { NextRequest } from "next/server"
+import authCheck from "@/lib/authCheck"
 
 // Updates meetings table with meeting data from OpenF1
-export async function GET() {
+export async function GET(req:NextRequest) {
     try{
+        const authorised = authCheck(req)
+
+        if (!authorised){
+            return Response.json(
+                {success: false, error: "Unauthorised"},
+                {status: 401}
+            )
+        }
+
         const currentDate = new Date()
         const startDate = new Date(currentDate.getFullYear(), 0, 1)
 

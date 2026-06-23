@@ -1,9 +1,20 @@
 import { supabaseAdmin } from "@/lib/supabase/server"
 import { Driver } from "@/types"
+import { NextRequest } from "next/server"
+import authCheck from "@/lib/authCheck"
 
 // Updates drivers table with driver data from OpenF1
-export async function GET() {
+export async function GET(req:NextRequest) {
     try{
+        const authorised = authCheck(req)
+
+        if (!authorised){
+            return Response.json(
+                {success: false, error: "Unauthorised"},
+                {status: 401}
+            )
+        }
+
         const driverDataUrl = "https://api.openf1.org/v1/drivers"
         const driverDataRes = await fetch(driverDataUrl)
 

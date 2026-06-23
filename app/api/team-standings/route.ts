@@ -1,9 +1,20 @@
 import { supabaseAdmin } from "@/lib/supabase/server"
 import { TeamStanding } from "@/types"
+import { NextRequest } from "next/server"
+import authCheck from "@/lib/authCheck"
 
 // Updates team_standings table with team standing data from OpenF1
-export async function GET() {
+export async function GET(req:NextRequest) {
     try{
+        const authorised = authCheck(req)
+
+        if (!authorised){
+            return Response.json(
+                {success: false, error: "Unauthorised"},
+                {status: 401}
+            )
+        }
+
         const teamStandingsUrl = "https://api.openf1.org/v1/championship_teams"
         const teamStandingsRes = await fetch(teamStandingsUrl)
 

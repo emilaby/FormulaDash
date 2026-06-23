@@ -1,9 +1,20 @@
 import { supabaseAdmin } from "@/lib/supabase/server"
 import { SessionResult } from "@/types"
+import { NextRequest } from "next/server"
+import authCheck from "@/lib/authCheck"
 
 // Updates session_results table with session result data from OpenF1
-export async function GET() {
+export async function GET(req:NextRequest) {
     try{
+        const authorised = authCheck(req)
+
+        if (!authorised){
+            return Response.json(
+                {success: false, error: "Unauthorised"},
+                {status: 401}
+            )
+        }
+
         const sessionsUrl = "https://api.openf1.org/v1/session_result"
         const sessionsRes = await fetch(sessionsUrl)
 
