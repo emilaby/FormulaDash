@@ -1,5 +1,6 @@
 "use client"
 import React from "react"
+import TableSkeleton from "../TableSkeleton"
 
 export default function DriverStandings(){
       type driverStandingObj = {
@@ -36,16 +37,11 @@ export default function DriverStandings(){
         }
         load()}, [])
 
-    const sortedData = (driverStandingsData ? [...driverStandingsData].sort((a, b) => a.position_current - b.position_current) :[])
+    const sortedData = (driverStandingsData ? [...driverStandingsData].sort((a, b) => a.position_current - b.position_current) : null)
 
     return (
         <>
-        {!sortedData &&
-            <div className="w-19/20 min-h-screen m-7 flex flex-col items-center p-7 border border-mid-blue rounded-3xl animate-pulse">
-            <div className="h-4 w-24 bg-gray-700 rounded-full mb-2"/>
-            <div className="h-6 w-64 bg-gray-700 rounded-full mb-4"/>
-            <div className="h-48 w-full bg-gray-800 rounded-lg"/>
-        </div>}
+        {!sortedData && <TableSkeleton/>}
 
         {sortedData &&
         <main className="bg-dark-blue min-h-screen p-7"> 

@@ -1,6 +1,7 @@
 "use client"
 import React from "react"
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Legend, ResponsiveContainer } from "recharts"
+import DriverStandingsGraphSkeleton from "./DriverStandingsGraphSkeleton"
 
 
 type standingObj = {
@@ -77,13 +78,7 @@ export default function DriverStandingsGraph(){
 
     return (
         <>
-        {(!standingsPerRace || !driverNums || !drivers) &&  
-        
-        <div className="flex flex-col items-center basis-[55%] max-w-[55%] h-[400px] grow shrink mt-7 mb-7 mr-7 ml-5 rounded-3xl animate-pulse">
-            <div className="h-4 w-24 bg-gray-700 rounded-full mb-2"/>
-            <div className="h-6 w-64 bg-gray-700 rounded-full mb-4"/>
-            <div className="h-[300px] w-full bg-gray-800 rounded-lg"/>
-        </div>}
+        {(!standingsPerRace || !driverNums || !drivers) &&  <DriverStandingsGraphSkeleton/>}
         
         {standingsPerRace && drivers && driverNums &&
         <div className="flex flex-col items-center basis-[55%] grow shrink mt-7 mb-7 mr-7 transform-gpu">

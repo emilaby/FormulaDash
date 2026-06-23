@@ -1,5 +1,6 @@
 "use client"
 import React from "react"
+import TableSkeleton from "../TableSkeleton"
 
 type teamStandingObj = {
     meeting_key: number,
@@ -16,7 +17,6 @@ type teamStandingObj = {
 export default function TeamStandings(){
     const [teamStandings, setTeamStandings] = React.useState<teamStandingObj[] | null>(null)
 
-    // unified data fetch so when caching route handler data there aren't inconsistencies (e.g. team standings upto date but driver data not)
     React.useEffect(() => {
         async function load(){
             const url = "/api/team-standings/latest"
@@ -31,16 +31,11 @@ export default function TeamStandings(){
         load()}, [])
 
 
-    const sortedData = (teamStandings ? [...teamStandings].sort((a, b) => a.position_current - b.position_current) :[])
+    const sortedData = (teamStandings ? [...teamStandings].sort((a, b) => a.position_current - b.position_current) : null)
 
     return (
         <>
-        {!sortedData &&
-            <div className="w-19/20 min-h-screen m-7 flex flex-col items-center p-7 border border-mid-blue rounded-3xl animate-pulse">
-            <div className="h-4 w-24 bg-gray-700 rounded-full mb-2"/>
-            <div className="h-6 w-64 bg-gray-700 rounded-full mb-4"/>
-            <div className="h-48 w-full bg-gray-800 rounded-lg"/>
-        </div>}
+        {!sortedData && <TableSkeleton/>}
 
         {sortedData &&
         <main className="bg-dark-blue min-h-screen p-7"> 

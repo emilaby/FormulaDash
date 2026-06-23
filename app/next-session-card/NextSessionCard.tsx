@@ -1,5 +1,7 @@
 "use client"
 import React from "react"
+import getCurrentCountdown from "@/lib/getCurrentCountdown"
+import NextSessionCardSkeleton from "./NextSessionCardSkeleton"
 
 export default function NextSessionCard() {
     type sessionDataObj = {
@@ -36,23 +38,6 @@ export default function NextSessionCard() {
             return
         }
         load()}, [])
-    
-    function getCurrentCountdown(targetDate:string | undefined){
-        if (targetDate === undefined) return null
-
-        const targetDateMs = new Date(targetDate).getTime()
-        const currentMs = new Date().getTime()
-        const difference = targetDateMs - currentMs
-        
-        if (difference <= 0) return {days: "00", hours: "00", mins:"00", secs:"00"}
-
-        const days = String(Math.floor(difference / (1000*60*60*24))).padStart(2, "0")
-        const hours = String(Math.floor((difference % (1000*60*60*24) / (1000*60*60)))).padStart(2, "0")
-        const mins = String(Math.floor((difference % (1000*60*60)) / (1000*60))).padStart(2, "0")
-        const secs = String(Math.floor((difference % (1000*60)) / 1000)).padStart(2, "0")
-
-        return { days, hours, mins, secs }
-    }
 
     const [countdown, setCountdown] = React.useState(() => getCurrentCountdown(nextSessionData?.date_start))
 
@@ -62,17 +47,12 @@ export default function NextSessionCard() {
         }, 1000)
 
         return () => clearInterval(interval)
-    }, [nextSessionData?.date_start]
+        }, [nextSessionData?.date_start]
     )
 
     return (
         <>
-        {(!nextSessionData || !countdown) && 
-        <div className="flex flex-col w-full items-center border border-mid-blue p-5 h-[200px] mt-3 rounded-3xl animate-pulse">
-            <div className="h-4 w-24 bg-gray-700 rounded-full mb-2"/>
-            <div className="h-6 w-64 bg-gray-700 rounded-full mb-4"/>
-            <div className="h-[100px] w-full bg-gray-800 rounded-lg"/>
-        </div>}
+        {(!nextSessionData || !countdown) && <NextSessionCardSkeleton/>}
 
         {nextSessionData && countdown &&
         <div className="flex flex-col mt-3 w-full items-center p-5 border border-mid-blue rounded-3xl hover:bg-white/3 transition">

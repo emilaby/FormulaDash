@@ -1,6 +1,7 @@
 "use client"
 import React from "react"
 import Image from "next/image"
+import RaceWeekendCardSkeleton from "./RaceWeekendCardSkeleton"
 
 type meetingDataObj = {
     meeting_key: number,
@@ -49,20 +50,14 @@ export default function RaceWeekendCard(){
 
     const liveNow = meetingData ? Date.parse(meetingData.date_start) <= Date.now() : false
     const raceName = meetingData?.meeting_official_name.toLowerCase()
-                        .split(" ")
-                        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-                        .join(" ")
+        .split(" ")
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(" ")
                         
 
     return (
         <>
-        {!meetingData &&
-        
-        <div className="flex flex-col w-full items-center border border-mid-blue p-5 h-[250px]  ml-7 mt-11 mb-7 mr-5 rounded-3xl animate-pulse">
-            <div className="h-4 w-24 bg-gray-700 rounded-full mb-2"/>
-            <div className="h-6 w-64 bg-gray-700 rounded-full mb-4"/>
-            <div className="h-[120px] w-full bg-gray-800 rounded-lg"/>
-        </div>}
+        {!meetingData && <RaceWeekendCardSkeleton/>}
 
         {meetingData &&
 
@@ -77,8 +72,10 @@ export default function RaceWeekendCard(){
                 <div className="flex-col items-center">
                     {liveNow && <p className="text-center">Live <span className="animate-pulse">🟢</span></p>}
                     {!liveNow && <p className="text-center">{`${hourglassFlip ? "⏳" : "⌛"} Upcoming`}</p>}
-                    <p className="text-center">{`${new Date(meetingData.date_start).toLocaleString("en-GB", {weekday: "long", month: "long", day: "numeric", hour: "2-digit", minute: "2-digit"}).replace(" at", ", ")} 
-                        - ${new Date(meetingData.date_end).toLocaleString("en-GB",  {weekday: "long", month: "long", day: "numeric", hour: "2-digit", minute: "2-digit"}).replace(" at", ", ")}`}</p>
+                    <p className="text-center">
+                        {`${new Date(meetingData.date_start).toLocaleString("en-GB", {weekday: "long", month: "long", day: "numeric", hour: "2-digit", minute: "2-digit"}).replace(" at", ", ")} 
+                        - ${new Date(meetingData.date_end).toLocaleString("en-GB",  {weekday: "long", month: "long", day: "numeric", hour: "2-digit", minute: "2-digit"}).replace(" at", ", ")}`}
+                    </p>
                 </div>
                 <Image src={meetingData.circuit_image} width={138} height={100} alt={`${meetingData.circuit_short_name} circuit`}/>
             </div>

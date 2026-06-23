@@ -2,6 +2,7 @@
 import React from "react"
 import formatLaptime from "@/lib/formatLaptime"
 import formatRaceTime from "@/lib/formatRaceTime"
+import TableSkeleton from "./TableSkeleton"
 
 type sessionDataObj = {
     driver_number: number,
@@ -64,18 +65,12 @@ export default function LastSessionCard (){
 
     return (
         <>
-        {(!sessionInfo || !sessionData) &&  
+        {(!sessionInfo || !sessionData) && <TableSkeleton/>}
         
-        <div className="w-19/20 ml-7 mr-7 mb-7 mt-9 flex flex-col items-center p-5 border border-mid-blue rounded-3xl animate-pulse">
-            <div className="h-4 w-24 bg-gray-700 rounded-full mb-2"/>
-            <div className="h-6 w-64 bg-gray-700 rounded-full mb-4"/>
-            <div className="h-48 w-full bg-gray-800 rounded-lg"/>
-        </div>}
-        
-        {sessionInfo && sessionData  && sessionInfo?.session_type?.trim().toLowerCase() === SessionType.Race && 
+        {sessionInfo && sessionData && sessionInfo.session_type?.trim().toLowerCase() === SessionType.Race && 
         <div className="w-19/20 ml-7 mr-7 mb-7 mt-9 flex flex-col items-center p-5 border border-mid-blue rounded-3xl hover:bg-white/3 transition">
             <p className="text-xs text-gray-500 mb-2">LAST SESSION</p>
-            <h1 className="font-medium text-lg">{sessionInfo?.name}</h1>
+            <h1 className="font-medium text-lg">{sessionInfo.name}</h1>
 
             <table className="w-full text-left border-collapse">
                 <thead className="text-gray-400">
@@ -98,7 +93,10 @@ export default function LastSessionCard (){
                                     <p>{sessionDriver.drivers.full_name}</p>
                                 </div>
                             </td>
-                            <td className="w-5/16 p-3 text-lg">{sessionDriver.position === 1 ? formatRaceTime(sessionDriver.duration) : (sessionDriver.gap_to_leader ? `+${String(sessionDriver.gap_to_leader).replace("+", "")}` : (sessionDriver.dnf ? "DNF" : (sessionDriver.dns ? "DNS" : (sessionDriver.dsq ? "DSQ" : "NC"))))}</td>
+                            <td className="w-5/16 p-3 text-lg">{sessionDriver.position === 1 ? formatRaceTime(sessionDriver.duration) : (sessionDriver.gap_to_leader ? 
+                                `+${String(sessionDriver.gap_to_leader).replace("+", "")}` : 
+                                    (sessionDriver.dnf ? "DNF" : (sessionDriver.dns ? "DNS" : (sessionDriver.dsq ? "DSQ" : "NC"))))}</td>
+
                             <td  className="w-2/16 pl-4">{sessionDriver.points}</td>
                         </tr>
                     )})}
@@ -106,10 +104,10 @@ export default function LastSessionCard (){
             </table>
 
         </div>}
-        {sessionInfo && sessionData && (sessionInfo?.session_type?.trim().toLowerCase() === SessionType.Practice || sessionInfo?.session_type?.trim().toLowerCase() === SessionType.Qualifying) && 
+        {sessionInfo && sessionData && (sessionInfo.session_type?.trim().toLowerCase() === SessionType.Practice || sessionInfo.session_type?.trim().toLowerCase() === SessionType.Qualifying) && 
         <div className="w-19/20 m-7 flex flex-col items-center p-4 border border-mid-blue rounded-3xl hover:bg-white/3 transition">
             <p className="text-xs text-gray-500 mb-2">LAST SESSION</p>
-            <h1 className="font-medium text-lg">{sessionInfo?.name}</h1>
+            <h1 className="font-medium text-lg">{sessionInfo.name}</h1>
 
             <table className="w-full text-left border-collapse">
                 <thead className="text-gray-400">
