@@ -1,0 +1,38 @@
+name: Scheduled OpenF1 calls
+
+on:
+  schedule:
+    - cron: '*/10 * * * *'
+jobs:
+  call-routes:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Driver data
+        run: |
+          curl -sf https://formula-dash-1.vercel.app/api/driver \
+          -H "Authorisation: Bearer ${{ secrets.CRON_SECRET }}"
+          
+      - name: Driver standings data
+        run: |
+          curl -sf https://formula-dash-1.vercel.app/api/driver-standings \
+          -H "Authorisation: Bearer ${{ secrets.CRON_SECRET }}"   
+          
+      - name: Meeting data
+        run: |
+          curl -sf https://formula-dash-1.vercel.app/api/meeting \
+          -H "Authorisation: Bearer ${{ secrets.CRON_SECRET }}"    
+          
+      - name: Session data
+        run: |
+          curl -sf https://formula-dash-1.vercel.app/api/session \
+          -H "Authorisation: Bearer ${{ secrets.CRON_SECRET }}" 
+          
+      - name: Session results data
+        run: |
+          curl -sf https://formula-dash-1.vercel.app/api/session-results \
+          -H "Authorisation: Bearer ${{ secrets.CRON_SECRET }}" 
+          
+      - name: Team standings data
+        run: |
+          curl -sf https://formula-dash-1.vercel.app/api/team-standings \
+          -H "Authorisation: Bearer ${{ secrets.CRON_SECRET }}"
