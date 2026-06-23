@@ -1,21 +1,12 @@
 "use client"
 import React from "react"
-import TableSkeleton from "../TableSkeleton"
+import TableSkeleton from "@/components/TableSkeleton"
+import { TeamStanding } from "@/types"
 
-type teamStandingObj = {
-    meeting_key: number,
-    session_key: number,
-    team_name: string,
-    position_start: number,
-    position_current: number,
-    points_start: number,
-    points_current: number,
-    team_colour: string
-}
-
+type TeamStandingMerged = TeamStanding & {team_colour: string}
 
 export default function TeamStandings(){
-    const [teamStandings, setTeamStandings] = React.useState<teamStandingObj[] | null>(null)
+    const [teamStandings, setTeamStandings] = React.useState<TeamStandingMerged[] | null>(null)
 
     React.useEffect(() => {
         async function load(){
@@ -31,7 +22,7 @@ export default function TeamStandings(){
         load()}, [])
 
 
-    const sortedData = (teamStandings ? [...teamStandings].sort((a, b) => a.position_current - b.position_current) : null)
+    const sortedData:TeamStandingMerged[] | null = (teamStandings ? [...teamStandings].sort((a, b) => a.position_current - b.position_current) : null)
 
     return (
         <>
@@ -51,7 +42,7 @@ export default function TeamStandings(){
                     </thead>
                     
                     <tbody>
-                        {sortedData && sortedData.map((standing:teamStandingObj) => (
+                        {sortedData && sortedData.map((standing:TeamStandingMerged) => (
                             <tr className="h-16 border-b border-gray-700 px-5 hover:bg-white/3 transition" key={standing.team_name}>
                                 <td className="w-3/12 p-3 pl-10 text-gray-300">{standing.position_current}</td>
                                 <td className="w-6/12 p-3">

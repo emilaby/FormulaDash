@@ -1,17 +1,5 @@
 import { supabaseAdmin } from "@/lib/supabase/server"
-type sessionDataElement = {
-    position: number,
-    driver_number: number,
-    number_of_laps: number,
-    points: number,
-    dnf: boolean,
-    dns: boolean,
-    dsq: boolean,
-    duration: number | number[],
-    gap_to_leader: string | string[],
-    meeting_key: number,
-    session_key: number
-}
+import { SessionResult } from "@/types"
 
 export async function GET() {
     try{
@@ -25,9 +13,9 @@ export async function GET() {
             )
         }
 
-        const sessionsData = await sessionsRes.json()
+        const sessionsData: SessionResult[] = await sessionsRes.json()
 
-        const parsedSessionsData = sessionsData.map((sessionData:sessionDataElement) => (
+        const parsedSessionsData = sessionsData.map((sessionData:SessionResult) => (
             {
                 position: sessionData.position,
                 driver_number: sessionData.driver_number,

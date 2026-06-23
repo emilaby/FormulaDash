@@ -1,4 +1,5 @@
 import { supabase } from "./supabase/client"
+
 export default async function getDriverStandingsHistory() {
     try{
         const currentDate = new Date()

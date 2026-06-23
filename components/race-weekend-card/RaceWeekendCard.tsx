@@ -2,47 +2,28 @@
 import React from "react"
 import Image from "next/image"
 import RaceWeekendCardSkeleton from "./RaceWeekendCardSkeleton"
-
-type meetingDataObj = {
-    meeting_key: number,
-    meeting_name: string,
-    meeting_official_name: string,
-    location: string,
-    country_key: number,
-    country_code: string,
-    country_name: string,
-    country_flag: string,
-    circuit_key: number,
-    circuit_short_name: string,
-    circuit_type: string,
-    circuit_info_url: string,
-    circuit_image: string,
-    gmt_offset: string,
-    date_start: string,
-    date_end: string,
-    year: number,
-    is_cancelled: boolean
-}
+import { Meeting } from "@/types"
 
 export default function RaceWeekendCard(){
-    const [meetingData, setMeetingData] = React.useState<meetingDataObj | null>(null)
+    const [meetingData, setMeetingData] = React.useState<Meeting | null>(null)
         
-        React.useEffect(() => {
-            async function load(){
-                const res = await fetch(`/api/race-weekend/latest`)
-                if (res.ok){
-                    const newData = await res.json()
+    React.useEffect(() => {
+        async function load(){
+            const res = await fetch(`/api/race-weekend/latest`)
+            if (res.ok){
+                const newData = await res.json()
 
-                    if (newData){
-                        setMeetingData(newData)
-                    }
-                    
+                if (newData){
+                    setMeetingData(newData)
                 }
-                return
+                
             }
-            load()}, [])
+            return
+        }
+        load()}, [])
     
     const [hourglassFlip, setHourGlassFlip] = React.useState(false)
+    
     React.useEffect(() => {
         const interval = setInterval(() => setHourGlassFlip(prev => !prev), 1000)
         return () => clearInterval(interval)

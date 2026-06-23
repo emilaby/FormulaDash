@@ -3,53 +3,9 @@ import getLastRaceSessionKey from "@/lib/getLastRaceSessionKey"
 import getDriverStandingsHistory from "@/lib/getDriverStandingsHistory"
 import getMeetingHistory from "@/lib/getMeetingHistory"
 
+import { DriverStanding, Meeting, Driver } from "@/types"
+
 export const revalidate = 900
-
-type standingObj = {
-    meeting_key: number,
-    session_key: number,
-    driver_number: number,
-    position_start: number,
-    position_current: number,
-    points_start: number,
-    points_current: number
-}
-
-type driverObj = {
-    meeting_key: number,
-    session_key: number,
-    driver_number: number,
-    broadcast_name: string,
-    full_name: string,
-    name_acronym: string,
-    team_name: string,
-    team_colour: string,
-    first_name: string,
-    last_name: string,
-    headshot_url: string,
-    country_code: string
-}
-
-type meetingDataObj = {
-    meeting_key: number,
-    meeting_name: string,
-    meeting_official_name: string,
-    location: string,
-    country_key: number,
-    country_code: string,
-    country_name: string,
-    country_flag: string,
-    circuit_key: number,
-    circuit_short_name: string,
-    circuit_type: string,
-    circuit_info_url: string,
-    circuit_image: string,
-    gmt_offset: string,
-    date_start: string,
-    date_end: string,
-    year: number,
-    is_cancelled: boolean
-}
 
 export async function GET() {
     try{
@@ -78,31 +34,30 @@ export async function GET() {
         }
 
         // construct array of objects- each object has driverNo : pts and location: "..."
-        const driverNums = [...new Set((driverStandingsHistory).map((standing:standingObj) => standing.driver_number))]
-        const meetingKeys = [...new Set((driverStandingsHistory).map((standing:standingObj) => standing.meeting_key))]
+        const driverNums = [...new Set((driverStandingsHistory).map((standing:DriverStanding) => standing.driver_number))]
+        const meetingKeys = [...new Set((driverStandingsHistory).map((standing:DriverStanding) => standing.meeting_key))]
 
         const meetingStartDate = (meetingKey: number): number => {
-            const meeting = meetingData.find((m: meetingDataObj) => m.meeting_key === meetingKey)
+            const meeting = meetingData.find((m: Meeting) => m.meeting_key === meetingKey)
             return meeting ? new Date(meeting.date_start).getTime() : 0
         }    
     
         meetingKeys.sort((a:number, b:number) => meetingStartDate(a) - meetingStartDate(b))
 
-        const meetingLocation = (meetingKey:number) => meetingData.find((meeting:meetingDataObj) => meeting.meeting_key === meetingKey)?.location
+        const meetingLocation = (meetingKey:number) => meetingData.find((meeting:Meeting) => meeting.meeting_key === meetingKey)?.location
 
         const validMeetingKeys = meetingKeys.filter((key:number) => meetingLocation(key))
 
     
-        const standingsPerRaceGrouped = validMeetingKeys.map((key:number) => {
-            const driversInRace = driverStandingsHistory.filter((standing:standingObj) => standing.meeting_key === key) 
+        const standingsPerRaceGrouped: Record<string, number | string>[] = validMeetingKeys.map((key:number) => {
+            const driversInRace = driverStandingsHistory.filter((standing:DriverStanding) => standing.meeting_key === key) 
             return driversInRace.reduce(
-                (row: Record<string, number | string>, driver:standingObj) => {
+                (row: Record<string, number | string>, driver:DriverStanding) => {
                     row[driver.driver_number] = driver.points_current
                     return row
                 }, {location: meetingLocation(key)}
             )
         })
-
 
         return Response.json(
             {

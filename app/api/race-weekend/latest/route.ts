@@ -1,4 +1,4 @@
-import { supabaseAdmin } from "@/lib/supabase/server"
+import { supabase } from "@/lib/supabase/client"
 
 export const revalidate = 900
 
@@ -7,7 +7,7 @@ export async function GET() {
 
         const currentDate = new Date()
 
-        const { data: meetingData, error: meetingDataErr } = await supabaseAdmin
+        const { data: meetingData, error: meetingDataErr } = await supabase
             .from("meetings")
             .select("*")
             .gt("date_end", currentDate.toISOString())

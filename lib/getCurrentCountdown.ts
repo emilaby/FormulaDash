@@ -1,5 +1,6 @@
-    
-export default function getCurrentCountdown(targetDate:string | undefined){
+import { Countdown } from "@/types"    
+
+export default function getCurrentCountdown(targetDate:string | undefined): Countdown | null{
     if (targetDate === undefined) return null
 
     const targetDateMs = new Date(targetDate).getTime()

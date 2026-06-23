@@ -3,36 +3,8 @@ import React from "react"
 import formatLaptime from "@/lib/formatLaptime"
 import formatRaceTime from "@/lib/formatRaceTime"
 import TableSkeleton from "./TableSkeleton"
+import { Session, DriverSessionResult } from "@/types"
 
-type sessionDataObj = {
-    driver_number: number,
-    position: number,
-    number_of_laps: number,
-    dnf: boolean,
-    dns: boolean,
-    dsq: boolean,
-    meeting_key: number,
-    session_key: number,
-    points: number,
-    gap_to_leader: string,
-    duration: number,
-    drivers: driverObj
-}
-
-type driverObj = {
-    meeting_key: number,
-    session_key: number,
-    driver_number: number,
-    broadcast_name: string,
-    full_name: string,
-    name_acronym: string,
-    team_name: string,
-    team_colour: string,
-    first_name: string,
-    last_name: string,
-    headshot_url: string,
-    country_code: string
-}
 
 type sessionInfo = {
     name: string,
@@ -48,7 +20,7 @@ enum SessionType {
 
 export default function LastSessionCard (){
     const [sessionInfo, setSessionInfo] = React.useState<sessionInfo | null>(null)
-    const [sessionData, setSessionData] = React.useState<sessionDataObj[] | null>(null)
+    const [sessionData, setSessionData] = React.useState<DriverSessionResult[] | null>(null)
     
     React.useEffect(() => {
         async function load(){
@@ -83,7 +55,7 @@ export default function LastSessionCard (){
                 </thead>
                 
                 <tbody>
-                    {sessionData && sessionData.map((sessionDriver:sessionDataObj) => {
+                    {sessionData && sessionData.map((sessionDriver:DriverSessionResult) => {
                     return (
                         <tr className="h-16 border-b border-gray-700 px-5 hover:bg-white/3 transition" key={sessionDriver.driver_number}>
                             <td className="w-3/16 p-3 pl-10 text-gray-300">{sessionDriver.position || "-"}</td>
@@ -120,7 +92,7 @@ export default function LastSessionCard (){
                 </thead>
                 
                 <tbody>
-                    {sessionData && sessionData.map((sessionDriver:sessionDataObj) => {
+                    {sessionData && sessionData.map((sessionDriver:DriverSessionResult) => {
                     return (
                         <tr className="h-16 border-b border-gray-700 px-5 hover:bg-white/3 transition" key={sessionDriver.driver_number}>
                             <td className="w-3/16 p-3 pl-10 text-gray-300">{sessionDriver.position || "-"}</td>

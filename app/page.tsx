@@ -1,7 +1,7 @@
-import RaceWeekendCard from "./race-weekend-card/RaceWeekendCard"
-import LastSessionCard from "./LastSessionCard"
-import NextSessionCard from "./next-session-card/NextSessionCard"
-import DriverStandingsGraph from "./driver-standings-graph/DriverStandingsGraph"
+import RaceWeekendCard from "../components/race-weekend-card/RaceWeekendCard"
+import LastSessionCard from "../components/LastSessionCard"
+import NextSessionCard from "../components/next-session-card/NextSessionCard"
+import DriverStandingsGraph from "../components/driver-standings-graph/DriverStandingsGraph"
 
 
 export default async function Home() {

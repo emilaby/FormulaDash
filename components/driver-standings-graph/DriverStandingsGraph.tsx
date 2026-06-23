@@ -2,57 +2,11 @@
 import React from "react"
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Legend, ResponsiveContainer } from "recharts"
 import DriverStandingsGraphSkeleton from "./DriverStandingsGraphSkeleton"
-
-
-type standingObj = {
-    meeting_key: number,
-    session_key: number,
-    driver_number: number,
-    position_start: number,
-    position_current: number,
-    points_start: number,
-    points_current: number
-}
-
-type driverObj = {
-    meeting_key: number,
-    session_key: number,
-    driver_number: number,
-    broadcast_name: string,
-    full_name: string,
-    name_acronym: string,
-    team_name: string,
-    team_colour: string,
-    first_name: string,
-    last_name: string,
-    headshot_url: string,
-    country_code: string
-}
-
-type meetingDataObj = {
-    meeting_key: number,
-    meeting_name: string,
-    meeting_official_name: string,
-    location: string,
-    country_key: number,
-    country_code: string,
-    country_name: string,
-    country_flag: string,
-    circuit_key: number,
-    circuit_short_name: string,
-    circuit_type: string,
-    circuit_info_url: string,
-    circuit_image: string,
-    gmt_offset: string,
-    date_start: string,
-    date_end: string,
-    year: number,
-    is_cancelled: boolean
-}
+import { Driver } from "@/types"
     
 export default function DriverStandingsGraph(){
     const [driverNums, setDriverNums] = React.useState<number[] | null>(null)
-    const [drivers, setDrivers] = React.useState<driverObj[] | null>(null)
+    const [drivers, setDrivers] = React.useState<Driver[] | null>(null)
     const [standingsPerRace, setStandingsPerRace] = React.useState<Record<string, number | string>[] | null>(null)
 
     
@@ -73,8 +27,8 @@ export default function DriverStandingsGraph(){
 
 
 
-    const driverTeamColour = (driverNum:number) => drivers?.find((driver:driverObj) => driver.driver_number === driverNum)?.team_colour
-    const nameFromNum = (driverNum:number) => drivers?.find((driver:driverObj) => driver.driver_number === driverNum)?.last_name
+    const driverTeamColour = (driverNum:number) => drivers?.find((driver:Driver) => driver.driver_number === driverNum)?.team_colour
+    const nameFromNum = (driverNum:number) => drivers?.find((driver:Driver) => driver.driver_number === driverNum)?.last_name
 
     return (
         <>

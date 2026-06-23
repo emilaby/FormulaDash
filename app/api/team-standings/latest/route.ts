@@ -1,18 +1,8 @@
-import { supabaseAdmin } from "@/lib/supabase/server"
+import { supabase } from "@/lib/supabase/client"
 import getLastRaceSessionKey from "@/lib/getLastRaceSessionKey"
+import { TeamStanding } from "@/types"
 
 export const revalidate = 900
-
-
-type teamObj = {
-    meeting_key: number,
-    session_key: number,
-    team_name: string,
-    position_start: number,
-    position_current: number,
-    points_start: number,
-    points_current: number,
-}
 
 type teamNameColour = {
     team_name: string,
@@ -32,8 +22,8 @@ export async function GET(){
         }
 
         const[{ data: teamStandingsLatest, error: teamStandingsLatestErr }, { data: teamNameColours, error: teamNameColoursErr }] = await Promise.all([
-            await supabaseAdmin.from("team_standings").select("*").eq("session_key", lastRaceSessionKey),
-            await supabaseAdmin.from("drivers").select("team_name, team_colour").eq("session_key", lastRaceSessionKey)
+            await supabase.from("team_standings").select("*").eq("session_key", lastRaceSessionKey),
+            await supabase.from("drivers").select("team_name, team_colour").eq("session_key", lastRaceSessionKey)
         ])
         
         if (teamStandingsLatestErr){
@@ -52,7 +42,7 @@ export async function GET(){
             )
         }
 
-        const teamStandingsLatestMerged = teamStandingsLatest.map((teamStanding:teamObj) => {
+        const teamStandingsLatestMerged = teamStandingsLatest.map((teamStanding:TeamStanding) => {
             const teamColour = teamNameColours.find((teamNameColour:teamNameColour) => teamNameColour.team_name === teamStanding.team_name)?.team_colour
         
             return(

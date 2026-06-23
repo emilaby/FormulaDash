@@ -1,28 +1,11 @@
 "use client"
 import React from "react"
-import TableSkeleton from "../TableSkeleton"
+import TableSkeleton from "@/components/TableSkeleton"
+import { DriverStanding, Driver } from "@/types"
 
 export default function DriverStandings(){
-      type driverStandingObj = {
-        meeting_key: number,
-        session_key: number,
-        driver_number: number,
-        position_start: number,
-        position_current: number,
-        points_start: number,
-        points_current: number,
-        broadcast_name: string,
-        full_name: string,
-        name_acronym: string,
-        team_name: string,
-        team_colour: string,
-        first_name: string,
-        last_name: string,
-        headshot_url: string,
-        country_code: string,
-    }
 
-    const [driverStandingsData, setDriverStandingsData] = React.useState<driverStandingObj[] | null>(null)
+    const [driverStandingsData, setDriverStandingsData] = React.useState<(DriverStanding & Driver)[]| null>(null)
 
     React.useEffect(() => {
         async function load(){
@@ -37,7 +20,7 @@ export default function DriverStandings(){
         }
         load()}, [])
 
-    const sortedData = (driverStandingsData ? [...driverStandingsData].sort((a, b) => a.position_current - b.position_current) : null)
+    const sortedData:(DriverStanding & Driver)[]| null = (driverStandingsData ? [...driverStandingsData].sort((a, b) => a.position_current - b.position_current) : null)
 
     return (
         <>
@@ -57,7 +40,7 @@ export default function DriverStandings(){
                     </thead>
                     
                     <tbody>
-                        {sortedData && sortedData.map((standing:driverStandingObj) => (
+                        {sortedData && sortedData.map((standing:(DriverStanding & Driver)) => (
                         <tr className="h-16 border-b border-gray-700 px-5 hover:bg-white/3 transition" key={standing.driver_number}>
                             <td className="w-3/16 p-3 pl-10 text-gray-300">{standing.position_current}</td>
                             <td className="w-5/16 p-3 text-lg">{standing.full_name}</td>

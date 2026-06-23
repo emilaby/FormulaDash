@@ -2,33 +2,9 @@ import { DRIVERNUMBERS } from "@/public/data/f1Data"
 import { supabase } from "@/lib/supabase/client"
 
 import getLastRaceSessionKey from "@/lib/getLastRaceSessionKey"
+import { DriverStanding, Driver } from "@/types"
 
 export const revalidate = 900
-
-type standingsObj = {
-    meeting_key: number,
-    session_key: number,
-    driver_number: number,
-    position_start: number,
-    position_current: number,
-    points_start: number,
-    points_current: number
-}
-
-type driverObj = {
-    meeting_key: number,
-    session_key: number,
-    driver_number: number,
-    broadcast_name: string,
-    full_name: string,
-    name_acronym: string,
-    team_name: string,
-    team_colour: string,
-    first_name: string,
-    last_name: string,
-    headshot_url: string,
-    country_code: string
-}
 
 
 export async function GET() {
@@ -67,10 +43,11 @@ export async function GET() {
             )
         }
 
+
         const mergedData = []
         for(const num of DRIVERNUMBERS){
-            const driverStanding = driverStandings.find((standing:standingsObj) =>  standing.driver_number === num)
-            const driverObj = driverData.find((driverDataObj: driverObj) => driverDataObj.driver_number === num)
+            const driverStanding = driverStandings.find((standing:DriverStanding) =>  standing.driver_number === num)
+            const driverObj = driverData.find((driverDataObj:Driver) => driverDataObj.driver_number === num)
             mergedData.push({
                 ...driverStanding,
                 ...driverObj,

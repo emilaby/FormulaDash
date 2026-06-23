@@ -1,4 +1,5 @@
 import { supabaseAdmin } from "@/lib/supabase/server"
+import { TeamStanding } from "@/types"
 
 export async function GET() {
     try{
@@ -12,7 +13,7 @@ export async function GET() {
             )
         }
 
-        const teamStandings = await teamStandingsRes.json()
+        const teamStandings: TeamStanding[] = await teamStandingsRes.json()
 
         const { error } = await supabaseAdmin
             .from("team_standings")

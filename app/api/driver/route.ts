@@ -1,4 +1,5 @@
 import { supabaseAdmin } from "@/lib/supabase/server"
+import { Driver } from "@/types"
 
 export async function GET() {
     try{
@@ -12,7 +13,7 @@ export async function GET() {
             )
         }
 
-        const driverData = await driverDataRes.json()
+        const driverData: Driver[] = await driverDataRes.json()
 
         const { error } = await supabaseAdmin
             .from("drivers")

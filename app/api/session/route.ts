@@ -1,4 +1,5 @@
 import { supabaseAdmin } from "@/lib/supabase/server"
+import { Session } from "@/types"
 
 export async function GET() {
     try{
@@ -12,7 +13,7 @@ export async function GET() {
             )
         }
 
-        const sessionsData = await sessionsRes.json()
+        const sessionsData: Session[] = await sessionsRes.json()
 
         const { error } = await supabaseAdmin
             .from("sessions")

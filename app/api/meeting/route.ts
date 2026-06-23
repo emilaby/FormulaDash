@@ -1,4 +1,5 @@
 import { supabaseAdmin } from "@/lib/supabase/server"
+import { Meeting } from "@/types"
 
 export async function GET() {
     try{
@@ -15,7 +16,7 @@ export async function GET() {
             )
         }
 
-        const meetingsData = await meetingsRes.json()
+        const meetingsData: Meeting[] = await meetingsRes.json()
 
         const { error } = await supabaseAdmin
             .from("meetings")
