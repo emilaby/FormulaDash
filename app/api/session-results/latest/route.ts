@@ -16,11 +16,11 @@ export async function GET() {
             )
         }
 
-        const { data: latestSessionResult, error: latestSessionResultErr } = await supabase
-            .from("session_results")
-            .select("*, drivers(*)")
-            .eq("session_key", lastSessionKey)
-    
+        const [{ data: latestSessionResult, error: latestSessionResultErr }, lastSession] = await Promise.all([
+            await supabase.from("session_results").select("*, drivers(*)").eq("session_key", lastSessionKey),
+            await getLastSession()
+        ])
+
         
         if (latestSessionResultErr){
             console.error(latestSessionResultErr.message)
@@ -30,14 +30,12 @@ export async function GET() {
             )
         }
 
-        const lastSession = await getLastSession()
         if (!lastSession){
             return Response.json(
                 {success: false, error: "Error fetching last session data from database"},
                 {status: 500}
             )
         }
-
         
         const positionDriverData = latestSessionResult.filter((sessionDriver) => sessionDriver.position)
         const noPositionDriverData = latestSessionResult.filter((sessionDriver) => !sessionDriver.position)

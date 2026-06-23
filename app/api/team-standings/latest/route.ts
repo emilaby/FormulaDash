@@ -21,8 +21,6 @@ type teamNameColour = {
 
 
 export async function GET(){
-
-
     try{
         const lastRaceSessionKey = await getLastRaceSessionKey()
 
@@ -33,10 +31,10 @@ export async function GET(){
             )
         }
 
-        const { data: teamStandingsLatest, error: teamStandingsLatestErr } = await supabaseAdmin
-            .from("team_standings")
-            .select("*")
-            .eq("session_key", lastRaceSessionKey)
+        const[{ data: teamStandingsLatest, error: teamStandingsLatestErr }, { data: teamNameColours, error: teamNameColoursErr }] = await Promise.all([
+            await supabaseAdmin.from("team_standings").select("*").eq("session_key", lastRaceSessionKey),
+            await supabaseAdmin.from("drivers").select("team_name, team_colour").eq("session_key", lastRaceSessionKey)
+        ])
         
         if (teamStandingsLatestErr){
             console.error(teamStandingsLatestErr.message)
@@ -45,11 +43,6 @@ export async function GET(){
                 {status: 500}
             )
         }
-
-        const { data: teamNameColours, error: teamNameColoursErr } = await supabaseAdmin
-            .from("drivers")
-            .select("team_name, team_colour")
-            .eq("session_key", lastRaceSessionKey)
         
         if (teamNameColoursErr){
             console.error(teamNameColoursErr.message)

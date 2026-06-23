@@ -25,11 +25,11 @@ export async function GET() {
         const currentDate = new Date()
 
         const { data, error } = await supabaseAdmin
-        .from("sessions")
-        .select("*")
-        .gt("date_start", currentDate.toISOString())
-        .order("date_end", { ascending: true })
-        .limit(1)
+            .from("sessions")
+            .select("*")
+            .gt("date_start", currentDate.toISOString())
+            .order("date_end", { ascending: true })
+            .limit(1)
         
         if (error){
             return Response.json(
