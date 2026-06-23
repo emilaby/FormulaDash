@@ -1,6 +1,8 @@
 name: Scheduled OpenF1 calls
 
 on:
+  workflow_dispatch:
+    
   schedule:
     - cron: '*/10 * * * *'
 jobs:
