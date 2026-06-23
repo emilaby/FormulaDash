@@ -53,20 +53,22 @@ type meetingDataObj = {
 
 export async function GET() {
     try{
-        // get LATEST DRIVER DATA
-        const lastRaceSessionKey = await getLastRaceSessionKey()
+        const [lastRaceSessionKey, driverStandingsHistory, meetingData] = await Promise.all([
+            getLastRaceSessionKey(), getDriverStandingsHistory(), getMeetingHistory()
+        ])
 
-        if (!lastRaceSessionKey){
+        if (!lastRaceSessionKey || !driverStandingsHistory || !meetingData){
             return Response.json(
-                {success: false, error: "Error fetching last race session key"},
+                {success: false, error: "Error fetching from database"},
                 {status: 500}
             )
         }
+
         const { data: driverLatest, error: driverLatestErr } = await supabase
                 .from("drivers")
                 .select("*")
                 .eq("session_key", lastRaceSessionKey)
-            
+    
         if (driverLatestErr){
             console.error(driverLatestErr.message)
             return Response.json(
@@ -75,50 +77,29 @@ export async function GET() {
             )
         }
 
-        // get DRIVER STANDING FROM SEASON SO FAR
-        const driverStandingsHistory = await getDriverStandingsHistory()
-        if (!driverStandingsHistory){
-            return Response.json(
-                {success: false, error: "Error fetching driver standings from database"},
-                {status: 500}
-            )
-        }
-
-        // get MEETING DATA FROM SEASON SO FAR
-        const meetingData = await getMeetingHistory()
-        if (!meetingData){
-            return Response.json(
-                {success: false, error: "Error fetching meeting history from database"},
-                {status: 500}
-            )
-        }
-
         // construct array of objects- each object has driverNo : pts and location: "..."
-
-        const driverNumsSet = new Set((driverStandingsHistory??[]).map((standing:standingObj) => standing.driver_number))
-        const driverNums = [...driverNumsSet]
-    
-    
-        const meetingKeysSet = new Set((driverStandingsHistory??[]).map((standing:standingObj) => standing.meeting_key))
-        const meetingKeys = [...meetingKeysSet]
+        const driverNums = [...new Set((driverStandingsHistory).map((standing:standingObj) => standing.driver_number))]
+        const meetingKeys = [...new Set((driverStandingsHistory).map((standing:standingObj) => standing.meeting_key))]
 
         const meetingStartDate = (meetingKey: number): number => {
-            const meeting = meetingData?.find((m: meetingDataObj) => m.meeting_key === meetingKey)
+            const meeting = meetingData.find((m: meetingDataObj) => m.meeting_key === meetingKey)
             return meeting ? new Date(meeting.date_start).getTime() : 0
         }    
     
         meetingKeys.sort((a:number, b:number) => meetingStartDate(a) - meetingStartDate(b))
 
-        const meetingLocation = (meetingKey:number) => meetingData?.find((meeting:meetingDataObj) => meeting.meeting_key === meetingKey)?.location
+        const meetingLocation = (meetingKey:number) => meetingData.find((meeting:meetingDataObj) => meeting.meeting_key === meetingKey)?.location
+
+        const validMeetingKeys = meetingKeys.filter((key:number) => meetingLocation(key))
 
     
-        const standingsPerRaceGrouped = meetingKeys.map((key:number) => {
-            const driversInRace = driverStandingsHistory?.filter((standing:standingObj) => standing.meeting_key === key) 
-            return driversInRace?.reduce(
+        const standingsPerRaceGrouped = validMeetingKeys.map((key:number) => {
+            const driversInRace = driverStandingsHistory.filter((standing:standingObj) => standing.meeting_key === key) 
+            return driversInRace.reduce(
                 (row: Record<string, number | string>, driver:standingObj) => {
                     row[driver.driver_number] = driver.points_current
                     return row
-                }, {location: meetingLocation(key) || ""}
+                }, {location: meetingLocation(key)}
             )
         })
 
