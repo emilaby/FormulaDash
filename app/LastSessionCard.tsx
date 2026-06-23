@@ -1,5 +1,7 @@
 "use client"
 import React from "react"
+import formatLaptime from "@/lib/formatLaptime"
+import formatRaceTime from "@/lib/formatRaceTime"
 
 type sessionDataObj = {
     driver_number: number,
@@ -59,19 +61,6 @@ export default function LastSessionCard (){
             return
         }
     load()}, [])
-
-    
-    const formatLaptime = (timeInSecs:number) => {
-        const mins = Math.floor(timeInSecs / 60)
-        const secs = (timeInSecs % 60).toFixed(3)
-        return `${mins}:${secs}`
-    }
-    const formatRaceTime = (timeInSecs:number) => {
-        const hours = Math.floor(timeInSecs / 3600)
-        const mins = Math.floor((timeInSecs - (hours*3600)) / 60)
-        const secs = (timeInSecs % 60).toFixed(3)
-        return `${hours}:${mins}:${secs}`
-    }
 
     return (
         <>
