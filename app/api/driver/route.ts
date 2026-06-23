@@ -3,7 +3,7 @@ import { Driver } from "@/types"
 import { NextRequest } from "next/server"
 import authCheck from "@/lib/authCheck"
 
-// Updates drivers table with driver data from OpenF1
+// Updates drivers table with driver data from OpenF1.
 export async function GET(req:NextRequest) {
     try{
         const authorised = authCheck(req)
@@ -20,7 +20,7 @@ export async function GET(req:NextRequest) {
 
         if (!driverDataRes.ok){
             return Response.json(
-                {success: false, error: "Error fetching driver data from OpenF1"},
+                {success: false, error: "Error fetching driver data from OpenF1."},
                 {status: 502}
             )
         }
