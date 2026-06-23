@@ -47,7 +47,8 @@ export default function DriverStandingsGraph(){
                 <YAxis tickLine={false} axisLine={false}/>
                 <Legend wrapperStyle={{ paddingLeft: 60 }}/>
                 {driverNums.map((num:number) => (
-                    <Line type="monotone" dataKey={num} name={nameFromNum(num)} stroke={`#${driverTeamColour(num)}`} strokeWidth={2} key={num} dot={false} activeDot={false}/>
+                    <Line type="monotone" dataKey={num} name={nameFromNum(num)} stroke={`#${driverTeamColour(num)}`} strokeWidth={2} key={num} dot={false} activeDot={false} isAnimationActive={true}
+                        animationBegin={0} animationDuration={1000} animationEasing="ease"/>
                 ))}
                 
             </LineChart>
