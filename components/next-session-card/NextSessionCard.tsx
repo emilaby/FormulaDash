@@ -4,8 +4,10 @@ import getCurrentCountdown from "@/lib/getCurrentCountdown"
 import NextSessionCardSkeleton from "./NextSessionCardSkeleton"
 import { Session } from "@/types"
 
+/**
+ * Displays next session name and countdown to it.
+ */
 export default function NextSessionCard() {
-
     const [nextSessionData, setnextSessionData] = React.useState<Session | null>(null)
             
     React.useEffect(() => {

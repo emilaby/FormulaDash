@@ -1,5 +1,6 @@
 import { supabase } from "./supabase/client"
 
+// Returns driver standings over the current season so far.
 export default async function getDriverStandingsHistory() {
     try{
         const currentDate = new Date()

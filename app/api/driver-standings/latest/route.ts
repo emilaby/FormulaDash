@@ -1,4 +1,3 @@
-import { DRIVERNUMBERS } from "@/public/data/f1Data"
 import { supabase } from "@/lib/supabase/client"
 
 import getLastRaceSessionKey from "@/lib/getLastRaceSessionKey"
@@ -40,9 +39,10 @@ export async function GET() {
             )
         }
 
+        const driverNums = [...new Set((driverStandings).map((standing:DriverStanding) => standing.driver_number))]
 
         const mergedData = []
-        for(const num of DRIVERNUMBERS){
+        for(const num of driverNums){
             const driverStanding = driverStandings.find((standing:DriverStanding) =>  standing.driver_number === num)
             const driverObj = driverData.find((driverDataObj:Driver) => driverDataObj.driver_number === num)
             mergedData.push({

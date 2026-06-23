@@ -1,5 +1,6 @@
-import { Countdown } from "@/types"    
+import { Countdown } from "@/types"
 
+// Returns countdown to given target as dd:hh:mm:ss 
 export default function getCurrentCountdown(targetDate:string | undefined): Countdown | null{
     if (targetDate === undefined) return null
 

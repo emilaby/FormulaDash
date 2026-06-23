@@ -1,6 +1,7 @@
 import { supabase } from "./supabase/client"
 import getLastSessionKey from "./getLastSessionKey"
 
+// Returns last session data.
 export default async function getLastSession() {
     try{
         const lastSessionKey = await getLastSessionKey()

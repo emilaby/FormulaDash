@@ -1,4 +1,6 @@
 import { supabase } from "./supabase/client"
+
+// Returns last race's session key.
 export default async function getLastRaceSessionKey(){
     try{
         const currentDate = new Date()

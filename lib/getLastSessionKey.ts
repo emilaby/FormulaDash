@@ -1,5 +1,6 @@
 import { supabase } from "./supabase/client"
 
+// Returns last session key.
 export default async function getLastSessionKey(){
 
     try{

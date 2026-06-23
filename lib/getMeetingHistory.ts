@@ -1,4 +1,6 @@
 import { supabase } from "./supabase/client"
+
+// Returns meeting data for the current season so far
 export default async function getMeetingHistory(){
     try{
         const currentDate = new Date()

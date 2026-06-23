@@ -3,7 +3,10 @@ import React from "react"
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Legend, ResponsiveContainer } from "recharts"
 import DriverStandingsGraphSkeleton from "./DriverStandingsGraphSkeleton"
 import { Driver } from "@/types"
-    
+
+/**
+ * Displays a graph of driver standings over the current season so far.
+ */
 export default function DriverStandingsGraph(){
     const [driverNums, setDriverNums] = React.useState<number[] | null>(null)
     const [drivers, setDrivers] = React.useState<Driver[] | null>(null)

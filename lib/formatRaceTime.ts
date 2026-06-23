@@ -1,3 +1,4 @@
+// Formats time is secs to hours:mins:secs
 const formatRaceTime = (timeInSecs:number) => {
     const hours = Math.floor(timeInSecs / 3600)
     const mins = Math.floor((timeInSecs - (hours*3600)) / 60)

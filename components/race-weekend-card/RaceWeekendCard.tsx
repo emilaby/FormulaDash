@@ -4,6 +4,9 @@ import Image from "next/image"
 import RaceWeekendCardSkeleton from "./RaceWeekendCardSkeleton"
 import { Meeting } from "@/types"
 
+/**
+ * Displays race weekend name, country flag, date, time and circuit image.
+ */
 export default function RaceWeekendCard(){
     const [meetingData, setMeetingData] = React.useState<Meeting | null>(null)
         
@@ -23,7 +26,7 @@ export default function RaceWeekendCard(){
         load()}, [])
     
     const [hourglassFlip, setHourGlassFlip] = React.useState(false)
-    
+
     React.useEffect(() => {
         const interval = setInterval(() => setHourGlassFlip(prev => !prev), 1000)
         return () => clearInterval(interval)

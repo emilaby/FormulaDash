@@ -3,7 +3,7 @@ import React from "react"
 import formatLaptime from "@/lib/formatLaptime"
 import formatRaceTime from "@/lib/formatRaceTime"
 import TableSkeleton from "./TableSkeleton"
-import { Session, DriverSessionResult } from "@/types"
+import { DriverSessionResult } from "@/types"
 
 
 type sessionInfo = {
@@ -17,7 +17,9 @@ enum SessionType {
     Qualifying = "qualifying"
 }
 
-
+/**
+ * Displays last session name and results.
+ */
 export default function LastSessionCard (){
     const [sessionInfo, setSessionInfo] = React.useState<sessionInfo | null>(null)
     const [sessionData, setSessionData] = React.useState<DriverSessionResult[] | null>(null)
