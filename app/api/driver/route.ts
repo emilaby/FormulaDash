@@ -20,7 +20,7 @@ export async function GET(req:NextRequest) {
 
         if (!driverDataRes.ok){
             return Response.json(
-                {success: false, error: "Error fetching driver data from OpenF1."},
+                {success: false, error: "Error fetching driver data from OpenF1"},
                 {status: 502}
             )
         }
