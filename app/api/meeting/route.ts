@@ -1,6 +1,7 @@
 import { supabaseAdmin } from "@/lib/supabase/server"
 import { Meeting } from "@/types"
 
+// Updates meetings table with meeting data from OpenF1
 export async function GET() {
     try{
         const currentDate = new Date()

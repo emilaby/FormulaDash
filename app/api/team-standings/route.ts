@@ -1,6 +1,7 @@
 import { supabaseAdmin } from "@/lib/supabase/server"
 import { TeamStanding } from "@/types"
 
+// Updates team_standings table with team standing data from OpenF1
 export async function GET() {
     try{
         const teamStandingsUrl = "https://api.openf1.org/v1/championship_teams"

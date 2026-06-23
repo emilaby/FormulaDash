@@ -1,6 +1,7 @@
 import { supabaseAdmin } from "@/lib/supabase/server"
 import { SessionResult } from "@/types"
 
+// Updates session_results table with session result data from OpenF1
 export async function GET() {
     try{
         const sessionsUrl = "https://api.openf1.org/v1/session_result"

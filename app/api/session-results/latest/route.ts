@@ -4,7 +4,7 @@ import getLastSession from "@/lib/getLastSession"
 
 export const revalidate = 900
 
-
+// Returns latest session info + results.
 export async function GET() {
     try{
         const lastSessionKey = await getLastSessionKey()

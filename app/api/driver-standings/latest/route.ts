@@ -6,12 +6,9 @@ import { DriverStanding, Driver } from "@/types"
 
 export const revalidate = 900
 
-
+// Returns latest driver standings merged with driver data
 export async function GET() {
     try{
-        // find last race session key from sessions
-        // access all driver standings + drivers with that session key
-
         const lastRaceSessionKey = await getLastRaceSessionKey()
 
         if (!lastRaceSessionKey){

@@ -1,12 +1,13 @@
-import { supabaseAdmin } from "@/lib/supabase/server"
+import { supabase } from "@/lib/supabase/client"
 
 export const revalidate = 900
 
+// Returns next session data.
 export async function GET() {
     try{
         const currentDate = new Date()
 
-        const { data, error } = await supabaseAdmin
+        const { data, error } = await supabase
             .from("sessions")
             .select("*")
             .gt("date_start", currentDate.toISOString())

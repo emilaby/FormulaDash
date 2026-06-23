@@ -9,7 +9,7 @@ type teamNameColour = {
     team_colour: string
 }
 
-
+// Returns latest team standings.
 export async function GET(){
     try{
         const lastRaceSessionKey = await getLastRaceSessionKey()
@@ -43,20 +43,21 @@ export async function GET(){
         }
 
         const teamStandingsLatestMerged = teamStandingsLatest.map((teamStanding:TeamStanding) => {
+
             const teamColour = teamNameColours.find((teamNameColour:teamNameColour) => teamNameColour.team_name === teamStanding.team_name)?.team_colour
-        
-            return(
-                {
-                    meeting_key: teamStanding.meeting_key,
-                    session_key: teamStanding.session_key,
-                    team_name: teamStanding.team_name,
-                    position_start: teamStanding.position_start,
-                    position_current: teamStanding.position_current,
-                    points_start: teamStanding.points_start,
-                    points_current: teamStanding.points_current,
-                    team_colour: teamColour
-                }
-            )
+            
+                return(
+                    {
+                        meeting_key: teamStanding.meeting_key,
+                        session_key: teamStanding.session_key,
+                        team_name: teamStanding.team_name,
+                        position_start: teamStanding.position_start,
+                        position_current: teamStanding.position_current,
+                        points_start: teamStanding.points_start,
+                        points_current: teamStanding.points_current,
+                        team_colour: teamColour
+                    }
+                )
         })
 
         return Response.json(teamStandingsLatestMerged)

@@ -1,6 +1,7 @@
 import { supabaseAdmin } from "@/lib/supabase/server"
 import { Driver } from "@/types"
 
+// Updates drivers table with driver data from OpenF1
 export async function GET() {
     try{
         const driverDataUrl = "https://api.openf1.org/v1/drivers"
