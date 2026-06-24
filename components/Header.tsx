@@ -6,7 +6,7 @@ export default function Header(){
     const pathname = usePathname()
 
     return(
-    <header className="flex sticky rounded-xs top-0 justify-between items-center bg-med-blue/80 backdrop-blur-xs h-12 sm:h-17 shadow-lg z-10">
+    <header className="flex sticky rounded-xs top-0 justify-between items-center bg-med-blue/80 backdrop-blur-xs h-15 sm:h-17 shadow-lg z-10">
         <h1 className="text-xl sm:text-3xl text-grey ml-3 mr-3"><Link href="/" className="flex justify-center"><p>Formula</p><p className="text-blue font-normal">Dash</p></Link></h1>
         <div className="flex min-w-0 max-w-full gap-7 text-sm sm:gap-10 sm:text-lg mr-3">
             <p className= {`shrink pb-1 border-b-2 ${pathname === "/" ? "border-b-2 border-blue" : "border-transparent"} hover:border-mid-blue`}>

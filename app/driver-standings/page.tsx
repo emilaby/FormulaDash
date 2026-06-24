@@ -2,6 +2,7 @@
 import React from "react"
 import TableSkeleton from "@/components/TableSkeleton"
 import { DriverStanding, Driver } from "@/types"
+import getShortTeamName from "@/lib/getShortTeamName"
 
 export default function DriverStandings(){
 
@@ -21,7 +22,6 @@ export default function DriverStandings(){
         load()}, [])
 
     const sortedData:(DriverStanding & Driver)[]| null = (driverStandingsData ? [...driverStandingsData].sort((a, b) => a.position_current - b.position_current) : null)
-    const shortTeamName = (name:string) => name.replace(" Racing", "").replace(" F1 Team", "")
 
     return (
         <>
@@ -29,13 +29,13 @@ export default function DriverStandings(){
 
         {sortedData &&
         <main className="bg-dark-blue min-h-screen p-4 sm:p-7 max-w-full min-w-0"> 
-            <div className="border border-mid-blue rounded-3xl p-3 sm:p-4">
+            <div className="border border-mid-blue rounded-3xl p-3 sm:p-4 min-w-0 overflow-hidden">
                 <table className="w-full text-left border-collapse min-w-0">
                     <thead className="text-gray-400">
                         <tr className="text-sm sm:text-lg h-7 sm:h-10 border-b-3 border-gray-700">
                             <th className="sm:pl-4 pb-1 sm:pb-0">
                                 <span className="hidden sm:inline">Position</span>
-                                <span className="sm:hidden">Pos</span>
+                                <span className="sm:hidden">Pos.</span>
                             </th>
                             <th className="sm:pl-3 pb-1 sm:pb-0">Name</th>
                             <th className="sm:pl-2 pb-1 sm:pb-0">Points</th>
@@ -56,7 +56,7 @@ export default function DriverStandings(){
                                 <div className="flex gap-3 sm:gap-7 items-center">
                                     {standing?.team_colour && <div className="min-w-5 min-h-5 sm:min-w-7 sm:min-h-7 rounded-full" style={{ backgroundColor: `#${standing.team_colour}`}}></div>}
                                     <span className="hidden sm:inline">{standing.team_name}</span>
-                                    <span className="sm:hidden">{shortTeamName(standing.team_name)}</span>
+                                    <span className="sm:hidden">{getShortTeamName(standing.team_name)}</span>
                                 </div>
                             </td>
                         </tr>
