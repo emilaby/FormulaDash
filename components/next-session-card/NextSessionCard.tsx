@@ -46,7 +46,7 @@ export default function NextSessionCard() {
             <h1 className="font-medium sm:text-lg">{`${nextSessionData.country_name} ${nextSessionData.session_name}`}</h1>
             {countdown && <div className="flex flex-wrap min-w-0 items-center max-w-full gap-1 sm:gap-2 mt-3 text-xs sm:text-base">
                 <div className="flex flex-col items-center bg-blue rounded-xl p-2 sm:p-3 w-14 sm:w-24">
-                    <h2 className="text-xl sm:text-3xl mb-1 sm:mb-0 font-bold tabular-nums" >{countdown.days}</h2>
+                    <h2 className="text-xl sm:text-3xl font-bold tabular-nums" >{countdown.days}</h2>
                     <p>DAYS</p>
                 </div>
                 <p className="text-lg sm:text-xl">:</p>
