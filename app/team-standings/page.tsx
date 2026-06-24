@@ -29,7 +29,7 @@ export default function TeamStandings(){
         {!sortedData && <TableSkeleton/>}
 
         {sortedData &&
-        <main className="bg-dark-blue min-h-screen p-7"> 
+        <main className="bg-dark-blue min-h-screen p-7 max-w-full"> 
             <div className="border border-mid-blue rounded-3xl p-2">
                 <table className="w-full text-left border-collapse">
                     <thead className="text-gray-400">

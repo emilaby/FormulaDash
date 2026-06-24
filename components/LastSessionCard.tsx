@@ -42,7 +42,7 @@ export default function LastSessionCard (){
         {(!sessionInfo || !sessionData) && <TableSkeleton/>}
         
         {sessionInfo && sessionData && sessionInfo.session_type?.trim().toLowerCase() === SessionType.Race && 
-        <div className="w-19/20 ml-7 mr-7 mb-7 mt-9 flex flex-col items-center p-5 border border-mid-blue rounded-3xl hover:bg-white/3 transition">
+        <div className="max-w-full ml-7 mr-7 mb-7 mt-9 flex flex-col items-center p-5 border border-mid-blue rounded-3xl hover:bg-white/3 transition">
             <p className="text-xs text-gray-500 mb-2">LAST SESSION</p>
             <h1 className="font-medium text-lg">{sessionInfo.name}</h1>
 

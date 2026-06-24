@@ -6,7 +6,7 @@ import DriverStandingsGraph from "../components/driver-standings-graph/DriverSta
 
 export default async function Home() {
   return(
-    <main className="bg-dark-blue min-h-screen flex flex-col items-center">
+    <main className="bg-dark-blue w-full min-h-screen flex flex-col items-center">
       <div className="flex w-full gap-12 h-[500px]">
         <div className="basis-[45%] grow shrink min-w-0 max-w-[45%] ml-8 mb-7 mt-5 flex flex-col items-center ">
           <NextSessionCard />
