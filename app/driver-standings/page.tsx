@@ -28,9 +28,10 @@ export default function DriverStandings(){
         {!sortedData && <TableSkeleton/>}
 
         {sortedData &&
-        <main className="bg-dark-blue min-h-screen p-4 sm:p-7 max-w-full min-w-0"> 
+        <main className="bg-dark-blue min-h-screen p-4 sm:p-7 max-w-full min-w-0">
             <div className="border border-mid-blue rounded-3xl p-3 sm:p-4 min-w-0 overflow-hidden">
-                <table className="w-full text-left border-collapse min-w-0">
+                <p className="font-semibold text-gray-300 text-base sm:text-lg text-center">DRIVER STANDINGS</p>
+                <table className="w-full text-left border-collapse min-w-0 mt-6">
                     <thead className="text-gray-400">
                         <tr className="text-sm sm:text-lg h-7 sm:h-10 border-b-3 border-gray-700">
                             <th className="sm:pl-4 pb-1 sm:pb-0">

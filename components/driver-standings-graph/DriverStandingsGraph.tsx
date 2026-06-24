@@ -44,10 +44,10 @@ export default function DriverStandingsGraph(){
                 <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={standingsPerRace}>
                     <CartesianGrid strokeDasharray="3 3" stroke="#2d3738" vertical={false}/>
-                    <XAxis dataKey="location" stroke="#9ca3af" interval="preserveStartEnd" angle={-90} height={120} tick={{dy:5, dx:-10, fontSize:12}} tickLine={false} textAnchor="end"/>
+                    <XAxis dataKey="location" stroke="#9ca3af" interval="preserveStartEnd" angle={-90} height={90} tick={{dy:5, dx:-10, fontSize:12}} tickLine={false} textAnchor="end"/>
                     <YAxis tickLine={false} axisLine={false} tick={{fontSize:13}}/>
                     <Legend 
-                        wrapperStyle={{ paddingLeft: 60 }}
+                        wrapperStyle={{ paddingLeft: 50 }}
                         formatter={(value) => (
                             <span className="text-xs sm:text-base">{value}</span>)}
                     />
