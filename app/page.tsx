@@ -7,14 +7,14 @@ import DriverStandingsGraph from "../components/driver-standings-graph/DriverSta
 export default async function Home() {
   return(
     <main className="bg-dark-blue w-full min-h-screen flex flex-col items-center">
-      <div className="flex flex-col sm:flex-row w-full sm:gap-12">
-        <div className="sm:basis-[45%] grow shrink min-w-0 max-w-full sm:max-w-[45%] sm:ml-8 sm:mb-7 sm:mt-5 flex flex-col items-center sm:p-0 p-7 ">
+      <div className="flex flex-col lg:flex-row w-full lg:gap-12">
+        <div className="lg:basis-[45%] grow shrink min-w-0 max-w-full lg:max-w-[45%] lg:ml-8 lg:mb-7 lg:mt-5 flex flex-col items-center lg:p-0 p-4 ">
           <NextSessionCard />
           <RaceWeekendCard />
         </div>
         <DriverStandingsGraph />
       </div>
-      <div className="p-7 w-full min-w-0">
+      <div className="p-4 w-full min-w-0">
         <LastSessionCard />
       </div>
     </main>

@@ -41,27 +41,27 @@ export default function NextSessionCard() {
         {(!nextSessionData || !countdown) && <NextSessionCardSkeleton/>}
 
         {nextSessionData && countdown &&
-        <div className="flex flex-col sm:mt-3 w-full items-center p-4 sm:p-5 border border-mid-blue rounded-3xl hover:bg-white/3 transition">
+        <div className="flex flex-col lg:mt-3 w-full items-center p-4 lg:p-5 border border-mid-blue rounded-3xl hover:bg-white/3 transition">
             <p className="text-xs text-gray-500 mb-3">NEXT SESSION</p>
-            <h1 className="font-medium sm:text-lg">{`${nextSessionData.country_name} ${nextSessionData.session_name}`}</h1>
-            {countdown && <div className="flex flex-wrap min-w-0 items-center max-w-full gap-1 sm:gap-2 mt-3 text-xs sm:text-base">
-                <div className="flex flex-col items-center bg-blue rounded-xl p-2 sm:p-3 w-14 sm:w-24">
-                    <h2 className="text-xl sm:text-3xl font-bold tabular-nums" >{countdown.days}</h2>
+            <h1 className="font-medium lg:text-lg">{`${nextSessionData.country_name} ${nextSessionData.session_name}`}</h1>
+            {countdown && <div className="flex flex-wrap min-w-0 items-center max-w-full gap-1 lg:gap-2 mt-3 text-xs lg:text-base">
+                <div className="flex flex-col items-center bg-blue rounded-xl p-2 lg:p-3 w-14 lg:w-24">
+                    <h2 className="text-xl lg:text-3xl font-bold tabular-nums" >{countdown.days}</h2>
                     <p>DAYS</p>
                 </div>
-                <p className="text-lg sm:text-xl">:</p>
-                <div className="flex flex-col items-center bg-blue rounded-xl p-2 sm:p-3 w-14 sm:w-24 ">
-                    <h2 className="text-xl sm:text-3xl font-bold tabular-nums">{countdown.hours}</h2>
+                <p className="text-lg lg:text-xl">:</p>
+                <div className="flex flex-col items-center bg-blue rounded-xl p-2 lg:p-3 w-14 lg:w-24 ">
+                    <h2 className="text-xl lg:text-3xl font-bold tabular-nums">{countdown.hours}</h2>
                     <p>HOURS</p>
                 </div>
-                <p className="text-lg sm:text-xl">:</p>
-                <div className="flex flex-col items-center bg-blue rounded-xl p-2 sm:p-3 w-14 sm:w-24">
-                    <h2 className="text-xl sm:text-3xl font-bold tabular-nums">{countdown.mins}</h2>
+                <p className="text-lg lg:text-xl">:</p>
+                <div className="flex flex-col items-center bg-blue rounded-xl p-2 lg:p-3 w-14 lg:w-24">
+                    <h2 className="text-xl lg:text-3xl font-bold tabular-nums">{countdown.mins}</h2>
                     <p>MINS</p>
                 </div>
-                <p className="text-lg sm:text-xl">:</p>
-                <div className="flex flex-col items-center bg-blue rounded-xl p-2 sm:p-3 w-14 sm:w-24">
-                    <h2 className="text-xl sm:text-3xl font-bold tabular-nums">{countdown.secs}</h2>
+                <p className="text-lg lg:text-xl">:</p>
+                <div className="flex flex-col items-center bg-blue rounded-xl p-2 lg:p-3 w-14 lg:w-24">
+                    <h2 className="text-xl lg:text-3xl font-bold tabular-nums">{countdown.secs}</h2>
                     <p>SECS</p>
                 </div>
 

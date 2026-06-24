@@ -25,48 +25,48 @@ export default function DriverStandings(){
 
     return (
         <>
-        {!sortedData && <TableSkeleton/>}
-
-        {sortedData &&
-        <main className="bg-dark-blue min-h-screen p-4 sm:p-7 max-w-full min-w-0">
-            <div className="border border-mid-blue rounded-3xl p-3 sm:p-4 min-w-0 overflow-hidden">
-                <p className="font-semibold text-gray-300 text-base sm:text-lg text-center">DRIVER STANDINGS</p>
-                <table className="w-full text-left border-collapse min-w-0 mt-6">
-                    <thead className="text-gray-400">
-                        <tr className="text-sm sm:text-lg h-7 sm:h-10 border-b-3 border-gray-700">
-                            <th className="sm:pl-4 pb-1 sm:pb-0">
-                                <span className="hidden sm:inline">Position</span>
-                                <span className="sm:hidden">Pos.</span>
-                            </th>
-                            <th className="sm:pl-3 pb-1 sm:pb-0">Name</th>
-                            <th className="sm:pl-2 pb-1 sm:pb-0">Points</th>
-                            <th className="sm:pl-3 pb-1 sm:pb-0">Team</th>
-                        </tr>
-                    </thead>
-                    
-                    <tbody>
-                        {sortedData && sortedData.map((standing:(DriverStanding & Driver)) => (
-                        <tr className="h-12 sm:h-16 text-sm sm:text-lg border-b border-gray-700 hover:bg-white/3 transition" key={standing.driver_number}>
-                            <td className="w-3/16 min-w-0 pl-1 sm:p-3 sm:pl-9 text-gray-300">{standing.position_current}</td>
-                            <td className="w-5/16 min-w-0 sm:p-3 sm:text-lg">
-                                <span className="hidden sm:inline">{standing.full_name}</span>
-                                <span className="sm:hidden">{`${standing.first_name.slice(0,1).toUpperCase()} ${standing.last_name.slice(0,1)}${standing.last_name.slice(1)}`}</span>
-                            </td>
-                            <td className="w-4/16 min-w-0 pl-1 sm:pl-0 sm:p-3">{standing.points_current}</td>
-                            <td className="w-4/16 min-w-0 sm:p-3">
-                                <div className="flex gap-3 sm:gap-7 items-center">
-                                    {standing?.team_colour && <div className="min-w-5 min-h-5 sm:min-w-7 sm:min-h-7 rounded-full" style={{ backgroundColor: `#${standing.team_colour}`}}></div>}
-                                    <span className="hidden sm:inline">{standing.team_name}</span>
-                                    <span className="sm:hidden">{getShortTeamName(standing.team_name)}</span>
-                                </div>
-                            </td>
-                        </tr>
-                        ))} 
-                    </tbody>
-                </table>
-            </div>
-    
-        </main>}
-    </>
+        <div className="bg-dark-blue p-2 lg:p-1">
+            {!sortedData && <TableSkeleton/>}
+        </div>
+            {sortedData &&
+            <main className="bg-dark-blue min-h-screen p-3 lg:p-7 max-w-full min-w-0">
+                <div className="border border-mid-blue rounded-3xl px-3 pt-3 pb-4 lg:px-4 lg:pt-4 lg:pb-5 min-w-0 overflow-hidden">
+                    <p className="font-semibold text-gray-300 text-base lg:text-lg text-center">DRIVER STANDINGS</p>
+                    <table className="w-full text-left border-collapse min-w-0 mt-6">
+                        <thead className="text-gray-400">
+                            <tr className="text-sm lg:text-lg h-7 lg:h-10 border-b-3 border-gray-700">
+                                <th className="lg:pl-4 pb-1 lg:pb-0">
+                                    <span className="hidden lg:inline">Position</span>
+                                    <span className="lg:hidden">Pos.</span>
+                                </th>
+                                <th className="lg:pl-3 pb-1 lg:pb-0">Name</th>
+                                <th className="lg:pl-2 pb-1 lg:pb-0">Points</th>
+                                <th className="lg:pl-3 pb-1 lg:pb-0">Team</th>
+                            </tr>
+                        </thead>
+                        
+                        <tbody>
+                            {sortedData && sortedData.map((standing:(DriverStanding & Driver)) => (
+                            <tr className="h-12 lg:h-16 text-sm lg:text-lg border-b border-gray-700 hover:bg-white/3 transition" key={standing.driver_number}>
+                                <td className="w-3/16 min-w-0 pl-1 lg:p-3 lg:pl-9 text-gray-300">{standing.position_current}</td>
+                                <td className="w-5/16 min-w-0 lg:p-3 lg:text-lg">
+                                    <span className="hidden lg:inline">{standing.full_name}</span>
+                                    <span className="lg:hidden">{`${standing.first_name.slice(0,1).toUpperCase()} ${standing.last_name.slice(0,1)}${standing.last_name.slice(1)}`}</span>
+                                </td>
+                                <td className="w-4/16 min-w-0 pl-1 lg:pl-0 lg:p-3">{standing.points_current}</td>
+                                <td className="w-4/16 min-w-0 lg:p-3">
+                                    <div className="flex gap-3 lg:gap-7 items-center">
+                                        {standing?.team_colour && <div className="min-w-5 min-h-5 lg:min-w-7 lg:min-h-7 rounded-full" style={{ backgroundColor: `#${standing.team_colour}`}}></div>}
+                                        <span className="hidden lg:inline">{standing.team_name}</span>
+                                        <span className="lg:hidden">{getShortTeamName(standing.team_name)}</span>
+                                    </div>
+                                </td>
+                            </tr>
+                            ))} 
+                        </tbody>
+                    </table>
+                </div>
+            </main>}
+            </>
     )
 }
