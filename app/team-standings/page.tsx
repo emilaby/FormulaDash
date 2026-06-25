@@ -26,9 +26,10 @@ export default function TeamStandings(){
 
     return (
         <>
-        <div className="bg-dark-blue p-1">
-            {!sortedData && <TableSkeleton/>}
-        </div>
+        {!sortedData &&
+            <main className="bg-dark-blue min-h-screen p-4 lg:p-7 max-w-full min-w-0">
+                <TableSkeleton/>
+            </main>}
         
         {sortedData &&
         <main className="bg-dark-blue min-h-screen p-4 lg:p-7 max-w-full min-w-0"> 

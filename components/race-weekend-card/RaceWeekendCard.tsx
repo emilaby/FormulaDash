@@ -45,11 +45,11 @@ export default function RaceWeekendCard(){
 
         {meetingData &&
 
-        <div className="overflow-hidden mt-7 lg:mt-11 flex flex-col items-center w-full p-4 lg:p-5 border border-mid-blue rounded-3xl hover:bg-white/3 transition">
+        <div className="overflow-hidden mt-7 mb-2 lg:mt-11 flex flex-col items-center w-full p-5 lg:pb-9 lg:pt-7 lg:px-5 border border-mid-blue rounded-3xl hover:bg-white/3 transition">
             {liveNow && <p className="text-xs text-gray-500 mb-3">CURRENT RACE WEEKEND</p>}
             {!liveNow && <p className="text-xs text-gray-500 mb-3">NEXT RACE WEEKEND</p>}
             <div className="flex items-center gap-5 mb-3">
-                <h1 className="font-medium text-base lg:text-lg">{raceName}</h1>
+                <h1 className="font-medium text-base lg:text-lg lg:mt-1">{raceName}</h1>
                 <Image src={meetingData.country_flag} width={48} height={26} className="rounded-md object-contain w-[44px] h-[24px] lg:w-[48px] lg:h-[26px] " alt={`${meetingData.country_name} flag`}/>
             </div>
             <div className="flex justify-center items-center">

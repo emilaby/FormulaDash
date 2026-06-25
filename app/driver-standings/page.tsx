@@ -25,11 +25,13 @@ export default function DriverStandings(){
 
     return (
         <>
-        <div className="bg-dark-blue p-2 lg:p-1">
-            {!sortedData && <TableSkeleton/>}
-        </div>
+            {!sortedData &&
+            <main className="bg-dark-blue min-h-screen p-4 lg:p-7 max-w-full min-w-0">
+                <TableSkeleton/>
+            </main>}
+
             {sortedData &&
-            <main className="bg-dark-blue min-h-screen p-3 lg:p-7 max-w-full min-w-0">
+            <main className="bg-dark-blue min-h-screen p-4 lg:p-7 max-w-full min-w-0">
                 <div className="border border-mid-blue rounded-3xl px-3 pt-3 pb-4 lg:px-4 lg:pt-4 lg:pb-5 min-w-0 overflow-hidden">
                     <p className="font-semibold text-gray-300 text-base lg:text-lg text-center">DRIVER STANDINGS</p>
                     <table className="w-full text-left border-collapse min-w-0 mt-6">

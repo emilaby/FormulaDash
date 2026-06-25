@@ -1,9 +1,11 @@
 export default function TableSkeleton(){
-    return (
-        <div className="min-h-screen lg:m-7 flex flex-col items-center p-7 border border-mid-blue rounded-3xl animate-pulse">
-            <div className="h-4 w-16 lg:w-24 bg-gray-700 rounded-full mb-2"/>
-            <div className="h-6 w-40 lg:w-64 bg-gray-700 rounded-full mb-4"/>
-            <div className="min-h-screen w-full bg-gray-800 rounded-lg"/>
+   return (
+        <div className="border border-mid-blue rounded-3xl px-4 pt-3 pb-4 lg:px-5 lg:pt-4 lg:pb-5 min-w-0 overflow-hidden animate-pulse">
+            <div className="flex justify-center mb-6">
+                <div className="h-6 lg:h-8 w-40 bg-gray-700 rounded-full" />
+            </div>
+            <div className="h-[620px] lg:h-[830px] w-full bg-gray-700 rounded-2xl" />
         </div>
-    )
+   )
+
 }
