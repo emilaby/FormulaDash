@@ -20,7 +20,9 @@ export default async function getLastSession() {
         }
 
         const latestSessionData = lastSession[0]
-        const name = `${latestSessionData.location} ${latestSessionData.circuit_short_name} ${latestSessionData.session_name}`
+        const location = latestSessionData.location
+        const circuitShortName = latestSessionData.circuit_short_name
+        const name = `${(location?.trim().toLowerCase() === circuitShortName?.trim().toLowerCase()) ? location : `${location} ${circuitShortName}`} ${latestSessionData.session_name}`
 
         return (
             { 
