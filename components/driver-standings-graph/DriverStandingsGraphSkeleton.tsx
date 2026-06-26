@@ -4,7 +4,7 @@ export default function DriverStandingsGraphSkeleton() {
             {/* Title */}
             <div className="h-4 w-32 bg-gray-700 rounded-full pl-10 mb-2" />
             <div className="w-full h-[365px] mb-5 bg-gray-800 rounded-xl" />
-            <div className="w-full h-[115px] bg-gray-800 rounded-xl" />
+            <div className="w-full h-[115px] lg:h-[110px] bg-gray-800 rounded-xl" />
         </div>
     )
 }
