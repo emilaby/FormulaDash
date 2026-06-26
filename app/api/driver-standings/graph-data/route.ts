@@ -5,7 +5,7 @@ import getMeetingHistory from "@/lib/getMeetingHistory"
 
 import { DriverStanding, Meeting } from "@/types"
 
-export const revalidate = 900
+export const revalidate = 450
 
 // Returns driver numbers (of current drivers), 
 // driver data (of current drivers), 

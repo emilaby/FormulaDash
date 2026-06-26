@@ -1,6 +1,6 @@
 import { supabase } from "@/lib/supabase/client"
 
-export const revalidate = 900
+export const revalidate = 450
 
 // Returns latest race's meeting data.
 export async function GET() {

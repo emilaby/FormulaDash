@@ -2,7 +2,7 @@ import { supabase } from "@/lib/supabase/client"
 import getLastRaceSessionKey from "@/lib/getLastRaceSessionKey"
 import { TeamStanding } from "@/types"
 
-export const revalidate = 900
+export const revalidate = 450
 
 type teamNameColour = {
     team_name: string,

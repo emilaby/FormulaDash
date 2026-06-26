@@ -2,7 +2,7 @@ import { supabase } from "@/lib/supabase/client"
 import getLastSessionKey from "@/lib/getLastSessionKey"
 import getLastSession from "@/lib/getLastSession"
 
-export const revalidate = 900
+export const revalidate = 450
 
 // Returns latest session info + results.
 export async function GET() {

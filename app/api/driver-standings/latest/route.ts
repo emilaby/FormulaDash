@@ -3,7 +3,7 @@ import { supabase } from "@/lib/supabase/client"
 import getLastRaceSessionKey from "@/lib/getLastRaceSessionKey"
 import { DriverStanding, Driver } from "@/types"
 
-export const revalidate = 900
+export const revalidate = 450
 
 // Returns latest driver standings merged with driver data
 export async function GET() {
