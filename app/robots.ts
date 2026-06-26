@@ -1,7 +1,7 @@
 import { MetadataRoute } from "next"
 
 export default function robots(): MetadataRoute.Robots {
-  const baseUrl = "https://formula-dash-1.vercel.app"
+  const baseUrl = "https://www.formuladash.com"
 
   return {
     rules: [

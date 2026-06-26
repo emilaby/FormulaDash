@@ -1,7 +1,7 @@
 import type { MetadataRoute } from 'next'
  
 export default function sitemap(): MetadataRoute.Sitemap {
-    const baseUrl = "https://formuladash1.vercel.app/"
+  const baseUrl = "https://www.formuladash.com"
     return [
     {
         url: baseUrl,
@@ -10,13 +10,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
         priority: 1,
     },
     {
-        url: `${baseUrl}driver-standings`,
+        url: `${baseUrl}/driver-standings`,
         lastModified: new Date(),
         changeFrequency: 'daily',
         priority: 0.9,
     },
     {
-        url: `${baseUrl}driver-standings`,
+        url: `${baseUrl}/team-standings`,
         lastModified: new Date(),
         changeFrequency: 'daily',
         priority: 0.7,
