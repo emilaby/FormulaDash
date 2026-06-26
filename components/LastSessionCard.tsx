@@ -36,15 +36,22 @@ export default function LastSessionCard (){
             return
         }
     load()}, [])
+    console.log(sessionData)
 
     return (
         <>
         {(!sessionInfo || !sessionData) && <div className="mt-1"><TableSkeleton/></div>}
-        
+
         {sessionInfo && sessionData && sessionInfo.session_type?.trim().toLowerCase() === SessionType.Race && 
         <div className="border border-mid-blue rounded-3xl mb-2 p-3 py-5 lg:px-0 min-w-0 w-full overflow-hidden flex flex-col items-center">
             <p className="text-xs text-gray-500 mb-2">LAST SESSION</p>
             <h1 className="font-medium text-base lg:text-lg mb-3 mt-1">{sessionInfo.name}</h1>
+            {sessionData.length === 0 && 
+            <div className="border border-mid-blue rounded-3xl mb-2 p-3 py-5 lg:px-0 min-w-0 w-full overflow-hidden flex flex-col items-center">
+                <h2 className="font-bold text-lg lg:text-2xl mb-3 mt-1 animate-pulse">Awaiting latest session data...</h2>
+                <p className="italic text-xs lg:text-sm text-gray-500">Data may be delayed by ~2.5 hours due to OpenF1 processing.</p>
+            </div>}
+            {sessionData.length > 0 &&
             <div className="w-full max-w-full lg:px-4 min-w-0">
                 <table className="w-full min-w-0 text-left">
                     <thead className="text-gray-400">
@@ -80,12 +87,18 @@ export default function LastSessionCard (){
                         )})}
                     </tbody>
                 </table>
-            </div>
+            </div>}
         </div>}
         {sessionInfo && sessionData && (sessionInfo.session_type?.trim().toLowerCase() === SessionType.Practice || sessionInfo.session_type?.trim().toLowerCase() === SessionType.Qualifying) && 
         <div className="border border-mid-blue rounded-3xl mb-2 p-3 py-5 lg:p-4 min-w-0 w-full overflow-hidden flex flex-col items-center">
             <p className="text-xs text-gray-500 mb-2">LAST SESSION</p>
             <h1 className="font-medium text-sm lg:text-lg mb-2">{sessionInfo.name}</h1>
+            {sessionData.length === 0 && 
+            <div className="flex flex-col items-center text-center mt-4">
+                <h2 className="font-bold text-lg lg:text-2xl mb-3 mt-1 animate-pulse">Awaiting latest session data...</h2>
+                <p className="italic text-xs lg:text-sm text-gray-500">Data may be delayed by ~2.5 hours due to OpenF1 processing.</p>
+            </div>}
+            {sessionData.length > 0 &&
             <div className="w-full max-w-full lg:px-4 min-w-0">
                 <table className="w-full min-w-0 text-left">
                     <thead className="text-gray-400">
@@ -118,7 +131,7 @@ export default function LastSessionCard (){
                         )})}
                     </tbody>
                 </table>
-            </div>
+            </div>}
         </div>}
         </>
     )

@@ -2,17 +2,20 @@ import { supabase } from "@/lib/supabase/client"
 
 export const revalidate = 900
 
-// Returns next session data.
+// Returns current/next session data.
 export async function GET() {
     try{
         const currentDate = new Date()
+        const dayBefore = new Date(currentDate.getTime() - 24 * 60 * 60 * 1000)
 
         const { data, error } = await supabase
             .from("sessions")
             .select("*")
-            .gt("date_start", currentDate.toISOString())
+            .gt("date_start", dayBefore.toISOString())
+            .gt("date_end", currentDate.toISOString())
             .order("date_end", { ascending: true })
             .limit(1)
+        
         
         if (error){
             return Response.json(

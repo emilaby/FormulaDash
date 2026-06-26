@@ -8,7 +8,7 @@ import { Session } from "@/types"
  * Displays next session name and countdown to it.
  */
 export default function NextSessionCard() {
-    const [nextSessionData, setnextSessionData] = React.useState<Session | null>(null)
+    const [nextSessionData, setnextSessionData] = React.useState<Session | null | undefined>(null)
             
     React.useEffect(() => {
         async function load(){
@@ -38,9 +38,9 @@ export default function NextSessionCard() {
 
     return (
         <>
-        {(!nextSessionData || !countdown) && <NextSessionCardSkeleton/>}
+        {(!nextSessionData || countdown === undefined) && <NextSessionCardSkeleton/>}
 
-        {nextSessionData && countdown &&
+        {nextSessionData && countdown !== undefined &&
         <div className="flex flex-col w-full items-center sm:mt-3 py-5 py-0 sm:pb-9 sm:pt-7 sm:px-5 border border-mid-blue rounded-3xl hover:bg-white/3 transition">
             <p className="text-xs text-gray-500">NEXT SESSION</p>
             <h1 className="font-medium sm:text-lg sm:mt-1">{`${nextSessionData.country_name} ${nextSessionData.session_name}`}</h1>
@@ -65,6 +65,10 @@ export default function NextSessionCard() {
                     <p>SECS</p>
                 </div>
 
+            </div>}
+            {countdown === null && <div className="flex flex-wrap gap-2 min-w-0 items-center max-w-full mt-11 pb-4 text-xl sm:text-3xl">
+                <h2 className="font-bold">LIVE NOW</h2>
+                <span className="animate-pulse">🔴</span>
             </div>}
         </div>}
 
