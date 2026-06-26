@@ -6,10 +6,7 @@ import { Analytics } from "@vercel/analytics/next"
 
 export const metadata:Metadata = {
   viewport: "width=device-width, initial-scale=1",
-  title: { 
-    default: "FormulaDash",
-    template: "%s | FormulaDash"
-  },
+  title: "FormulaDash | F1 Standings, Race Weekend Info & Results Dashboard",
   description: "F1 dashboard with race, qualifying and practice results, team and driver standings."
 }
 

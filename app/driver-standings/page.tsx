@@ -4,7 +4,6 @@ import TableSkeleton from "@/components/TableSkeleton"
 import { DriverStanding, Driver } from "@/types"
 import getShortTeamName from "@/lib/getShortTeamName"
 
-
 export default function DriverStandings(){
 
     const [driverStandingsData, setDriverStandingsData] = React.useState<(DriverStanding & Driver)[]| null>(null)

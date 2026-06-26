@@ -66,7 +66,7 @@ export default function NextSessionCard() {
                 </div>
 
             </div>}
-            {countdown === null && <div className="flex flex-wrap gap-2 min-w-0 items-center max-w-full mt-11 pb-4 text-xl sm:text-3xl">
+            {countdown === null && <div className="flex flex-wrap gap-2 min-w-0 items-center max-w-full mt-7 sm:mt-11 pb-4 text-xl sm:text-3xl">
                 <h2 className="font-bold">LIVE NOW</h2>
                 <span className="animate-pulse">🔴</span>
             </div>}
