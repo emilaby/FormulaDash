@@ -92,7 +92,7 @@ export default function LastSessionCard (){
         {sessionInfo && sessionData && (sessionInfo.session_type?.trim().toLowerCase() === SessionType.Practice || sessionInfo.session_type?.trim().toLowerCase() === SessionType.Qualifying) && 
         <div className="border border-mid-blue rounded-3xl mb-2 p-3 py-5 lg:p-4 lg:pt-5 min-w-0 w-full overflow-hidden flex flex-col items-center">
             <p className="text-xs font-semibold text-gray-500 mb-2">LAST SESSION</p>
-            <h1 className="font-semibold text-sm lg:text-lg mb-2 lg:mt-2">{sessionInfo.name}</h1>
+            <h1 className="font-semibold text-base lg:text-lg mb-2 lg:mt-2">{sessionInfo.name}</h1>
             {sessionData.length === 0 && 
             <div className="flex flex-col items-center text-center mt-4 lg:mb-2">
                 <h2 className="font-bold text-lg lg:text-2xl mb-3 mt-1 animate-pulse">Awaiting latest session data...</h2>
