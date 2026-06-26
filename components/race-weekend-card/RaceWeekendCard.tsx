@@ -52,9 +52,8 @@ export default function RaceWeekendCard(){
                 <Image src={meetingData.country_flag} width={48} height={26} className="rounded-md object-contain w-[44px] h-[24px] sm:w-[48px] sm:h-[26px] " alt={`${meetingData.country_name} flag`}/>
             </div>
             <div className="flex justify-center items-center">
-                <div className="flex-col items-center text-sm sm:text-base justify-center">
-                    {liveNow && <p className="text-center">Live <span className="animate-pulse">🟢</span></p>}
-                    {!liveNow && <p className="text-center">{`${hourglassFlip ? "⏳" : "⌛"} Upcoming`}</p>}
+                <div className="flex-col items-center text-sm sm:text-[1.1rem] justify-center">
+                    {liveNow ? (<p className="text-center font-semibold">Live <span className="animate-pulse">🟢</span></p>) : (<p className="text-center font-semibold">{`${hourglassFlip ? "⏳" : "⌛"} Upcoming`}</p>)}
                     <p className="text-center">
                         {`${new Date(meetingData.date_start).toLocaleString("en-GB", {weekday: "long", month: "long", day: "numeric", hour: "2-digit", minute: "2-digit"}).replace(" at", ", ")} 
                         - ${new Date(meetingData.date_end).toLocaleString("en-GB",  {weekday: "long", month: "long", day: "numeric", hour: "2-digit", minute: "2-digit"}).replace(" at", ", ")}`}
