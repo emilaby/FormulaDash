@@ -42,7 +42,7 @@ export default function NextSessionCard() {
 
         {nextSessionData && countdown !== undefined &&
         <div className="flex flex-col w-full items-center sm:mt-3 py-5 py-0 sm:pb-9 sm:pt-7 sm:px-5 border border-mid-blue rounded-3xl hover:bg-white/3 transition">
-            <p className="text-xs text-gray-500">NEXT SESSION</p>
+            <p className="text-xs text-gray-500">{countdown === null ? "CURRENT SESSION" : "NEXT SESSION"}</p>
             <h1 className="font-medium sm:text-lg sm:mt-1">{`${nextSessionData.country_name} ${nextSessionData.session_name}`}</h1>
             {countdown && <div className="flex flex-wrap min-w-0 items-center max-w-full gap-1 sm:gap-2 mt-3 text-xs sm:text-base">
                 <div className="flex flex-col items-center bg-blue rounded-xl px-3 py-2 sm:p-3 w-16 sm:w-24">
