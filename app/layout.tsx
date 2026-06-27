@@ -1,5 +1,5 @@
 import "./globals.css";
-import Header from "../components/Header"
+import Header from "@/components/Header";
 import { Titillium_Web } from "next/font/google"
 import { Metadata } from "next"
 import { Analytics } from "@vercel/analytics/next"

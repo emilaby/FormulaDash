@@ -36,7 +36,14 @@ export default function LastSessionCard (){
             return
         }
     load()}, [])
-    console.log(sessionData)
+
+    const parsedQualiGap = (sessionDriver: DriverSessionResult, sessionInfo:sessionInfo) => {
+        const sessionType = sessionInfo.session_type?.trim().toLowerCase()
+        if (sessionType === SessionType.Qualifying && sessionDriver.position > 10){
+            return <p className="pl-5 lg:pl-6">-</p>
+        }
+        return `+${Number(sessionDriver.gap_to_leader).toFixed(3)}`
+    }
 
     return (
         <>
@@ -125,7 +132,7 @@ export default function LastSessionCard (){
                                         <span className="lg:hidden">{sessionDriver.drivers.last_name}</span>
                                     </div>
                                 </td>
-                                <td className="w-5/16 min-w-0 lg:p-3 lg:text-lg">{sessionDriver.position === 1 ? formatLaptime(sessionDriver.duration) : `+${Number(sessionDriver.gap_to_leader).toFixed(3)}`}</td>
+                                <td className="w-5/16 min-w-0 lg:p-3 lg:text-lg">{sessionDriver.position === 1 ? formatLaptime(sessionDriver.duration) : parsedQualiGap(sessionDriver, sessionInfo)}</td>
                                 <td  className="w-2/16 min-w-0 lg:pl-4">{sessionDriver.number_of_laps}</td>
                             </tr>
                         )})}
