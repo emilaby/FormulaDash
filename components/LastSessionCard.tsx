@@ -132,8 +132,8 @@ export default function LastSessionCard (){
                                         <span className="lg:hidden">{sessionDriver.drivers.last_name}</span>
                                     </div>
                                 </td>
-                                <td className="w-5/16 min-w-0 lg:p-3 lg:text-lg">{sessionDriver.position === 1 ? formatLaptime(sessionDriver.duration) : parsedQualiGap(sessionDriver, sessionInfo)}</td>
-                                <td  className="w-2/16 min-w-0 lg:pl-4">{sessionDriver.number_of_laps}</td>
+                                <td className="w-5/16 min-w-0 lg:p-3 lg:pl-4 lg:text-lg">{sessionDriver.position === 1 ? formatLaptime(sessionDriver.duration) : parsedQualiGap(sessionDriver, sessionInfo)}</td>
+                                <td  className="w-2/16 min-w-0 lg:pl-5">{sessionDriver.number_of_laps}</td>
                             </tr>
                         )})}
                     </tbody>

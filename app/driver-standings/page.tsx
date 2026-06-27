@@ -55,7 +55,7 @@ export default function DriverStandings(){
                                     <span className="hidden lg:inline">{standing.full_name}</span>
                                     <span className="lg:hidden">{`${standing.first_name.slice(0,1).toUpperCase()} ${standing.last_name.slice(0,1)}${standing.last_name.slice(1)}`}</span>
                                 </td>
-                                <td className="w-4/16 min-w-0 pl-1 lg:pl-0 lg:p-3">{standing.points_current}</td>
+                                <td className="w-4/16 min-w-0 pl-1 lg:p-3">{standing.points_current}</td>
                                 <td className="w-4/16 min-w-0 lg:p-3">
                                     <div className="flex gap-3 lg:gap-7 items-center">
                                         {standing?.team_colour && <div className="min-w-5 min-h-5 lg:min-w-7 lg:min-h-7 rounded-full" style={{ backgroundColor: `#${standing.team_colour}`}}></div>}
