@@ -32,7 +32,7 @@ export default function DriverStandings(){
 
             {sortedData &&
             <main className="bg-dark-blue min-h-screen p-4 lg:p-7 max-w-full min-w-0">
-                <div className="border border-mid-blue rounded-3xl px-3 pt-3 pb-4 lg:px-4 lg:pt-4 lg:pb-5 min-w-0 overflow-hidden">
+                <div className="border border-mid-blue hover:bg-white/3 transition rounded-3xl px-3 pt-3 lg:px-4 lg:pt-4 min-w-0 overflow-hidden">
                     <p className="font-semibold text-gray-300 text-base lg:text-lg text-center">DRIVER STANDINGS</p>
                     <table className="w-full text-left border-collapse min-w-0 mt-6">
                         <thead className="text-gray-400">
@@ -49,7 +49,7 @@ export default function DriverStandings(){
                         
                         <tbody>
                             {sortedData && sortedData.map((standing:(DriverStanding & Driver)) => (
-                            <tr className="h-12 lg:h-16 text-sm lg:text-lg border-b border-gray-700 hover:bg-white/3 transition" key={standing.driver_number}>
+                            <tr className="h-12 lg:h-16 text-sm lg:text-lg border-b border-gray-700 last:border-b-0" key={standing.driver_number}>
                                 <td className="w-3/16 min-w-0 pl-1 lg:p-3 lg:pl-9 text-gray-300">{standing.position_current}</td>
                                 <td className="w-5/16 min-w-0 lg:p-3 lg:text-lg">
                                     <span className="hidden lg:inline">{standing.full_name}</span>

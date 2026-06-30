@@ -50,7 +50,7 @@ export default function LastSessionCard (){
         {(!sessionInfo || !sessionData) && <div className="mt-1"><TableSkeleton/></div>}
 
         {sessionInfo && sessionData && sessionInfo.session_type?.trim().toLowerCase() === SessionType.Race && 
-        <div className="border border-mid-blue rounded-3xl mb-2 p-3 py-5 lg:px-0 min-w-0 w-full overflow-hidden flex flex-col items-center">
+        <div className="border border-mid-blue rounded-3xl mb-2 pt-5 pl-3 pr-3 lg:px-0 min-w-0 w-full overflow-hidden flex flex-col items-center hover:bg-white/3 transition">
             <p className="text-xs font-semibold text-gray-500 mb-2">LAST SESSION</p>
             <h1 className="font-semibold text-base lg:text-lg mb-3 mt-1">{sessionInfo.name}</h1>
             {sessionData.length === 0 && 
@@ -76,7 +76,7 @@ export default function LastSessionCard (){
                     <tbody>
                         {sessionData && sessionData.map((sessionDriver:DriverSessionResult) => {
                         return (
-                            <tr className="h-12 lg:h-16 border-b border-gray-700 px-5 hover:bg-white/3 transition text-sm lg:text-base" key={sessionDriver.driver_number}>
+                            <tr className="h-12 lg:h-16 border-b border-gray-700 last:border-b-0 px-5 text-sm lg:text-base" key={sessionDriver.driver_number}>
                                 <td className="w-3/16 min-w-0 lg:p-3 pl-1 lg:pl-9 text-gray-300">{sessionDriver.position || "-"}</td>
                                 <td className="w-6/16 min-w-0 lg:pl-3 lg:text-lg">
                                     <div className="flex gap-3 lg:gap-7 items-center min-w-0">
@@ -97,7 +97,7 @@ export default function LastSessionCard (){
             </div>}
         </div>}
         {sessionInfo && sessionData && (sessionInfo.session_type?.trim().toLowerCase() === SessionType.Practice || sessionInfo.session_type?.trim().toLowerCase() === SessionType.Qualifying) && 
-        <div className="border border-mid-blue rounded-3xl mb-2 p-3 py-5 lg:p-4 lg:pt-5 min-w-0 w-full overflow-hidden flex flex-col items-center">
+        <div className="border border-mid-blue rounded-3xl mb-2 pt-5 pl-3 pr-3 lg:px-0 min-w-0 w-full overflow-hidden flex flex-col items-center hover:bg-white/3 transition">
             <p className="text-xs font-semibold text-gray-500 mb-2">LAST SESSION</p>
             <h1 className="font-semibold text-base lg:text-lg mb-2 lg:mt-2">{sessionInfo.name}</h1>
             {sessionData.length === 0 && 
@@ -123,7 +123,7 @@ export default function LastSessionCard (){
                     <tbody>
                         {sessionData && sessionData.map((sessionDriver:DriverSessionResult) => {
                         return (
-                            <tr className="h-12 lg:h-16 border-b border-gray-700 px-5 hover:bg-white/3 transition text-sm lg:text-base" key={sessionDriver.driver_number}>
+                            <tr className="h-12 lg:h-16 border-b border-gray-700 last:border-b-0 px-5 text-sm lg:text-base" key={sessionDriver.driver_number}>
                                 <td className="w-3/16 min-w-0 lg:p-3 pl-1 lg:pl-9 text-gray-300">{sessionDriver.position || "-"}</td>
                                 <td className="w-6/16 min-w-0 lg:pl-3 lg:text-lg">
                                     <div className="flex gap-3 lg:gap-7 items-center min-w-0">
