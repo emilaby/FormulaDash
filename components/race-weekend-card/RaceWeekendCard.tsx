@@ -51,7 +51,7 @@ export default function RaceWeekendCard(){
                 <h1 className="font-semibold text-base sm:text-lg sm:mt-1">{raceName}</h1>
                 <Image src={meetingData.country_flag} width={48} height={26} className="rounded-md object-contain w-[44px] h-[24px] sm:w-[48px] sm:h-[26px] " alt={`${meetingData.country_name} flag`}/>
             </div>
-            <div className="flex justify-center items-center">
+            <div className="flex lg:gap-5 justify-center items-center">
                 <div className="flex-col items-center text-sm sm:text-[1.1rem] justify-center">
                     {liveNow ? (<p className="text-center font-semibold">Live <span className="animate-pulse">🟢</span></p>) : (<p className="text-center font-semibold">{`${hourglassFlip ? "⏳" : "⌛"} Upcoming`}</p>)}
                     <p className="text-center">
