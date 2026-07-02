@@ -3,12 +3,19 @@ import React from "react"
 import Image from "next/image"
 import RaceWeekendCardSkeleton from "./RaceWeekendCardSkeleton"
 import { Meeting } from "@/types"
+import { ChevronDown } from "lucide-react"
+
+type Session = {
+    session_name: string,
+    date_start: string
+}
 
 /**
  * Displays race weekend name, country flag, date, time and circuit image.
  */
 export default function RaceWeekendCard(){
     const [meetingData, setMeetingData] = React.useState<Meeting | null>(null)
+    const [sessionsData, setSessionsData] = React.useState<Session[] | null>(null)
         
     React.useEffect(() => {
         async function load(){
@@ -17,7 +24,8 @@ export default function RaceWeekendCard(){
                 const newData = await res.json()
 
                 if (newData){
-                    setMeetingData(newData)
+                    setMeetingData(newData.meetingData)
+                    setSessionsData(newData.sessions)
                 }
                 
             }
@@ -37,15 +45,18 @@ export default function RaceWeekendCard(){
         .split(" ")
         .map(word => word.charAt(0).toUpperCase() + word.slice(1))
         .join(" ")
-                        
+
+
+    const [expanded, setExpanded] = React.useState(false)
+    
 
     return (
         <>
-        {!meetingData && <RaceWeekendCardSkeleton/>}
+        {(!meetingData || !sessionsData) && <RaceWeekendCardSkeleton/>}
 
-        {meetingData &&
+        {meetingData && sessionsData &&
 
-        <div className="overflow-hidden mt-7 mb-2 sm:mt-11 flex flex-col items-center w-full p-5 sm:pb-9 sm:pt-5 sm:px-5 border border-mid-blue rounded-3xl hover:bg-white/3 transition">
+        <div onClick={() => setExpanded(!expanded)} className="overflow-hidden mt-7 mb-2 sm:mt-11 flex flex-col items-center w-full px-5 pt-5 pb-3 sm:pb-4 sm:pt-5 sm:px-5 border border-mid-blue rounded-3xl hover:bg-white/3 transition">
             <p className="text-xs font-semibold text-gray-500 mb-3">{liveNow ? "CURRENT RACE WEEKEND" : "NEXT RACE WEEKEND"}</p>
             <div className="flex items-center gap-5 mb-3 sm:mt-1 sm:mb-6">
                 <h1 className="font-semibold text-base sm:text-lg sm:mt-1">{raceName}</h1>
@@ -61,6 +72,15 @@ export default function RaceWeekendCard(){
                 </div>
                 <Image src={meetingData.circuit_image} width={138} height={100} className="w-[110px] h-[80px] sm:w-[138px] sm:h-[100px] "alt={`${meetingData.circuit_short_name} circuit`}/>
             </div>
+            <div className="flex flex-col gap-1 w-full lg:px-8 mt-3 lg:mt-5">
+                {expanded && sessionsData.map((session:Session, index:number) => (
+                    <div key={index} className="flex justify-between text-sm sm:text-base">
+                        <p className="font-semibold">{session.session_name}</p>
+                        <p>{new Date(session.date_start).toLocaleString("en-GB", {weekday: "long", month: "long", day: "numeric", hour: "2-digit", minute: "2-digit"}).replace(" at", ", ")}</p>
+                    </div>))
+                }
+            </div>
+            <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${expanded ? "rotate-180" : ""}`}/>
         </div>}
         </>
     )

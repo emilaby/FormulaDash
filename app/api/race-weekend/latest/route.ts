@@ -2,7 +2,7 @@ import { supabase } from "@/lib/supabase/client"
 
 export const revalidate = 450
 
-// Returns latest race's meeting data.
+// Returns current/next race's meeting data.
 export async function GET() {
     try{
 
@@ -21,8 +21,31 @@ export async function GET() {
                 {status: 500}
             )
         }
+
+        const currMeetingData = meetingData[0]
+        const meetingKey = currMeetingData.meeting_key
+
+        const { data: meetingSessionsData, error: meetingSessionsDataErr } = await supabase
+            .from("sessions")
+            .select("session_name, date_start")
+            .eq("meeting_key", meetingKey)
+            .gt("date_end", currentDate.toISOString())
+            .order("date_end", { ascending: true })
+            
         
-        return Response.json(meetingData[0])
+        if (meetingSessionsDataErr){
+            return Response.json(
+                {success: false, error: meetingSessionsDataErr.message},
+                {status: 500}
+            )
+        }
+        
+        return Response.json(
+            {
+                meetingData: currMeetingData,
+                sessions: meetingSessionsData
+            }
+        )
 
     }
 
