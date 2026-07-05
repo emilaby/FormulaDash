@@ -45,6 +45,19 @@ export default function LastSessionCard (){
         return `+${Number(sessionDriver.gap_to_leader).toFixed(3)}`
     }
 
+    const parsedRaceGap = (sessionDriver: DriverSessionResult) => {
+        const gap = sessionDriver.gap_to_leader
+         
+        if (gap){
+            if(gap.toLowerCase().includes("lap")){
+                return gap
+            }
+            return `+${String(Number(sessionDriver.gap_to_leader).toFixed(3)).replace("+", "")}` 
+        }
+
+        return sessionDriver.dnf ? "DNF" : (sessionDriver.dns ? "DNS" : (sessionDriver.dsq ? "DSQ" : "NC"))
+    }
+
     return (
         <>
         {(!sessionInfo || !sessionData) && <div className="mt-1"><TableSkeleton/></div>}
@@ -85,9 +98,7 @@ export default function LastSessionCard (){
                                         <span className="lg:hidden">{sessionDriver.drivers.last_name}</span>
                                     </div>
                                 </td>
-                                <td className="w-5/16 min-w-0 lg:p-3 lg:text-lg">{sessionDriver.position === 1 ? formatRaceTime(sessionDriver.duration) : (sessionDriver.gap_to_leader ? 
-                                    `+${String(sessionDriver.gap_to_leader).replace("+", "")}` : 
-                                        (sessionDriver.dnf ? "DNF" : (sessionDriver.dns ? "DNS" : (sessionDriver.dsq ? "DSQ" : "NC"))))}</td>
+                                <td className="w-5/16 min-w-0 lg:p-3 lg:text-lg">{sessionDriver.position === 1 ? formatRaceTime(sessionDriver.duration) : parsedRaceGap(sessionDriver)}</td>
 
                                 <td className="w-2/16 min-w-0 lg:pl-4">{sessionDriver.points}</td>
                             </tr>
