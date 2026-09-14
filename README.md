@@ -1,4 +1,4 @@
-# FormulaDash
+# FormulaDash 🏎️
 
 Check it out here: [FormulaDash](https://www.formuladash.com/)
 
