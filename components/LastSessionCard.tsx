@@ -5,7 +5,7 @@ import formatRaceTime from "@/lib/formatRaceTime"
 import TableSkeleton from "./TableSkeleton"
 import { DriverSessionResult } from "@/types"
 
-type sessionInfo = {
+type SessionInfo = {
     name: string,
     session_type: string 
 }
@@ -20,7 +20,7 @@ enum SessionType {
  * Displays last session name and results.
  */
 export default function LastSessionCard (){
-    const [sessionInfo, setSessionInfo] = React.useState<sessionInfo | null>(null)
+    const [sessionInfo, setSessionInfo] = React.useState<SessionInfo | null>(null)
     const [sessionData, setSessionData] = React.useState<DriverSessionResult[] | null>(null)
     
     React.useEffect(() => {
@@ -36,7 +36,7 @@ export default function LastSessionCard (){
         }
     load()}, [])
 
-    const parsedQualiGap = (sessionDriver: DriverSessionResult, sessionInfo:sessionInfo) => {
+    const parsedQualiGap = (sessionDriver: DriverSessionResult, sessionInfo:SessionInfo) => {
         const sessionType = sessionInfo.session_type?.trim().toLowerCase()
         if (sessionType === SessionType.Qualifying && sessionDriver.position > 10){
             return <p className="pl-5 lg:pl-6">-</p>
