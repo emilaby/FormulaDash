@@ -4,11 +4,10 @@ import formatLaptime from "@/lib/formatLaptime"
 import formatRaceTime from "@/lib/formatRaceTime"
 import TableSkeleton from "./TableSkeleton"
 import { DriverSessionResult } from "@/types"
-import getShortDriverName from "@/lib/getShortDriverName"
 
 type sessionInfo = {
     name: string,
-    session_type: string //practice race qualifying
+    session_type: string 
 }
 
 enum SessionType {

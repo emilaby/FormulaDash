@@ -8,7 +8,7 @@ import { Session } from "@/types"
  * Displays next session name and countdown to it.
  */
 export default function NextSessionCard() {
-    const [nextSessionData, setnextSessionData] = React.useState<Session | null | undefined>(null)
+    const [nextSessionData, setNextSessionData] = React.useState<Session | null>(null)
             
     React.useEffect(() => {
         async function load(){
@@ -17,7 +17,7 @@ export default function NextSessionCard() {
                 const newData = await res.json()
 
                 if (newData){
-                    setnextSessionData(newData)
+                    setNextSessionData(newData)
                 }
                 
             }

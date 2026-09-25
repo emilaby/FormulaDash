@@ -38,10 +38,10 @@ export default function DriverStandingsGraph(){
         {(!standingsPerRace || !driverNums || !drivers) &&  <DriverStandingsGraphSkeleton/>}
         
         {standingsPerRace && drivers && driverNums &&
-        <div className="flex flex-col items-center grow shrink min-w-0 lg:w-auto mt-4 mb-4 mr-7 lg:mt-7 lg:mb-7 lg:mr-7 transform-gpu">
+        <div className="flex flex-col items-center grow shrink min-w-0 lg:w-auto mt-4 mb-4 mr-7 lg:mt-7 lg:mb-7 lg:mr-7">
             <p className="text-xs font-semibold pl-10 pb-2 text-gray-500">DRIVER STANDINGS</p>
-            <div className="w-full h-[500px] lg:h-[500px]">
-                <ResponsiveContainer width="100%" height="100%">
+            <div className="w-full">
+                <ResponsiveContainer width="100%" height={500}>
                 <LineChart data={standingsPerRace}>
                     <CartesianGrid strokeDasharray="3 3" stroke="#2d3738" vertical={false}/>
                     <XAxis dataKey="location" stroke="#9ca3af" interval="preserveStartEnd" angle={-90} height={140} tick={{dy:5, dx:-10, fontSize:12}} tickLine={false} textAnchor="end"/>
