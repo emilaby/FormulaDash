@@ -25,16 +25,26 @@ export default function LastSessionCard (){
     
     React.useEffect(() => {
         async function load(){
-            const res = await fetch(`/api/session-results/latest`)
-            
-            if (res.ok){
+            try{
+                const res = await fetch(`/api/session-results/latest`)
+                
+                if (!res.ok){
+                    return
+                }
+
                 const newData = await res.json()
                 setSessionInfo(newData.sessionInfo)
                 setSessionData(newData.mergedSessionData)
             }
-            return
+            catch(err){
+                console.error(err)
+            }
         }
-    load()}, [])
+        load()
+        const interval = setInterval(load, 60000)
+
+        return () => clearInterval(interval)
+    }, [])
 
     const parsedQualiGap = (sessionDriver: DriverSessionResult, sessionInfo:SessionInfo) => {
         const sessionType = sessionInfo.session_type?.trim().toLowerCase()

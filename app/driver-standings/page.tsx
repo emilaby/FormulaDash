@@ -10,16 +10,26 @@ export default function DriverStandings(){
 
     React.useEffect(() => {
         async function load(){
-            const url = "/api/driver-standings/latest"
-            const res = await fetch(url)
+            try{
+                const url = "/api/driver-standings/latest"
+                const res = await fetch(url)
             
-            if (res.ok){
+                if (!res.ok){
+                    return
+                }
+
                 const newData = await res.json()
                 setDriverStandingsData(newData)
             }
-            return
+            catch(err){
+                console.error(err)
+            }
         }
-        load()}, [])
+        load()
+        const interval = setInterval(load, 60000)
+
+        return () => clearInterval(interval)
+    }, [])
 
     const sortedData:(DriverStanding & Driver)[]| null = (driverStandingsData ? [...driverStandingsData].sort((a, b) => a.position_current - b.position_current) : null)
 

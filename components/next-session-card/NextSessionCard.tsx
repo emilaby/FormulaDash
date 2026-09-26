@@ -12,18 +12,23 @@ export default function NextSessionCard() {
             
     React.useEffect(() => {
         async function load(){
-            const res = await fetch(`/api/session/next`)
-            if (res.ok){
-                const newData = await res.json()
-
-                if (newData){
-                    setNextSessionData(newData)
+            try{
+                const res = await fetch(`/api/session/next`)
+                if (!res.ok){
+                    return
                 }
-                
+                const newData = await res.json()
+                setNextSessionData(newData)
             }
-            return
+            catch(err){
+                console.error(err)
+            }
         }
-        load()}, [])
+        load()
+        const interval = setInterval(load, 60000)
+
+        return () => clearInterval(interval)
+    }, [])
 
     const [countdown, setCountdown] = React.useState(() => getCurrentCountdown(nextSessionData?.date_start))
 

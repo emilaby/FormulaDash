@@ -5,8 +5,6 @@ import getMeetingHistory from "@/lib/getMeetingHistory"
 
 import { DriverStanding, Meeting } from "@/types"
 
-export const revalidate = 450
-
 // Returns driver numbers (of current drivers), 
 // driver data (of current drivers), 
 // driver standings grouped by race from current season so far (only for current drivers).

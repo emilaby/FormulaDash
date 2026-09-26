@@ -19,19 +19,25 @@ export default function RaceWeekendCard(){
         
     React.useEffect(() => {
         async function load(){
-            const res = await fetch(`/api/race-weekend/latest`)
-            if (res.ok){
+            try{
+                const res = await fetch(`/api/race-weekend/latest`)
+                if (!res.ok){
+                    return
+                }
                 const newData = await res.json()
 
-                if (newData){
-                    setMeetingData(newData.meetingData)
-                    setSessionsData(newData.sessions)
-                }
-                
+                setMeetingData(newData.meetingData)
+                setSessionsData(newData.sessions)
             }
-            return
+            catch(err){
+                console.error(err)
+            }
         }
-        load()}, [])
+        load()
+        const interval = setInterval(load, 60000)
+
+        return () => clearInterval(interval)
+    }, [])
     
     const [hourglassFlip, setHourGlassFlip] = React.useState(false)
 

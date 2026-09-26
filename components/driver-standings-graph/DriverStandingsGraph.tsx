@@ -15,18 +15,28 @@ export default function DriverStandingsGraph(){
     
     React.useEffect(() => {
         async function load(){
-            const url = "/api/driver-standings/graph-data"
-            const res = await fetch(url)
-            
-            if (res.ok){
+            try{
+                const url = "/api/driver-standings/graph-data"
+                const res = await fetch(url)
+                
+                if (!res.ok){
+                    return
+                }
+
                 const newData = await res.json()
                 setDriverNums(newData.driverNums)
                 setDrivers(newData.drivers)
                 setStandingsPerRace(newData.standingsPerRace)
             }
-            return 
+            catch(err){
+                console.error(err)
+            }
         }
-        load()}, [])
+        load()
+        const interval = setInterval(load, 60000)
+
+        return () => clearInterval(interval)
+    }, [])
 
 
 

@@ -10,16 +10,26 @@ export default function TeamStandings(){
 
     React.useEffect(() => {
         async function load(){
-            const url = "/api/team-standings/latest"
-            const res = await fetch(url)
-            
-            if (res.ok){
+            try{
+                const url = "/api/team-standings/latest"
+                const res = await fetch(url)
+                
+                if (!res.ok){
+                    return
+                }
+                
                 const newData = await res.json()
                 setTeamStandings(newData)
             }
-            return 
+            catch(err){
+                console.error(err)
+            }
         }
-        load()}, [])
+        load()
+        const interval = setInterval(load, 60000)
+
+        return () => clearInterval(interval)
+    }, [])
 
 
     const sortedData:TeamStandingMerged[] | null = (teamStandings ? [...teamStandings].sort((a, b) => a.position_current - b.position_current) : null)
