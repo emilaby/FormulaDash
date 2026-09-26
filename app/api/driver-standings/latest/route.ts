@@ -15,11 +15,11 @@ export async function GET() {
             )
         }
 
-        const [{ data: driverStandings, error: driverStandingsErr }, { data: driverData, error: driverDataErr }] = await Promise.all([
-            supabase.from("driver_standings").select("*").eq("session_key", lastRaceSessionKey),
-            supabase.from("drivers").select("*").eq("session_key", lastRaceSessionKey)
+        const { data: driverStandings, error: driverStandingsErr } = await supabase
+            .from("driver_standings")
+            .select("*")
+            .eq("session_key", lastRaceSessionKey)
 
-        ])
 
         if (driverStandingsErr){
             console.error(driverStandingsErr.message)
@@ -28,7 +28,13 @@ export async function GET() {
                 {status: 500}
             )
         }
-        
+
+        const driverNums = [...new Set((driverStandings).map((standing:DriverStanding) => standing.driver_number))]
+ 
+        const { data: driverData, error: driverDataErr } = await supabase.rpc("get_latest_drivers", {
+            driver_nums: driverNums
+        })
+
         if (driverDataErr){
             console.error(driverDataErr.message)
             return Response.json(
@@ -37,12 +43,14 @@ export async function GET() {
             )
         }
 
-        const driverNums = [...new Set((driverStandings).map((standing:DriverStanding) => standing.driver_number))]
-
         const mergedData = []
         for(const num of driverNums){
             const driverStanding = driverStandings.find((standing:DriverStanding) =>  standing.driver_number === num)
             const driverObj = driverData.find((driverDataObj:Driver) => driverDataObj.driver_number === num)
+            if (num === 22){
+                console.log(driverStanding)
+                console.log(driverObj)
+            }
             mergedData.push({
                 ...driverStanding,
                 ...driverObj,
