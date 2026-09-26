@@ -47,10 +47,7 @@ export async function GET() {
         for(const num of driverNums){
             const driverStanding = driverStandings.find((standing:DriverStanding) =>  standing.driver_number === num)
             const driverObj = driverData.find((driverDataObj:Driver) => driverDataObj.driver_number === num)
-            if (num === 22){
-                console.log(driverStanding)
-                console.log(driverObj)
-            }
+
             mergedData.push({
                 ...driverStanding,
                 ...driverObj,
