@@ -108,3 +108,14 @@ export type Countdown = {
     mins: string,
     secs: string
 }
+
+export type SessionInfo = {
+    name: string,
+    session_type: string 
+}
+
+export enum SessionType {
+    Race = "race",
+    Practice = "practice",
+    Qualifying = "qualifying"
+}
