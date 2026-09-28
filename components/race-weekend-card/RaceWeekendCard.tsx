@@ -76,7 +76,7 @@ export default function RaceWeekendCard(){
                         - ${new Date(meetingData.date_end).toLocaleString("en-GB",  {weekday: "long", month: "long", day: "numeric", hour: "2-digit", minute: "2-digit"}).replace(" at", ", ")}`}
                     </p>
                 </div>
-                <Image src={meetingData.circuit_image} width={138} height={100} className="w-[110px] h-[80px] sm:w-[138px] sm:h-[100px] "alt={`${meetingData.circuit_short_name} circuit`}/>
+                <Image src={meetingData.circuit_image} width={138} height={100} className="w-[110px] h-[80px] sm:w-[138px] sm:h-[100px] "alt={`${meetingData.circuit_short_name} circuit`} preload/>
             </div>
             <div className="flex flex-col gap-1 w-full lg:px-8 mt-3 lg:mt-5">
                 {expanded && sessionsData.map((session:Session, index:number) => (
