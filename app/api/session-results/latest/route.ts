@@ -42,10 +42,17 @@ export async function GET() {
 
         const mergedSessionData = [...sortedPositionDriverData, ...sortedNoPositionDriverData]
 
-        return Response.json({
-            sessionInfo: lastSession,
-            mergedSessionData: mergedSessionData
-        })
+        return Response.json(
+            {
+                sessionInfo: lastSession,
+                mergedSessionData: mergedSessionData
+            },
+            {
+                headers: {
+                    "Cache-Control": "public, max-age=60",
+                }
+            }
+        )
 
     }
     catch(err){

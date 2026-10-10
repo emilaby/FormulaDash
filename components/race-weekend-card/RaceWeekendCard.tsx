@@ -20,7 +20,8 @@ export default function RaceWeekendCard(){
     React.useEffect(() => {
         async function load(){
             try{
-                const res = await fetch(`/api/race-weekend/latest`)
+                const url = "/api/race-weekend/latest"
+                const res = await fetch(url)
                 if (!res.ok){
                     return
                 }

@@ -42,6 +42,11 @@ export async function GET() {
             {
                 meetingData: currMeetingData,
                 sessions: meetingSessionsData
+            },
+            {
+                headers: {
+                    "Cache-Control": "public, max-age=60",
+                }
             }
         )
 

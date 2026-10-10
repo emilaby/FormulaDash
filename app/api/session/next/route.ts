@@ -22,7 +22,13 @@ export async function GET() {
             )
         }
         
-        return Response.json(data[0])
+        return Response.json(data[0],
+            {
+                headers: {
+                    "Cache-Control": "public, max-age=60",
+                }
+            }
+        )
     }
 
     catch(err) {

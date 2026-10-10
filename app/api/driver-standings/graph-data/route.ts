@@ -65,6 +65,11 @@ export async function GET() {
                 driverNums: driverNums,
                 drivers: driverLatest,
                 standingsPerRace: standingsPerRaceGrouped
+            },
+            {
+                headers: {
+                    "Cache-Control": "public, max-age=60",
+                }
             }
         )
 

@@ -58,7 +58,13 @@ export async function GET(){
                 )
         })
 
-        return Response.json(teamStandingsLatestMerged)
+        return Response.json(teamStandingsLatestMerged,
+            {
+                headers: {
+                    "Cache-Control": "public, max-age=60",
+                }
+            }
+        )
 
     }
 

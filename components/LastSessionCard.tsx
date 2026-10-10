@@ -16,7 +16,8 @@ export default function LastSessionCard (){
     React.useEffect(() => {
         async function load(){
             try{
-                const res = await fetch(`/api/session-results/latest`)
+                const url = "/api/session-results/latest"
+                const res = await fetch(url)
                 
                 if (!res.ok){
                     return

@@ -13,7 +13,8 @@ export default function NextSessionCard() {
     React.useEffect(() => {
         async function load(){
             try{
-                const res = await fetch(`/api/session/next`)
+                const url = "/api/session/next"
+                const res = await fetch(url)
                 if (!res.ok){
                     return
                 }
@@ -46,7 +47,7 @@ export default function NextSessionCard() {
         {(!nextSessionData || countdown === undefined) && <NextSessionCardSkeleton/>}
 
         {nextSessionData && countdown !== undefined &&
-        <div className="flex flex-col w-full items-center sm:mt-3 py-5 py-0 sm:pb-9 sm:pt-4 sm:px-5 border border-mid-blue rounded-3xl hover:bg-white/3 transition">
+        <div className="flex flex-col w-full items-center sm:mt-3 py-5 sm:pb-9 sm:pt-4 sm:px-5 border border-mid-blue rounded-3xl hover:bg-white/3 transition">
             <p className="text-xs font-semibold text-gray-500">{countdown === null ? "CURRENT SESSION" : "NEXT SESSION"}</p>
             <h1 className="font-semibold sm:text-lg sm:mt-1 sm:mb-2">{`${nextSessionData.country_name} ${nextSessionData.session_name}`}</h1>
             {countdown && <div className="flex flex-wrap min-w-0 items-center max-w-full gap-1 sm:gap-2 mt-3 text-xs sm:text-base">

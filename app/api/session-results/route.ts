@@ -29,7 +29,7 @@ export async function GET(req:NextRequest) {
 
         const parsedSessionsData = sessionsData.map((sessionData:SessionResult) => (
             {
-                position: sessionData.position,
+                position: typeof sessionData.position === "number" ? sessionData.position : null,
                 driver_number: sessionData.driver_number,
                 number_of_laps: sessionData.number_of_laps,
                 points: sessionData.points,
@@ -60,6 +60,7 @@ export async function GET(req:NextRequest) {
     }
     
     catch(err){
+        console.log("hi")
         console.error(err)
         return Response.json(
             {success: false, error: "Failed to load data"},

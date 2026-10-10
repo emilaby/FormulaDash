@@ -54,7 +54,13 @@ export async function GET() {
             })
         }
 
-        return Response.json(mergedData)
+        return Response.json(mergedData, 
+            {
+                headers: {
+                    "Cache-Control": "public, max-age=60",
+                }
+            }
+        )
     }
 
     catch(err){
