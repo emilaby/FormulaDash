@@ -5,7 +5,7 @@ import NextSessionCardSkeleton from "./NextSessionCardSkeleton"
 import { Session } from "@/types"
 
 /**
- * Displays next session name and countdown to it.
+ * Displays next session name and a countdown to it.
  */
 export default function NextSessionCard() {
     const [nextSessionData, setNextSessionData] = React.useState<Session | null>(null)
