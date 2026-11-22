@@ -3,19 +3,19 @@ import { describe, expect, it, vi } from "vitest"
 import { render, screen } from "@testing-library/react"
 import Home from "./page"
 
-vi.mock("../components/race-weekend-card/RaceWeekendCard", () => ({
+vi.mock("@/components/race-weekend-card/RaceWeekendCard", () => ({
     default: () => <div data-testid="race-weekend-card" />,
 }))
 
-vi.mock("../components/LastSessionCard", () => ({
+vi.mock("@/components/last-session-card/LastSessionCard", () => ({
     default: () => <div data-testid="last-session-card" />,
 }))
 
-vi.mock("../components/next-session-card/NextSessionCard", () => ({
+vi.mock("@/components/next-session-card/NextSessionCard", () => ({
     default: () => <div data-testid="next-session-card" />,
 }))
 
-vi.mock("../components/driver-standings-graph/DriverStandingsGraph", () => ({
+vi.mock("@/components/driver-standings-graph/DriverStandingsGraph", () => ({
     default: () => <div data-testid="driver-standings-graph" />,
 }))
 

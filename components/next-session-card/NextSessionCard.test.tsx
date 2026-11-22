@@ -5,11 +5,13 @@ import getCurrentCountdown from "@/lib/getCurrentCountdown"
 import NextSessionCard from "./NextSessionCard"
 
 vi.mock("@/lib/getCurrentCountdown", () => ({
-    default: vi.fn(() => ({ days: "02", hours: "03", mins: "04", secs: "05" })),
+    default: vi.fn(() => ({ days: "02", hours: "03", mins: "04", secs: "05" }))
 }))
-
 vi.mock("./NextSessionCardSkeleton", () => ({
-    default: () => <div data-testid="session-card-skeleton">Loading session</div>,
+    default: () => <div data-testid="session-card-skeleton">Loading session</div>
+}))
+vi.mock("./NextSessionCardError", () => ({
+    default: () => <div data-testid="next-session-err">Error loading next session</div>
 }))
 
 const nextSession = {
@@ -89,7 +91,7 @@ describe("NextSessionCard", () => {
         expect(screen.queryByText("DAYS")).toBeNull()
     })
 
-    it("keeps the skeleton visible when the session response is not ok", async () => {
+    it("displays error when the session response is not ok", async () => {
         vi.stubGlobal("fetch", vi.fn().mockResolvedValue({
             ok: false,
             json: vi.fn(),
@@ -97,7 +99,7 @@ describe("NextSessionCard", () => {
 
         render(<NextSessionCard />)
 
-        await waitFor(() => expect(screen.getByTestId("session-card-skeleton")).toBeTruthy())
+        await waitFor(() => expect(screen.getByTestId("next-session-err")).toBeTruthy())
         expect(screen.queryByText("NEXT SESSION")).toBeNull()
     })
 })

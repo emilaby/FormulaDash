@@ -14,11 +14,13 @@ vi.mock("next/image", () => ({
         src: string
         width: number
         height: number
-    }) => <img alt={alt} src={src} width={width} height={height} />,
+    }) => <img alt={alt} src={src} width={width} height={height} />
 }))
-
 vi.mock("./RaceWeekendCardSkeleton", () => ({
-    default: () => <div data-testid="race-weekend-skeleton">Loading race weekend</div>,
+    default: () => <div data-testid="race-weekend-skeleton">Loading race weekend</div>
+}))
+vi.mock("./RaceWeekendCardError", () => ({
+    default: () => <div data-testid="race-weekend-err">Error loading race weekend</div>,
 }))
 
 const futureStart = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString()
@@ -112,7 +114,7 @@ describe("RaceWeekendCard", () => {
         expect(screen.getByText(/Live/)).toBeTruthy()
     })
 
-    it("keeps the skeleton visible when the race weekend response is not ok", async () => {
+    it("displays error when the race weekend response is not ok", async () => {
         vi.stubGlobal("fetch", vi.fn().mockResolvedValue({
             ok: false,
             json: vi.fn(),
@@ -120,7 +122,7 @@ describe("RaceWeekendCard", () => {
 
         render(<RaceWeekendCard />)
 
-        await waitFor(() => expect(screen.getByTestId("race-weekend-skeleton")).toBeTruthy())
+        await waitFor(() => expect(screen.getByTestId("race-weekend-err")).toBeTruthy())
         expect(screen.queryByText("NEXT RACE WEEKEND")).toBeNull()
     })
 })

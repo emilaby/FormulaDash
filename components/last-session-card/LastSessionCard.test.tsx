@@ -3,8 +3,11 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 import { cleanup, render, screen, waitFor } from "@testing-library/react"
 import LastSessionCard from "./LastSessionCard"
 
-vi.mock("./TableSkeleton", () => ({
-    default: () => <div data-testid="table-skeleton">Loading results</div>,
+vi.mock("../TableSkeleton", () => ({
+    default: () => <div data-testid="table-skeleton">Loading results</div>
+}))
+vi.mock("./LastSessionCardError", () => ({
+    default: () => <div data-testid="last-session-err">Error loading last session</div>
 }))
 
 const driver = {
@@ -139,7 +142,7 @@ describe("LastSessionCard", () => {
         expect(screen.getByText("Data may be delayed by ~2.5 hours due to OpenF1 processing.")).toBeTruthy()
     })
 
-    it("keeps the skeleton visible when the response is not ok", async () => {
+    it("displays error when the response is not ok", async () => {
         vi.stubGlobal("fetch", vi.fn().mockResolvedValue({
             ok: false,
             json: vi.fn(),
@@ -147,7 +150,7 @@ describe("LastSessionCard", () => {
 
         render(<LastSessionCard />)
 
-        await waitFor(() => expect(screen.getByTestId("table-skeleton")).toBeTruthy())
+        await waitFor(() => expect(screen.getByTestId("last-session-err")).toBeTruthy())
         expect(screen.queryByText("LAST SESSION")).toBeNull()
     })
 })

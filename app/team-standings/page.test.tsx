@@ -4,7 +4,10 @@ import { cleanup, render, screen, waitFor } from "@testing-library/react"
 import TeamStandings from "./page"
 
 vi.mock("@/components/TableSkeleton", () => ({
-    default: () => <div data-testid="table-skeleton">Loading standings</div>,
+    default: () => <div data-testid="table-skeleton">Loading standings</div>
+}))
+vi.mock("@/components/TeamStandingsError", () => ({
+    default: () => <div data-testid="team-standings-err">Error loading standings</div>
 }))
 
 const teams = [
@@ -70,7 +73,7 @@ describe("TeamStandings", () => {
         expect(rows[2].textContent).toContain("Ferrari")
     })
 
-    it("keeps the skeleton visible when the standings response is not ok", async () => {
+    it("displays error when the standings response is not ok", async () => {
         vi.stubGlobal("fetch", vi.fn().mockResolvedValue({
             ok: false,
             json: vi.fn(),
@@ -78,7 +81,7 @@ describe("TeamStandings", () => {
 
         render(<TeamStandings />)
 
-        await waitFor(() => expect(screen.getByTestId("table-skeleton")).toBeTruthy())
+        await waitFor(() => expect(screen.getByTestId("team-standings-err")).toBeTruthy())
         expect(screen.queryByText("TEAM STANDINGS")).toBeNull()
     })
 

@@ -4,7 +4,10 @@ import { cleanup, render, screen, waitFor } from "@testing-library/react"
 import DriverStandingsGraph from "./DriverStandingsGraph"
 
 vi.mock("./DriverStandingsGraphSkeleton", () => ({
-    default: () => <div data-testid="graph-skeleton">Loading graph</div>,
+    default: () => <div data-testid="graph-skeleton">Loading graph</div>
+}))
+vi.mock("./DriverStandingsGraphError", () => ({
+    default: () => <div data-testid="driver-standings-graph-err">Error loading graph</div>
 }))
 
 const graphData = {
@@ -52,7 +55,7 @@ describe("DriverStandingsGraph", () => {
         expect(screen.queryByTestId("graph-skeleton")).toBeNull()
     })
 
-    it("keeps the skeleton visible when the graph response is not ok", async () => {
+    it("displays error when the graph response is not ok", async () => {
         vi.stubGlobal("fetch", vi.fn().mockResolvedValue({
             ok: false,
             json: vi.fn(),
@@ -60,7 +63,7 @@ describe("DriverStandingsGraph", () => {
 
         render(<DriverStandingsGraph />)
 
-        await waitFor(() => expect(screen.getByTestId("graph-skeleton")).toBeTruthy())
+        await waitFor(() => expect(screen.getByTestId("driver-standings-graph-err")).toBeTruthy())
         expect(screen.queryByText("DRIVER STANDINGS")).toBeNull()
     })
 
