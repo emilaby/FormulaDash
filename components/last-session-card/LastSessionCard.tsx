@@ -1,6 +1,6 @@
 "use client"
 import React from "react"
-import TableSkeleton from "./TableSkeleton"
+import TableSkeleton from "../TableSkeleton"
 import { DriverSessionResult, SessionType, SessionInfo } from "@/types"
 import formatRaceTime from "@/lib/formatRaceTime"
 import formatLaptime from "@/lib/formatLaptime"

@@ -2,6 +2,7 @@
 import React from "react"
 import Image from "next/image"
 import RaceWeekendCardSkeleton from "./RaceWeekendCardSkeleton"
+import RaceWeekendCardError from "./RaceWeekendCardError"
 import { Meeting } from "@/types"
 import { ChevronDown } from "lucide-react"
 
@@ -16,6 +17,7 @@ type Session = {
 export default function RaceWeekendCard(){
     const [meetingData, setMeetingData] = React.useState<Meeting | null>(null)
     const [sessionsData, setSessionsData] = React.useState<Session[] | null>(null)
+    const [error, setError] = React.useState<boolean>(false)
         
     React.useEffect(() => {
         async function load(){
@@ -23,6 +25,9 @@ export default function RaceWeekendCard(){
                 const url = "/api/race-weekend/latest"
                 const res = await fetch(url)
                 if (!res.ok){
+                    if (!meetingData || !sessionsData){
+                        setError(true)
+                    }
                     return
                 }
                 const newData = await res.json()
@@ -32,6 +37,7 @@ export default function RaceWeekendCard(){
             }
             catch(err){
                 console.error(err)
+                setError(true)
             }
         }
         load()
@@ -59,7 +65,9 @@ export default function RaceWeekendCard(){
 
     return (
         <>
-        {(!meetingData || !sessionsData) && <RaceWeekendCardSkeleton/>}
+        {error && <RaceWeekendCardError/>}
+
+        {(!error && (!meetingData || !sessionsData)) && <RaceWeekendCardSkeleton/>}
 
         {meetingData && sessionsData &&
 

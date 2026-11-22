@@ -10,7 +10,7 @@ export default function NextSessionCardError() {
 
             <div className="h-4 sm:h-6 flex items-center justify-center mt-1 sm:mt-2 mb-3">
                 <p className="text-sm sm:text-base text-gray-200 font-medium">
-                    Unable to load next session
+                    Unable to load next session data
                 </p>
             </div>
 
