@@ -32,6 +32,7 @@ export default function DriverStandingsGraph(){
                 setDriverNums(newData.driverNums)
                 setDrivers(newData.drivers)
                 setStandingsPerRace(newData.standingsPerRace)
+                setError(false)
             }
             catch(err){
                 console.error(err)

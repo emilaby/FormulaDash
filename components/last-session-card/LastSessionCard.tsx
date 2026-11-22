@@ -1,6 +1,7 @@
 "use client"
 import React from "react"
 import TableSkeleton from "../TableSkeleton"
+import LastSessionCardError from "./LastSessionCardError"
 import { DriverSessionResult, SessionType, SessionInfo } from "@/types"
 import formatRaceTime from "@/lib/formatRaceTime"
 import formatLaptime from "@/lib/formatLaptime"
@@ -12,20 +13,25 @@ import parseRaceGap from "@/lib/parseRaceGap"
 export default function LastSessionCard (){
     const [sessionInfo, setSessionInfo] = React.useState<SessionInfo | null>(null)
     const [sessionData, setSessionData] = React.useState<DriverSessionResult[] | null>(null)
+    const [error, setError] = React.useState<boolean>(false)
     
     React.useEffect(() => {
         async function load(){
             try{
-                const url = "/api/session-results/latest"
+                const url = "/api/session-results/latest..."
                 const res = await fetch(url)
                 
                 if (!res.ok){
+                    if (!sessionInfo || !sessionData){
+                        setError(true)
+                    }
                     return
                 }
 
                 const newData = await res.json()
                 setSessionInfo(newData.sessionInfo)
                 setSessionData(newData.mergedSessionData)
+                setError(false)
             }
             catch(err){
                 console.error(err)
@@ -65,7 +71,9 @@ export default function LastSessionCard (){
 
     return (
         <>
-        {(!sessionInfo || !sessionData) && 
+        {error && <LastSessionCardError/>}
+
+        {(!error && (!sessionInfo || !sessionData)) && 
         <div className="mt-1"><TableSkeleton/></div>}
 
         {sessionInfo && sessionData && 

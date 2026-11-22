@@ -34,6 +34,7 @@ export default function RaceWeekendCard(){
 
                 setMeetingData(newData.meetingData)
                 setSessionsData(newData.sessions)
+                setError(false)
             }
             catch(err){
                 console.error(err)
