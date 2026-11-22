@@ -1,12 +1,14 @@
 "use client"
 import React from "react"
 import TableSkeleton from "@/components/TableSkeleton"
+import TeamStandingsError from "@/components/TeamStandingsError"
 import { TeamStanding } from "@/types"
 
 type TeamStandingMerged = TeamStanding & {team_colour: string}
 
 export default function TeamStandings(){
     const [teamStandings, setTeamStandings] = React.useState<TeamStandingMerged[] | null>(null)
+    const [error, setError] = React.useState<boolean>(false)
 
     React.useEffect(() => {
         async function load(){
@@ -15,11 +17,15 @@ export default function TeamStandings(){
                 const res = await fetch(url)
                 
                 if (!res.ok){
+                    if (!teamStandings){
+                        setError(true)
+                    }
                     return
                 }
                 
                 const newData = await res.json()
                 setTeamStandings(newData)
+                setError(false)
             }
             catch(err){
                 console.error(err)
@@ -36,7 +42,12 @@ export default function TeamStandings(){
 
     return (
         <>
-        {!sortedData &&
+        {error && 
+            <main className="bg-dark-blue min-h-screen p-4 lg:p-7 max-w-full min-w-0">
+                <TeamStandingsError/>
+            </main>}
+
+        {!error && !sortedData &&
             <main className="bg-dark-blue min-h-screen p-4 lg:p-7 max-w-full min-w-0">
                 <TableSkeleton/>
             </main>}

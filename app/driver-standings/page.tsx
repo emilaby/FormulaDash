@@ -1,12 +1,14 @@
 "use client"
 import React from "react"
 import TableSkeleton from "@/components/TableSkeleton"
+import DriverStandingsError from "@/components/DriverStandingsError"
 import { DriverStanding, Driver } from "@/types"
 import getShortTeamName from "@/lib/getShortTeamName"
 
 export default function DriverStandings(){
 
     const [driverStandingsData, setDriverStandingsData] = React.useState<(DriverStanding & Driver)[]| null>(null)
+    const [error, setError] = React.useState<boolean>(false)
 
     React.useEffect(() => {
         async function load(){
@@ -15,11 +17,15 @@ export default function DriverStandings(){
                 const res = await fetch(url)
             
                 if (!res.ok){
+                    if (!driverStandingsData){
+                        setError(true)
+                    }
                     return
                 }
 
                 const newData = await res.json()
                 setDriverStandingsData(newData)
+                setError(false)
             }
             catch(err){
                 console.error(err)
@@ -35,7 +41,12 @@ export default function DriverStandings(){
 
     return (
         <>
-            {!sortedData &&
+            {error && 
+            <main className="bg-dark-blue min-h-screen p-4 lg:p-7 max-w-full min-w-0">
+                <DriverStandingsError/>
+            </main>}
+
+            {!error && !sortedData &&
             <main className="bg-dark-blue min-h-screen p-4 lg:p-7 max-w-full min-w-0">
                 <TableSkeleton/>
             </main>}
