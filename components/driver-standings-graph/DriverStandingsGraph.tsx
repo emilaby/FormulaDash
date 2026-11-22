@@ -2,6 +2,7 @@
 import React from "react"
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Legend, ResponsiveContainer } from "recharts"
 import DriverStandingsGraphSkeleton from "./DriverStandingsGraphSkeleton"
+import DriverStandingsGraphError from "./DriverStandingsGraphError"
 import { Driver } from "@/types"
 
 /**
@@ -11,6 +12,7 @@ export default function DriverStandingsGraph(){
     const [driverNums, setDriverNums] = React.useState<number[] | null>(null)
     const [drivers, setDrivers] = React.useState<Driver[] | null>(null)
     const [standingsPerRace, setStandingsPerRace] = React.useState<Record<string, number | string>[] | null>(null)
+    const [error, setError] = React.useState<boolean>(false)
 
     
     React.useEffect(() => {
@@ -20,6 +22,9 @@ export default function DriverStandingsGraph(){
                 const res = await fetch(url)
                 
                 if (!res.ok){
+                    if (!driverNums || !drivers || !standingsPerRace){
+                        setError(true)
+                    }
                     return
                 }
 
@@ -45,7 +50,9 @@ export default function DriverStandingsGraph(){
 
     return (
         <>
-        {(!standingsPerRace || !driverNums || !drivers) &&  <DriverStandingsGraphSkeleton/>}
+        {error && <DriverStandingsGraphError/>}
+
+        {(!error && (!standingsPerRace || !driverNums || !drivers)) &&  <DriverStandingsGraphSkeleton/>}
         
         {standingsPerRace && drivers && driverNums &&
         <div className="flex flex-col items-center grow shrink min-w-0 lg:w-auto mt-4 mb-4 mr-7 lg:mt-7 lg:mb-7 lg:mr-7">

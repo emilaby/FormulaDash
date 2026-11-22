@@ -28,7 +28,6 @@ export default function NextSessionCard() {
                 setError(false)
             }
             catch(err){
-                setError(true)
                 console.error(err)
             }
         }

@@ -37,7 +37,6 @@ export default function RaceWeekendCard(){
             }
             catch(err){
                 console.error(err)
-                setError(true)
             }
         }
         load()
