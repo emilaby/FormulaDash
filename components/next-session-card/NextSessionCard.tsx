@@ -2,6 +2,7 @@
 import React from "react"
 import getCurrentCountdown from "@/lib/getCurrentCountdown"
 import NextSessionCardSkeleton from "./NextSessionCardSkeleton"
+import NextSessionCardError from "./NextSessionCardError"
 import { Session } from "@/types"
 
 /**
@@ -9,6 +10,7 @@ import { Session } from "@/types"
  */
 export default function NextSessionCard() {
     const [nextSessionData, setNextSessionData] = React.useState<Session | null>(null)
+    const [error, setError] = React.useState<boolean>(false)
             
     React.useEffect(() => {
         async function load(){
@@ -16,12 +18,17 @@ export default function NextSessionCard() {
                 const url = "/api/session/next"
                 const res = await fetch(url)
                 if (!res.ok){
+                    if(!nextSessionData){
+                        setError(true)
+                    }
                     return
                 }
                 const newData = await res.json()
                 setNextSessionData(newData)
+                setError(false)
             }
             catch(err){
+                setError(true)
                 console.error(err)
             }
         }
@@ -44,7 +51,9 @@ export default function NextSessionCard() {
 
     return (
         <>
-        {(!nextSessionData || countdown === undefined) && <NextSessionCardSkeleton/>}
+        {error && <NextSessionCardError/>}
+
+        {(!error && (!nextSessionData || countdown === undefined)) && <NextSessionCardSkeleton/>}
 
         {nextSessionData && countdown !== undefined &&
         <div className="flex flex-col w-full items-center sm:mt-3 py-5 sm:pb-9 sm:pt-4 sm:px-5 border border-mid-blue rounded-3xl hover:bg-white/3 transition">
